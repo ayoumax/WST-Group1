@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MotorPH IT Support Ticketing System - Tickets</title>
+</head>
+<body>
+    <header>
+        <h1>MotorPH IT Support Ticketing System</h1>
+    </header>
+
+    <aside>
+        <nav>
+            <h3>Navigation Menu</h3>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="tickets.html">IT Tickets</a></li>
+                <li><a href="index.html">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <hr>
+        <article id="tickets-area">
+            <h2>IT Tickets</h2>
+            <p>View, message, update, and clear resolved technical support tickets</p>
+            
+            <section>
+                <h3>Ticket List</h3>
+                <form action="#" method="GET">
+                    <label for="search">Search:</label>
+                    <input type="text" id="search" name="search" placeholder="Search tickets...">
+                    <button type="submit">Search</button>
+                </form>
+                <br>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Submitted By</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TCK-1001</td>
+                            <td>emp10001</td>
+                            <td>Login Issue</td>
+                            <td>IN_PROGRESS</td>
+                        </tr>
+                        <tr>
+                            <td>TCK-1003</td>
+                            <td>fin01</td>
+                            <td>Payroll Issue</td>
+                            <td>RESOLVED</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <br>
+            <section>
+                <h3>Ticket Details: TCK-1001</h3>
+                <form action="#" method="POST">
+                    <p><strong>Submitted By:</strong> emp10001</p>
+                    <p><strong>Category:</strong> Login Issue</p>
+                    <p><strong>Subject:</strong> log in</p>
+                    <p><strong>Created At:</strong> 2026-04-25 12:54:34</p>
+                    <p>
+                        <label for="status"><strong>Status:</strong></label>
+                        <select id="status" name="status">
+                            <option value="open">OPEN</option>
+                            <option value="in_progress" selected>IN_PROGRESS</option>
+                            <option value="resolved">RESOLVED</option>
+                            <option value="closed">CLOSED</option>
+                        </select>
+                    </p>
+                    <p><strong>User Description:</strong></p>
+                    <p>cant log i my account</p>
+                    
+                    <hr>
+                    <h4>Message Thread</h4>
+                    <ul>
+                        <li>[2026-05-16 19:41:49] it01: dfdf</li>
+                        <li>[2026-05-16 19:42:37] emp10001: working</li>
+                    </ul>
+
+                    <p>
+                        <label for="new-message"><strong>New Message / Question:</strong></label><br>
+                        <textarea id="new-message" name="new-message" rows="4" cols="50"></textarea>
+                    </p>
+
+                    <button type="button">Delete Resolved Ticket</button>
+                    <button type="submit">Update Status</button>
+                    <button type="button">Send Message</button>
+                </form>
+            </section>
+        </article>
+    </main>
+
+    <hr>
+    <footer>
+        <p>MotorPH IT Support Ticketing System &copy; 2026</p>
+    </footer>
+</body>
+</html>

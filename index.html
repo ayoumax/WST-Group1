@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MotorPH IT Support Ticketing System - Login</title>
+</head>
+<body>
+    <header>
+        <h1>MotorPH IT Support Ticketing System</h1>
+    </header>
+
+    <main>
+        <article id="login-area">
+            <h2>Sign in</h2>
+            <p>Select your role and enter your credentials.</p>
+            <form action="dashboard.html" method="GET">
+                <p>
+                    <label for="role">Login As:</label><br>
+                    <select id="role" name="role">
+                        <option value="it">IT</option>
+                        <option value="hr">HR</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="username">Username:</label><br>
+                    <input type="text" id="username" name="username" required>
+                </p>
+                <p>
+                    <label for="password">Password:</label><br>
+                    <input type="password" id="password" name="password" required>
+                </p>
+                <p>
+                    <input type="checkbox" id="show-password" name="show-password">
+                    <label for="show-password">Show password</label>
+                </p>
+                <button type="submit">Login</button>
+            </form>
+        </article>
+    </main>
+
+    <hr>
+    <footer>
+        <p>MotorPH IT Support Ticketing System &copy; 2026</p>
+    </footer>
+</body>
+</html>
