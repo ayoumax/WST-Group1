@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MotorPH IT Support - Submit Ticket</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MotorPH IT Support Ticketing System</h1>
+        <p>Employee Portal</p>
+    </header>
+
+    <hr>
+
+    <nav>
+
+        <h3>Navigation</h3>
+
+        <ul>
+            <li>
+                <a href="employee-dashboard.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="submit-ticket.html">
+                    Submit Ticket
+                </a>
+            </li>
+
+            <li>
+                <a href="my-tickets.html">
+                    My Tickets
+                </a>
+            </li>
+
+            <li>
+                <a href="index.html">
+                    Logout
+                </a>
+            </li>
+        </ul>
+
+    </nav>
+
+    <hr>
+
+    <main>
+
+        <article>
+
+            <h2>Submit IT Support Ticket</h2>
+
+            <p>
+                Please provide the information
+                about the technical problem
+                you are experiencing.
+            </p>
+
+            <section>
+
+                <form action="my-tickets.html" method="GET">
+
+                    <p>
+                        <label for="category">
+                            <strong>Issue Category:</strong>
+                        </label>
+                        <br>
+
+                        <select
+                            id="category"
+                            name="category"
+                            required>
+
+                            <option value="">
+                                Select category
+                            </option>
+
+                            <option value="account">
+                                Account / Login Issue
+                            </option>
+
+                            <option value="hardware">
+                                Hardware Issue
+                            </option>
+
+                            <option value="software">
+                                Software Issue
+                            </option>
+
+                            <option value="network">
+                                Network / Internet Issue
+                            </option>
+
+                            <option value="email">
+                                Email Issue
+                            </option>
+
+                            <option value="printer">
+                                Printer Issue
+                            </option>
+
+                            <option value="other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </p>
+
+                    <p>
+
+                        <label for="subject">
+                            <strong>Subject:</strong>
+                        </label>
+
+                        <br>
+
+                        <input
+                            type="text"
+                            id="subject"
+                            name="subject"
+                            placeholder="Brief description of the issue"
+                            required>
+
+                    </p>
+
+                    <p>
+
+                        <label for="description">
+                            <strong>Problem Description:</strong>
+                        </label>
+
+                        <br>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="6"
+                            cols="50"
+                            placeholder="Describe what happened..."
+                            required></textarea>
+
+                    </p>
+
+                    <p>
+
+                        <label for="priority">
+                            <strong>Priority:</strong>
+                        </label>
+
+                        <br>
+
+                        <select
+                            id="priority"
+                            name="priority">
+
+                            <option value="low">
+                                Low
+                            </option>
+
+                            <option value="medium" selected>
+                                Medium
+                            </option>
+
+                            <option value="high">
+                                High
+                            </option>
+
+                        </select>
+
+                    </p>
+
+                    <p>
+
+                        <label for="device">
+                            <strong>Device / Equipment:</strong>
+                        </label>
+
+                        <br>
+
+                        <input
+                            type="text"
+                            id="device"
+                            name="device"
+                            placeholder="Example: Desktop PC">
+
+                    </p>
+
+                    <p>
+
+                        <label for="location">
+                            <strong>Department / Location:</strong>
+                        </label>
+
+                        <br>
+
+                        <input
+                            type="text"
+                            id="location"
+                            name="location"
+                            placeholder="Example: HR Department">
+
+                    </p>
+
+                    <button type="submit">
+                        Submit Ticket
+                    </button>
+
+                    <button type="reset">
+                        Clear Form
+                    </button>
+
+                </form>
+
+            </section>
+
+        </article>
+
+        <aside>
+
+            <h3>Before Submitting</h3>
+
+            <ul>
+                <li>
+                    Describe the problem clearly.
+                </li>
+
+                <li>
+                    Select the correct issue category.
+                </li>
+
+                <li>
+                    Choose an appropriate priority.
+                </li>
+
+                <li>
+                    Include your device or location
+                    if applicable.
+                </li>
+            </ul>
+
+        </aside>
+
+    </main>
+
+    <hr>
+
+    <footer>
+
+        <p>
+            MotorPH IT Support Ticketing System
+            &copy; 2026
+        </p>
+
+    </footer>
+
+</body>
+
+</html>
