@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A beginner-friendly IT support ticketing system.">
+  <title>Campus IT Helpdesk</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section class="login-screen" id="loginScreen" aria-labelledby="loginTitle">
+    <form class="login-card" id="loginForm">
+      <span class="brand-icon">IT</span>
+      <p class="eyebrow">Campus support portal</p>
+      <h1 id="loginTitle">Sign in to Helpdesk</h1>
+      <p>This is a front-end demonstration. Any school email and password will work.</p>
+      <label>School email<input id="loginEmail" type="email" placeholder="student@campus.edu" required></label>
+      <label>Password<input id="loginPassword" type="password" placeholder="Enter your password" minlength="4" required></label>
+      <button class="primary-button" type="submit">Sign In</button>
+      <small>Demo only — no real account information is checked or sent.</small>
+    </form>
+  </section>
+
+  <header class="topbar">
+    <a class="brand" href="#dashboard" aria-label="Campus IT Helpdesk home">
+      <span class="brand-icon">IT</span>
+      <span>
+        <strong>Campus IT Helpdesk</strong>
+        <small>Support Ticket System</small>
+      </span>
+    </a>
+
+    <button class="menu-button" id="menuButton" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+    <nav id="mainNav" aria-label="Main navigation">
+      <a class="nav-link active" href="#dashboard" data-page="dashboard">Dashboard</a>
+      <a class="nav-link" href="#tickets" data-page="tickets">My Tickets</a>
+      <a class="nav-link" href="#new-ticket" data-page="new-ticket">Create Ticket</a>
+      <a class="nav-link" href="#help" data-page="help">Help</a>
+    </nav>
+
+    <div class="user-area">
+      <span class="avatar" aria-hidden="true">EV</span>
+      <span><strong>Irisha</strong><small>Student</small></span>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-section active" id="dashboard" aria-labelledby="dashboardTitle">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">Overview</p>
+          <h1 id="dashboardTitle">Good day, Irisha</h1>
+          <p>Check your requests or report a new technical problem.</p>
+        </div>
+        <button class="primary-button" type="button" data-open-form>+ Create Ticket</button>
+      </div>
+
+      <div class="stat-grid" aria-label="Ticket summary">
+        <article class="stat-card">
+          <span class="stat-icon blue">◎</span>
+          <div><small>Total Tickets</small><strong id="totalCount">0</strong></div>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon orange">!</span>
+          <div><small>Open</small><strong id="openCount">0</strong></div>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon violet">↻</span>
+          <div><small>In Progress</small><strong id="progressCount">0</strong></div>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon green">✓</span>
+          <div><small>Resolved</small><strong id="resolvedCount">0</strong></div>
+        </article>
+      </div>
+
+      <div class="content-grid">
+        <section class="panel" aria-labelledby="recentTitle">
+          <div class="panel-heading">
+            <div><h2 id="recentTitle">Recent Tickets</h2><p>Your latest support requests</p></div>
+            <button class="text-button" type="button" data-page-button="tickets">View all</button>
+          </div>
+          <div class="ticket-list" id="recentTicketList"></div>
+        </section>
+
+        <aside class="panel quick-help" aria-labelledby="quickHelpTitle">
+          <div class="panel-heading"><div><h2 id="quickHelpTitle">Quick Help</h2><p>Try these common solutions first</p></div></div>
+          <ul>
+            <li><button class="help-tip" type="button" data-tip="Restart your device, wait 30 seconds, and reconnect to the campus Wi-Fi."><span>Wi-Fi connection problem</span><b>›</b></button></li>
+            <li><button class="help-tip" type="button" data-tip="Use the Forgot Password link on your school account login page."><span>Forgotten password</span><b>›</b></button></li>
+            <li><button class="help-tip" type="button" data-tip="Check that the printer has paper, then cancel and resend the print job."><span>Printer is not working</span><b>›</b></button></li>
+          </ul>
+          <p class="tip-box" id="tipBox">Select a common problem to see a quick suggestion.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="page-section" id="tickets" aria-labelledby="ticketsTitle">
+      <div class="page-heading compact">
+        <div><p class="eyebrow">Ticket list</p><h1 id="ticketsTitle">My Tickets</h1><p>Search and monitor all submitted requests.</p></div>
+        <button class="primary-button" type="button" data-open-form>+ Create Ticket</button>
+      </div>
+      <section class="panel">
+        <div class="toolbar">
+          <label class="search-field">Search tickets<input id="ticketSearch" type="search" placeholder="Search by title or ticket number"></label>
+          <label>Status<select id="statusFilter"><option value="All">All statuses</option><option>Open</option><option>In Progress</option><option>Resolved</option></select></label>
+        </div>
+        <div class="ticket-list" id="allTicketList"></div>
+      </section>
+    </section>
+
+    <section class="page-section" id="new-ticket" aria-labelledby="formTitle">
+      <div class="page-heading compact"><div><p class="eyebrow">Support request</p><h1 id="formTitle">Create a New Ticket</h1><p>Describe the problem clearly so the IT team can help you faster.</p></div></div>
+      <form class="panel ticket-form" id="ticketForm">
+        <div class="form-row">
+          <label>Ticket title<input id="ticketTitle" name="title" type="text" placeholder="Example: Cannot connect to campus Wi-Fi" required></label>
+          <label>Category<select id="ticketCategory" name="category" required><option value="">Select a category</option><option>Network</option><option>Hardware</option><option>Software</option><option>Account Access</option><option>Other</option></select></label>
+        </div>
+        <div class="form-row">
+          <label>Priority<select id="ticketPriority" name="priority" required><option>Low</option><option selected>Medium</option><option>High</option></select></label>
+          <label>Location<input id="ticketLocation" name="location" type="text" placeholder="Example: Computer Laboratory 2"></label>
+        </div>
+        <label>Problem description<textarea id="ticketDescription" name="description" rows="6" placeholder="Explain what happened and what you already tried." required></textarea></label>
+        <div class="form-actions"><button class="secondary-button" type="reset">Clear</button><button class="primary-button" type="submit">Submit Ticket</button></div>
+      </form>
+    </section>
+
+    <section class="page-section" id="help" aria-labelledby="helpTitle">
+      <div class="page-heading compact"><div><p class="eyebrow">Support information</p><h1 id="helpTitle">Help Center</h1><p>Basic information before sending a ticket.</p></div></div>
+      <div class="content-grid">
+        <article class="panel"><h2>Before submitting</h2><ol class="steps"><li>Restart the device or application.</li><li>Check the internet and cable connections.</li><li>Write down any error message you see.</li><li>Create a ticket if the problem continues.</li></ol></article>
+        <aside class="panel contact-card"><h2>IT Office</h2><p><strong>Email:</strong> itsupport@campus.edu</p><p><strong>Office hours:</strong> Monday–Friday, 8:00 AM–5:00 PM</p><p><strong>Emergency:</strong> Contact the laboratory supervisor.</p></aside>
+      </div>
+    </section>
+  </main>
+
+  <footer><p>Campus IT Helpdesk • Student project prototype</p></footer>
+
+  <dialog id="ticketDialog">
+    <button class="dialog-close" id="closeDialog" type="button" aria-label="Close ticket details">×</button>
+    <div id="dialogContent"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
