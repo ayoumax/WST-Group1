@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MotorPH IT Support Ticketing System - Login</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MotorPH IT Support Ticketing System</h1>
+        <p>Employee and IT Support Portal</p>
+    </header>
+
+    <hr>
+
+    <main>
+
+        <!-- Employee Login -->
+        <section>
+
+            <h2>Employee Login</h2>
+
+            <p>
+                Employees can submit IT support requests
+                and monitor their existing tickets.
+            </p>
+
+            <form action="employee-dashboard.html" method="GET">
+
+                <p>
+                    <label for="employee-username">
+                        Username:
+                    </label>
+                    <br>
+
+                    <input
+                        type="text"
+                        id="employee-username"
+                        name="username"
+                        placeholder="Enter username"
+                        required>
+                </p>
+
+                <p>
+                    <label for="employee-password">
+                        Password:
+                    </label>
+                    <br>
+
+                    <input
+                        type="password"
+                        id="employee-password"
+                        name="password"
+                        placeholder="Enter password"
+                        required>
+                </p>
+
+                <button type="submit">
+                    Login as Employee
+                </button>
+
+            </form>
+
+        </section>
+
+        <hr>
+
+        <!-- IT Admin Login -->
+        <section>
+
+            <h2>IT Admin Login</h2>
+
+            <p>
+                IT administrators can review,
+                respond to, and manage support tickets.
+            </p>
+
+            <form action="admin-dashboard.html" method="GET">
+
+                <p>
+                    <label for="admin-username">
+                        Username:
+                    </label>
+                    <br>
+
+                    <input
+                        type="text"
+                        id="admin-username"
+                        name="username"
+                        placeholder="Enter IT username"
+                        required>
+                </p>
+
+                <p>
+                    <label for="admin-password">
+                        Password:
+                    </label>
+                    <br>
+
+                    <input
+                        type="password"
+                        id="admin-password"
+                        name="password"
+                        placeholder="Enter password"
+                        required>
+                </p>
+
+                <button type="submit">
+                    Login as IT Admin
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>
+            MotorPH IT Support Ticketing System
+            &copy; 2026
+        </p>
+    </footer>
+
+</body>
+
+</html>
