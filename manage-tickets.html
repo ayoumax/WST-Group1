@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MotorPH IT Support - Manage Tickets</title>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>
+            MotorPH IT Support Ticketing System
+        </h1>
+
+        <p>
+            IT Administration Portal
+        </p>
+
+    </header>
+
+    <hr>
+
+    <nav>
+
+        <h3>Admin Navigation</h3>
+
+        <ul>
+
+            <li>
+                <a href="admin-dashboard.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="manage-tickets.html">
+                    Manage Tickets
+                </a>
+            </li>
+
+            <li>
+                <a href="index.html">
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+    <hr>
+
+    <main>
+
+        <article>
+
+            <h2>Manage Support Tickets</h2>
+
+            <p>
+                Search, review, respond to,
+                and update employee IT tickets.
+            </p>
+
+            <!-- Search -->
+            <section>
+
+                <h3>Search Tickets</h3>
+
+                <form action="#" method="GET">
+
+                    <p>
+
+                        <label for="ticket-search">
+                            Search:
+                        </label>
+
+                        <input
+                            type="text"
+                            id="ticket-search"
+                            name="search"
+                            placeholder="Ticket ID, employee, or issue">
+
+                        <button type="submit">
+                            Search
+                        </button>
+
+                    </p>
+
+                    <p>
+
+                        <label for="status-filter">
+                            Filter by Status:
+                        </label>
+
+                        <select
+                            id="status-filter"
+                            name="status-filter">
+
+                            <option value="all">
+                                All
+                            </option>
+
+                            <option value="open">
+                                Open
+                            </option>
+
+                            <option value="in-progress">
+                                In Progress
+                            </option>
+
+                            <option value="resolved">
+                                Resolved
+                            </option>
+
+                            <option value="closed">
+                                Closed
+                            </option>
+
+                        </select>
+
+                    </p>
+
+                </form>
+
+            </section>
+
+            <!-- Ticket List -->
+            <section>
+
+                <h3>All Tickets</h3>
+
+                <table border="1">
+
+                    <thead>
+
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Employee</th>
+                            <th>Category</th>
+                            <th>Subject</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>TCK-1001</td>
+                            <td>EMP-10001</td>
+                            <td>Account</td>
+                            <td>Cannot Login</td>
+                            <td>High</td>
+                            <td>In Progress</td>
+                        </tr>
+
+                        <tr>
+                            <td>TCK-1002</td>
+                            <td>EMP-10002</td>
+                            <td>Hardware</td>
+                            <td>Computer Running Slow</td>
+                            <td>Medium</td>
+                            <td>Open</td>
+                        </tr>
+
+                        <tr>
+                            <td>TCK-1003</td>
+                            <td>EMP-10003</td>
+                            <td>Network</td>
+                            <td>No Internet Connection</td>
+                            <td>High</td>
+                            <td>Open</td>
+                        </tr>
+
+                        <tr>
+                            <td>TCK-0998</td>
+                            <td>EMP-10004</td>
+                            <td>Printer</td>
+                            <td>Printer Not Working</td>
+                            <td>Low</td>
+                            <td>Resolved</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+            <br>
+
+            <!-- Ticket Details -->
+            <section>
+
+                <h3>
+                    Ticket Details: TCK-1001
+                </h3>
+
+                <p>
+                    <strong>Employee:</strong>
+                    EMP-10001
+                </p>
+
+                <p>
+                    <strong>Department:</strong>
+                    Human Resources
+                </p>
+
+                <p>
+                    <strong>Category:</strong>
+                    Account / Login Issue
+                </p>
+
+                <p>
+                    <strong>Subject:</strong>
+                    Cannot Login
+                </p>
+
+                <p>
+                    <strong>Priority:</strong>
+                    High
+                </p>
+
+                <p>
+                    <strong>Problem Description:</strong>
+                </p>
+
+                <p>
+                    Employee cannot log in to
+                    the MotorPH employee account
+                    even after entering the
+                    correct password.
+                </p>
+
+                <hr>
+
+                <!-- Status Update -->
+                <form action="#" method="POST">
+
+                    <p>
+
+                        <label for="ticket-status">
+                            <strong>Update Status:</strong>
+                        </label>
+
+                        <br>
+
+                        <select
+                            id="ticket-status"
+                            name="ticket-status">
+
+                            <option value="open">
+                                Open
+                            </option>
+
+                            <option
+                                value="in-progress"
+                                selected>
+                                In Progress
+                            </option>
+
+                            <option value="resolved">
+                                Resolved
+                            </option>
+
+                            <option value="closed">
+                                Closed
+                            </option>
+
+                        </select>
+
+                    </p>
+
+                    <button type="submit">
+                        Update Status
+                    </button>
+
+                </form>
+
+                <hr>
+
+                <!-- Message Thread -->
+                <h4>Message Thread</h4>
+
+                <ul>
+
+                    <li>
+                        <strong>Employee:</strong>
+                        I still cannot access my account.
+                    </li>
+
+                    <li>
+                        <strong>IT Support:</strong>
+                        We are currently checking your
+                        account. Please try resetting
+                        your password.
+                    </li>
+
+                    <li>
+                        <strong>Employee:</strong>
+                        I tried resetting it but
+                        the problem is still happening.
+                    </li>
+
+                </ul>
+
+                <!-- Admin Reply -->
+                <form action="#" method="POST">
+
+                    <p>
+
+                        <label for="admin-message">
+                            <strong>
+                                Send Message to Employee:
+                            </strong>
+                        </label>
+
+                        <br>
+
+                        <textarea
+                            id="admin-message"
+                            name="admin-message"
+                            rows="5"
+                            cols="50"
+                            placeholder="Write your response..."></textarea>
+
+                    </p>
+
+                    <button type="submit">
+                        Send Message
+                    </button>
+
+                </form>
+
+            </section>
+
+        </article>
+
+        <aside>
+
+            <h3>Ticket Handling Guide</h3>
+
+            <ul>
+
+                <li>
+                    Review the employee's description.
+                </li>
+
+                <li>
+                    Check the priority and current status.
+                </li>
+
+                <li>
+                    Send updates to the employee.
+                </li>
+
+                <li>
+                    Mark the ticket resolved
+                    after fixing the issue.
+                </li>
+
+            </ul>
+
+        </aside>
+
+    </main>
+
+    <hr>
+
+    <footer>
+
+        <p>
+            MotorPH IT Support Ticketing System
+            &copy; 2026
+        </p>
+
+    </footer>
+
+</body>
+
+</html>
