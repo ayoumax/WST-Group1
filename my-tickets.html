@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MotorPH IT Support - My Tickets</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MotorPH IT Support Ticketing System</h1>
+        <p>Employee Portal</p>
+    </header>
+
+    <hr>
+
+    <nav>
+
+        <h3>Navigation</h3>
+
+        <ul>
+
+            <li>
+                <a href="employee-dashboard.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="submit-ticket.html">
+                    Submit Ticket
+                </a>
+            </li>
+
+            <li>
+                <a href="my-tickets.html">
+                    My Tickets
+                </a>
+            </li>
+
+            <li>
+                <a href="index.html">
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+    <hr>
+
+    <main>
+
+        <article>
+
+            <h2>My Support Tickets</h2>
+
+            <p>
+                View the status of your submitted
+                IT support requests.
+            </p>
+
+            <!-- Search -->
+            <section>
+
+                <h3>Search My Tickets</h3>
+
+                <form action="#" method="GET">
+
+                    <label for="search">
+                        Search:
+                    </label>
+
+                    <input
+                        type="text"
+                        id="search"
+                        name="search"
+                        placeholder="Ticket ID or issue">
+
+                    <button type="submit">
+                        Search
+                    </button>
+
+                </form>
+
+            </section>
+
+            <br>
+
+            <!-- Ticket List -->
+            <section>
+
+                <h3>Ticket List</h3>
+
+                <table border="1">
+
+                    <thead>
+
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Category</th>
+                            <th>Subject</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>TCK-1001</td>
+                            <td>Account / Login</td>
+                            <td>Cannot Login</td>
+                            <td>High</td>
+                            <td>In Progress</td>
+                        </tr>
+
+                        <tr>
+                            <td>TCK-1002</td>
+                            <td>Hardware</td>
+                            <td>Computer Running Slow</td>
+                            <td>Medium</td>
+                            <td>Open</td>
+                        </tr>
+
+                        <tr>
+                            <td>TCK-0998</td>
+                            <td>Printer</td>
+                            <td>Printer Not Working</td>
+                            <td>Low</td>
+                            <td>Resolved</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+            <br>
+
+            <!-- Ticket Details -->
+            <section>
+
+                <h3>
+                    Ticket Details: TCK-1001
+                </h3>
+
+                <p>
+                    <strong>Category:</strong>
+                    Account / Login Issue
+                </p>
+
+                <p>
+                    <strong>Subject:</strong>
+                    Cannot Login
+                </p>
+
+                <p>
+                    <strong>Priority:</strong>
+                    High
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    In Progress
+                </p>
+
+                <p>
+                    <strong>Description:</strong>
+                </p>
+
+                <p>
+                    I cannot log in to my MotorPH
+                    employee account even after
+                    entering my correct password.
+                </p>
+
+                <hr>
+
+                <h4>Message Thread</h4>
+
+                <ul>
+
+                    <li>
+                        <strong>Employee:</strong>
+                        I still cannot access my account.
+                    </li>
+
+                    <li>
+                        <strong>IT Support:</strong>
+                        We are currently checking your
+                        account. Please try resetting
+                        your password.
+                    </li>
+
+                </ul>
+
+                <form action="#" method="POST">
+
+                    <p>
+
+                        <label for="employee-message">
+                            <strong>Reply:</strong>
+                        </label>
+
+                        <br>
+
+                        <textarea
+                            id="employee-message"
+                            name="employee-message"
+                            rows="4"
+                            cols="50"
+                            placeholder="Write a message to IT support..."></textarea>
+
+                    </p>
+
+                    <button type="submit">
+                        Send Message
+                    </button>
+
+                </form>
+
+            </section>
+
+        </article>
+
+    </main>
+
+    <hr>
+
+    <footer>
+
+        <p>
+            MotorPH IT Support Ticketing System
+            &copy; 2026
+        </p>
+
+    </footer>
+
+</body>
+
+</html>
