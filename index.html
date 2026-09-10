@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Helpdesk Ticketing System - Login</title>
+</head>
+<body>
+
+    <header>
+        <h1>IT Helpdesk Ticketing System</h1>
+        <p>Sign in to submit or manage support tickets.</p>
+    </header>
+
+    <hr>
+
+    <main>
+        <article id="login-area">
+            <h2>Log In</h2>
+
+            <form action="dashboard.html" method="GET">
+
+                <p>
+                    <label for="role">Log in as:</label><br>
+                    <select id="role" name="role">
+                        <option value="employee">Employee</option>
+                        <option value="staff">Support Staff</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="email">Email:</label><br>
+                    <input type="email" id="email" name="email" placeholder="you@company.com" required>
+                </p>
+
+                <p>
+                    <label for="password">Password:</label><br>
+                    <input type="password" id="password" name="password" required>
+                </p>
+
+                <button type="submit">Log In</button>
+
+            </form>
+
+            <p><a href="#">Don't have an account? Register</a></p>
+        </article>
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>IT Helpdesk Ticketing System &copy; 2026</p>
+    </footer>
+
+</body>
+</html>

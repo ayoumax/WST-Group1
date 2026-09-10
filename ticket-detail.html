@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket #1042 - IT Helpdesk Ticketing System</title>
+</head>
+<body>
+
+    <header>
+        <img src="https://placehold.co/40x40?text=IT" alt="IT Helpdesk logo" width="40" height="40">
+        <h1>IT Helpdesk Ticketing System</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="submit-ticket.html">Submit Ticket</a></li>
+            <li><a href="staff-dashboard.html">Staff View</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+
+    <hr>
+
+    <main>
+        <article id="ticket-detail">
+            <p><a href="dashboard.html">My Tickets</a> / Ticket #1042</p>
+            <h2>Cannot connect to office Wi-Fi</h2>
+            <p>Submitted by J. Santos on August 28, 2026</p>
+            <p>Status: <strong>Open</strong> &nbsp; Priority: <strong>High</strong></p>
+
+            <h3>Description</h3>
+            <p>Unable to connect to the office Wi-Fi network since this morning. Laptop shows <em>"limited connectivity"</em> and other devices on the same floor seem unaffected.</p>
+
+            <h3>Activity</h3>
+            <ul>
+                <li><strong>J. Santos</strong> &mdash; Tried restarting the laptop, still no luck. <em>(Aug 28, 10:15 AM)</em></li>
+                <li><strong>Support Staff</strong> &mdash; Can you confirm which floor and AP name you're seeing? <em>(Aug 28, 11:02 AM)</em></li>
+            </ul>
+
+            <form action="ticket-detail.html" method="post">
+                <p>
+                    <label for="comment">Add a comment:</label><br>
+                    <textarea id="comment" name="comment" rows="3" placeholder="Type your reply..." required></textarea>
+                </p>
+                <button type="submit">Add Comment</button>
+            </form>
+        </article>
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>IT Helpdesk Ticketing System &copy; 2026</p>
+    </footer>
+
+</body>
+</html>

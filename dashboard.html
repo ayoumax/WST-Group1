@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tickets - IT Helpdesk Ticketing System</title>
+</head>
+<body>
+
+    <header>
+        <img src="https://placehold.co/40x40?text=IT" alt="IT Helpdesk logo" width="40" height="40">
+        <h1>IT Helpdesk Ticketing System</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="submit-ticket.html">Submit Ticket</a></li>
+            <li><a href="staff-dashboard.html">Staff View</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+
+    <hr>
+
+    <main>
+
+        <!-- My Tickets -->
+        <section id="dashboard">
+            <h2>My Tickets</h2>
+            <p>Track the support tickets you've submitted.</p>
+
+            <form action="dashboard.html" method="get">
+                <p>
+                    <label for="ticket-search">Search tickets:</label><br>
+                    <input type="search" id="ticket-search" name="q" placeholder="Search by subject or category">
+                </p>
+                <button type="submit">Search</button>
+            </form>
+
+            <ul>
+                <li>
+                    <article>
+                        <h3><a href="ticket-detail.html">Cannot connect to office Wi-Fi</a></h3>
+                        <p>Category: Network</p>
+                        <p>Status: <strong>Open</strong></p>
+                        <p>Submitted: August 28, 2026</p>
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <h3><a href="ticket-detail.html">Laptop won't boot after update</a></h3>
+                        <p>Category: Hardware</p>
+                        <p>Status: <strong>In Progress</strong></p>
+                        <p>Submitted: August 26, 2026</p>
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <h3><a href="ticket-detail.html">Need access to shared drive</a></h3>
+                        <p>Category: Account Access</p>
+                        <p>Status: <strong>Resolved</strong></p>
+                        <p>Submitted: August 20, 2026</p>
+                    </article>
+                </li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <!-- Quick help tips -->
+        <aside id="quick-help">
+            <h2>Need Help Fast?</h2>
+            <p>Try these steps before submitting a ticket:</p>
+            <ul>
+                <li>Restart your device and try again.</li>
+                <li>Check that your cables and Wi-Fi are connected.</li>
+                <li>Write down any error message you see.</li>
+            </ul>
+            <p><a href="submit-ticket.html">Still need help? Submit a ticket</a></p>
+        </aside>
+
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>IT Helpdesk Ticketing System &copy; 2026</p>
+    </footer>
+
+</body>
+</html>

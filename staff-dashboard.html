@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tickets - Staff View</title>
+</head>
+<body>
+
+    <header>
+        <img src="https://placehold.co/40x40?text=IT" alt="IT Helpdesk logo" width="40" height="40">
+        <h1>IT Helpdesk Ticketing System</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="submit-ticket.html">Submit Ticket</a></li>
+            <li><a href="staff-dashboard.html">Staff View</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+
+    <hr>
+
+    <main>
+        <section id="staff-dashboard">
+            <h2>All Support Tickets</h2>
+            <p>Review and manage tickets submitted by employees.</p>
+
+            <form action="staff-dashboard.html" method="get">
+                <p>
+                    <label for="staff-search">Search by employee or subject:</label><br>
+                    <input type="search" id="staff-search" name="q" placeholder="Search tickets">
+                </p>
+                <p>
+                    <label for="status-filter">Status:</label><br>
+                    <select id="status-filter" name="status">
+                        <option value="all">All</option>
+                        <option value="open">Open</option>
+                        <option value="progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </p>
+                <button type="submit">Filter</button>
+            </form>
+
+            <ul>
+                <li>
+                    <article>
+                        <h3><a href="ticket-detail.html">Cannot connect to office Wi-Fi</a></h3>
+                        <p>Employee: J. Santos</p>
+                        <p>Priority: <strong>High</strong> &nbsp; Status: <strong>Open</strong></p>
+                        <p>Submitted: August 28, 2026</p>
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <h3><a href="ticket-detail.html">Laptop won't boot after update</a></h3>
+                        <p>Employee: M. Cruz</p>
+                        <p>Priority: <strong>Urgent</strong> &nbsp; Status: <strong>In Progress</strong></p>
+                        <p>Submitted: August 26, 2026</p>
+                    </article>
+                </li>
+                <li>
+                    <article>
+                        <h3><a href="ticket-detail.html">Need access to shared drive</a></h3>
+                        <p>Employee: A. Reyes</p>
+                        <p>Priority: <strong>Low</strong> &nbsp; Status: <strong>Resolved</strong></p>
+                        <p>Submitted: August 20, 2026</p>
+                    </article>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>IT Helpdesk Ticketing System &copy; 2026</p>
+    </footer>
+
+</body>
+</html>

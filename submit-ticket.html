@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit New Ticket - IT Helpdesk Ticketing System</title>
+</head>
+<body>
+
+    <header>
+        <img src="https://placehold.co/40x40?text=IT" alt="IT Helpdesk logo" width="40" height="40">
+        <h1>IT Helpdesk Ticketing System</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="submit-ticket.html">Submit Ticket</a></li>
+            <li><a href="staff-dashboard.html">Staff View</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+
+    <hr>
+
+    <main>
+        <section id="new-ticket">
+            <p><a href="dashboard.html">My Tickets</a> / New Ticket</p>
+            <h2>Submit a New Ticket</h2>
+            <p>Describe your issue and our support team will get back to you.</p>
+
+            <form action="dashboard.html" method="post">
+
+                <p>
+                    <label for="subject">Subject:</label><br>
+                    <input type="text" id="subject" name="subject" placeholder="Brief summary of the issue" required>
+                </p>
+
+                <p>
+                    <label for="category">Category:</label><br>
+                    <select id="category" name="category">
+                        <option value="network">Network</option>
+                        <option value="hardware">Hardware</option>
+                        <option value="software">Software</option>
+                        <option value="account">Account Access</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="priority">Priority:</label><br>
+                    <select id="priority" name="priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label for="description">Description:</label><br>
+                    <textarea id="description" name="description" rows="6" placeholder="Describe what happened, when it started, and any error messages you saw" required></textarea>
+                </p>
+
+                <a href="dashboard.html">Cancel</a>
+                <button type="submit">Submit Ticket</button>
+
+            </form>
+        </section>
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>IT Helpdesk Ticketing System &copy; 2026</p>
+    </footer>
+
+</body>
+</html>
