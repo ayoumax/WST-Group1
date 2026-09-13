@@ -4,74 +4,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MotorPH IT Support - Manage Tickets</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="dashboard-page">
 
-    <header>
-        <h1>MotorPH IT Support Ticketing System</h1>
-        <p>IT Technician Portal</p>
-    </header>
+    <div class="app-layout">
 
-    <aside>
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
 
-        <nav aria-label="Technician Navigation">
+            <div class="sidebar-brand">
 
-            <h3>Navigation</h3>
+                <div class="sidebar-logo">
 
-            <ul>
-                <li>
-                    <a href="technician-dashboard.html">
-                        Dashboard
-                    </a>
-                </li>
+                    <img
+                        src="images/motorph-logo.png"
+                        alt="MotorPH Logo">
 
-                <li>
-                    <a
-                        href="manage-tickets.html"
-                        aria-current="page">
-                        Assigned Tickets
-                    </a>
-                </li>
+                    <div>
+                        <h1>MotorPH</h1>
+                        <p>IT Support</p>
+                    </div>
 
-                <li>
-                    <a href="index.html">
-                        Logout
-                    </a>
-                </li>
-            </ul>
+                </div>
 
-        </nav>
+                <small>
+                    Technician Portal
+                </small>
 
-    </aside>
+            </div>
 
-    <hr>
 
-    <main>
+            <nav class="sidebar-nav">
 
-        <article>
+                <a href="technician-dashboard.html">
+                    Dashboard
+                </a>
 
-            <h2>Manage Assigned Tickets</h2>
+                <a
+                    class="active"
+                    href="manage-tickets.html">
+                    Assigned Tickets
+                </a>
 
-            <p>
-                Search, review, communicate,
-                and update support tickets.
-            </p>
+            </nav>
 
-            <section>
+
+            <a
+                class="logout-button"
+                href="index.html">
+                Logout
+            </a>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="dashboard-content">
+
+            <header class="dashboard-header">
+
+                <div>
+
+                    <h2>Manage Assigned Tickets</h2>
+
+                    <p>
+                        Search, review, communicate, and update support tickets.
+                    </p>
+
+                </div>
+
+            </header>
+
+
+            <!-- SEARCH AND FILTER -->
+            <section class="dashboard-card filter-card">
 
                 <h3>Search and Filter</h3>
 
                 <form
+                    class="filter-form"
                     action="#"
                     method="GET">
 
                     <p>
                         <label for="staff-search">
-                            Search:
+                            Search
                         </label>
-                        <br>
 
                         <input
                             type="search"
@@ -82,9 +105,8 @@
 
                     <p>
                         <label for="staff-status">
-                            Status:
+                            Status
                         </label>
-                        <br>
 
                         <select
                             id="staff-status"
@@ -121,214 +143,336 @@
 
             </section>
 
-            <section>
 
-                <h3>Ticket List</h3>
+            <div class="dashboard-grid">
 
-                <table border="1">
+                <!-- TICKET LIST -->
+                <section class="dashboard-card recent-tickets">
 
-                    <thead>
+                    <h3>Ticket List</h3>
 
-                        <tr>
-                            <th>Ticket ID</th>
-                            <th>Employee</th>
-                            <th>Category</th>
-                            <th>Priority</th>
-                            <th>Status</th>
-                        </tr>
 
-                    </thead>
+                    <div class="table-container">
 
-                    <tbody>
+                        <table>
 
-                        <tr>
-                            <td>
-                                TCK-1001
-                            </td>
+                            <thead>
 
-                            <td>
-                                J. Santos
-                            </td>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Employee</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
 
-                            <td>
-                                Network
-                            </td>
+                            </thead>
 
-                            <td>
-                                High
-                            </td>
 
-                            <td>
-                                Open
-                            </td>
-                        </tr>
+                            <tbody>
 
-                        <tr>
-                            <td>
-                                TCK-1002
-                            </td>
+                                <tr class="selected-row">
 
-                            <td>
-                                M. Cruz
-                            </td>
+                                    <td>
+                                        <a
+                                            class="ticket-link"
+                                            href="#ticket-details">
+                                            TCK-1001
+                                        </a>
+                                    </td>
 
-                            <td>
-                                Hardware
-                            </td>
+                                    <td>
+                                        J. Santos
+                                    </td>
 
-                            <td>
-                                Urgent
-                            </td>
+                                    <td>
+                                        Network
+                                    </td>
 
-                            <td>
-                                In Progress
-                            </td>
-                        </tr>
+                                    <td>
+                                        <span class="priority high">
+                                            High
+                                        </span>
+                                    </td>
 
-                    </tbody>
+                                    <td>
+                                        <span class="status open">
+                                            Open
+                                        </span>
+                                    </td>
 
-                </table>
+                                </tr>
 
-            </section>
 
-            <section>
+                                <tr>
 
-                <h3>Ticket Details: TCK-1001</h3>
+                                    <td>
+                                        TCK-1002
+                                    </td>
 
-                <p>
-                    <strong>Employee:</strong>
-                    J. Santos
-                </p>
+                                    <td>
+                                        M. Cruz
+                                    </td>
 
-                <p>
-                    <strong>Department:</strong>
-                    Human Resources
-                </p>
+                                    <td>
+                                        Hardware
+                                    </td>
 
-                <p>
-                    <strong>Category:</strong>
-                    Network
-                </p>
+                                    <td>
+                                        <span class="priority urgent">
+                                            Urgent
+                                        </span>
+                                    </td>
 
-                <p>
-                    <strong>Subject:</strong>
-                    Cannot Connect to Office Wi-Fi
-                </p>
+                                    <td>
+                                        <span class="status progress">
+                                            In Progress
+                                        </span>
+                                    </td>
 
-                <p>
-                    <strong>Priority:</strong>
-                    High
-                </p>
+                                </tr>
 
-                <p>
-                    <strong>Description:</strong>
-                    Employee cannot connect to the office
-                    Wi-Fi. The laptop detects the network
-                    but cannot establish a connection.
-                </p>
 
-                <form
-                    action="#"
-                    method="POST">
+                                <tr>
 
-                    <p>
-                        <label for="ticket-status">
-                            <strong>Update Status:</strong>
-                        </label>
-                        <br>
+                                    <td>
+                                        TCK-1004
+                                    </td>
 
-                        <select
-                            id="ticket-status"
-                            name="ticket-status">
+                                    <td>
+                                        R. Lim
+                                    </td>
 
-                            <option
-                                value="open"
-                                selected>
-                                Open
-                            </option>
+                                    <td>
+                                        Hardware
+                                    </td>
 
-                            <option value="in-progress">
-                                In Progress
-                            </option>
+                                    <td>
+                                        <span class="priority medium">
+                                            Medium
+                                        </span>
+                                    </td>
 
-                            <option value="resolved">
-                                Resolved
-                            </option>
+                                    <td>
+                                        <span class="status open">
+                                            Open
+                                        </span>
+                                    </td>
 
-                            <option value="closed">
-                                Closed
-                            </option>
+                                </tr>
 
-                        </select>
-                    </p>
 
-                    <button type="submit">
-                        Update Status
-                    </button>
+                                <tr>
 
-                </form>
+                                    <td>
+                                        TCK-1005
+                                    </td>
 
-            </section>
+                                    <td>
+                                        K. Tan
+                                    </td>
 
-            <section>
+                                    <td>
+                                        Account Access
+                                    </td>
 
-                <h3>Message Thread</h3>
+                                    <td>
+                                        <span class="priority high">
+                                            High
+                                        </span>
+                                    </td>
 
-                <ul>
+                                    <td>
+                                        <span class="status progress">
+                                            In Progress
+                                        </span>
+                                    </td>
 
-                    <li>
-                        <strong>Employee:</strong>
-                        I tried restarting my laptop,
-                        but the problem still remains.
-                    </li>
+                                </tr>
 
-                    <li>
-                        <strong>IT Technician:</strong>
-                        Please confirm whether another
-                        device can connect to the network.
-                    </li>
 
-                </ul>
+                                <tr>
 
-                <form
-                    action="#"
-                    method="POST">
+                                    <td>
+                                        TCK-1006
+                                    </td>
 
-                    <p>
-                        <label for="technician-message">
-                            <strong>Send Message:</strong>
-                        </label>
-                        <br>
+                                    <td>
+                                        L. Garcia
+                                    </td>
 
-                        <textarea
-                            id="technician-message"
-                            name="message"
-                            rows="4"
-                            cols="50"
-                            placeholder="Write your response..."
-                            required></textarea>
-                    </p>
+                                    <td>
+                                        Account Access
+                                    </td>
 
-                    <button type="submit">
-                        Send Message
-                    </button>
+                                    <td>
+                                        <span class="priority low">
+                                            Low
+                                        </span>
+                                    </td>
 
-                </form>
+                                    <td>
+                                        <span class="status resolved">
+                                            Resolved
+                                        </span>
+                                    </td>
 
-            </section>
+                                </tr>
 
-        </article>
+                            </tbody>
 
-    </main>
+                        </table>
 
-    <hr>
+                    </div>
 
-    <footer>
-        <p>
-            MotorPH IT Support Ticketing System
-            &copy; 2026
-        </p>
-    </footer>
+                </section>
+
+
+                <!-- TICKET DETAILS AND MESSAGES -->
+                <div class="detail-stack">
+
+                    <section
+                        class="dashboard-card"
+                        id="ticket-details">
+
+                        <h3>Ticket Details: TCK-1001</h3>
+
+                        <div class="detail-list">
+
+                            <p>
+                                <strong>Employee</strong>
+                                <span>J. Santos</span>
+                            </p>
+
+                            <p>
+                                <strong>Department</strong>
+                                <span>Human Resources</span>
+                            </p>
+
+                            <p>
+                                <strong>Category</strong>
+                                <span>Network</span>
+                            </p>
+
+                            <p>
+                                <strong>Subject</strong>
+                                <span>Cannot Connect to Office Wi-Fi</span>
+                            </p>
+
+                            <p>
+                                <strong>Priority</strong>
+                                <span class="priority high">
+                                    High
+                                </span>
+                            </p>
+
+                            <p>
+                                <strong>Description</strong>
+                                <span>
+                                    Employee cannot connect to the office Wi-Fi.
+                                    The laptop detects the network but cannot
+                                    establish a connection.
+                                </span>
+                            </p>
+
+                        </div>
+
+
+                        <form
+                            class="ticket-form stacked"
+                            action="#"
+                            method="POST">
+
+                            <p>
+                                <label for="ticket-status">
+                                    Update Status
+                                </label>
+
+                                <select
+                                    id="ticket-status"
+                                    name="ticket-status">
+
+                                    <option
+                                        value="open"
+                                        selected>
+                                        Open
+                                    </option>
+
+                                    <option value="in-progress">
+                                        In Progress
+                                    </option>
+
+                                    <option value="resolved">
+                                        Resolved
+                                    </option>
+
+                                    <option value="closed">
+                                        Closed
+                                    </option>
+
+                                </select>
+                            </p>
+
+                            <button type="submit">
+                                Update Status
+                            </button>
+
+                        </form>
+
+                    </section>
+
+
+                    <section class="dashboard-card">
+
+                        <h3>Message Thread</h3>
+
+                        <ul class="message-list">
+
+                            <li>
+                                <strong>Employee</strong>
+                                I tried restarting my laptop, but the problem still remains.
+                            </li>
+
+                            <li>
+                                <strong>IT Technician</strong>
+                                Please confirm whether another device can connect to the network.
+                            </li>
+
+                        </ul>
+
+
+                        <form
+                            class="ticket-form stacked"
+                            action="#"
+                            method="POST">
+
+                            <p>
+                                <label for="technician-message">
+                                    Send Message
+                                </label>
+
+                                <textarea
+                                    id="technician-message"
+                                    name="message"
+                                    placeholder="Write your response..."
+                                    required></textarea>
+                            </p>
+
+                            <button type="submit">
+                                Send Message
+                            </button>
+
+                        </form>
+
+                    </section>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
 
 </body>
 

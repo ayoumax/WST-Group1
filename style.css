@@ -333,6 +333,44 @@ a {
     flex-shrink: 0;
 }
 
+.sidebar-logo h1 {
+    margin: 0;
+
+    color:
+        var(--sidebar-text);
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    line-height: 1.1;
+}
+
+.sidebar-logo p {
+    margin:
+        5px
+        0
+        0;
+
+    color:
+        var(--sidebar-text-muted);
+
+    font-size: 12px;
+
+    line-height: 1.3;
+}
+
+.sidebar-brand small {
+    display: block;
+
+    margin-top: 12px;
+
+    color:
+        var(--sidebar-text-muted);
+
+    font-size: 12px;
+}
+
 .sidebar-title {
     min-width: 0;
 }
@@ -577,6 +615,13 @@ a {
     margin-top: 0;
 }
 
+.dashboard-card > p {
+    margin-top: 0;
+
+    color:
+        var(--text-muted);
+}
+
 
 /* =========================
    TABLE
@@ -716,6 +761,282 @@ tbody tr:hover {
 
 
 /* =========================
+   FILTER AND PAGE FORMS
+========================= */
+
+.filter-card {
+    margin-bottom: 20px;
+}
+
+.filter-form,
+.ticket-form {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    align-items: flex-end;
+}
+
+.filter-form p,
+.ticket-form p {
+    margin: 0;
+
+    flex: 1;
+
+    min-width: 180px;
+}
+
+.filter-form label,
+.ticket-form label,
+.detail-list strong {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color:
+        var(--text-muted);
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+.filter-form input,
+.filter-form select,
+.ticket-form input,
+.ticket-form select,
+.ticket-form textarea {
+    width: 100%;
+
+    padding: 10px;
+
+    border:
+        1px solid
+        var(--card-border);
+
+    border-radius: 5px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    color:
+        var(--text-dark);
+
+    background-color: white;
+}
+
+.ticket-form textarea {
+    min-height: 110px;
+
+    resize: vertical;
+}
+
+.ticket-form.stacked {
+    flex-direction: column;
+
+    align-items: stretch;
+}
+
+.ticket-form.stacked p {
+    flex: none;
+
+    min-width: 0;
+}
+
+.ticket-form.stacked button {
+    align-self: flex-start;
+}
+
+.filter-form button {
+    flex-shrink: 0;
+}
+
+.filter-form button,
+.ticket-form button,
+.primary-button {
+    padding:
+        11px
+        18px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    background-color:
+        var(--sidebar-active);
+
+    color: white;
+
+    font-weight: bold;
+
+    font-family: inherit;
+
+    cursor: pointer;
+}
+
+.filter-form button:hover,
+.ticket-form button:hover,
+.primary-button:hover {
+    background-color:
+        var(--sidebar-hover);
+}
+
+
+/* =========================
+   TICKET DETAILS
+========================= */
+
+.detail-stack {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.detail-list {
+    margin-bottom: 18px;
+}
+
+.detail-list p {
+    margin: 0;
+
+    padding:
+        12px
+        0;
+
+    border-bottom:
+        1px solid
+        var(--card-border);
+}
+
+.detail-list p:last-child {
+    border-bottom: none;
+}
+
+.detail-list span {
+    color:
+        var(--text-dark);
+
+    font-weight: normal;
+}
+
+.selected-row {
+    background-color:
+        #E8F1FF;
+}
+
+tbody tr.selected-row:hover {
+    background-color:
+        #E8F1FF;
+}
+
+
+/* =========================
+   MESSAGE THREAD
+========================= */
+
+.message-list {
+    list-style: none;
+
+    margin: 0 0 18px;
+
+    padding: 0;
+}
+
+.message-list li {
+    margin-bottom: 10px;
+
+    padding:
+        12px
+        14px;
+
+    background-color:
+        #F4F7FB;
+
+    border:
+        1px solid
+        var(--card-border);
+
+    border-radius: 5px;
+
+    color:
+        var(--text-muted);
+}
+
+.message-list strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        var(--text-dark);
+}
+
+
+/* =========================
+   PRIORITY AND CLOSED STATUS
+========================= */
+
+.priority {
+    display: inline-block;
+
+    padding:
+        5px
+        9px;
+
+    border-radius: 15px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.priority.urgent {
+    background-color:
+        #FDECEC;
+
+    color:
+        #B42318;
+}
+
+.priority.high {
+    background-color:
+        #FFF2DF;
+
+    color:
+        #A95B00;
+}
+
+.priority.medium {
+    background-color:
+        #E8F1FF;
+
+    color:
+        #0F52AA;
+}
+
+.priority.low {
+    background-color:
+        #EEF2F6;
+
+    color:
+        #5F6E87;
+}
+
+.status.closed {
+    background-color:
+        #EEF2F6;
+
+    color:
+        #5F6E87;
+}
+
+
+/* =========================
    RESPONSIVE
 ========================= */
 
@@ -732,6 +1053,12 @@ tbody tr:hover {
     .dashboard-grid {
         grid-template-columns:
             1fr;
+    }
+
+    .filter-form {
+        flex-direction: column;
+
+        align-items: stretch;
     }
 }
 
