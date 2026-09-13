@@ -4,107 +4,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MotorPH IT Support Ticketing System - Login</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="login-page">
 
-    <header>
-        <h1>MotorPH IT Support Ticketing System</h1>
-        <p>Employee and IT Support Portal</p>
-    </header>
+    <main class="login-main">
 
-    <hr>
+        <!-- LEFT SIDE -->
+        <section class="login-visual">
 
-    <main>
+            <img
+                src="images/login-illustration.png"
+                alt="MotorPH IT Support Illustration">
 
+        </section>
+
+
+        <!-- LOGIN CARD -->
         <section id="login-area">
+
+            <div class="login-logo">
+
+                <img
+                    src="images/motorph-logo.png"
+                    alt="MotorPH Logo">
+
+                <div>
+                    <h1>MotorPH</h1>
+                    <p>IT Support Portal</p>
+                </div>
+
+            </div>
+
 
             <h2>Sign In</h2>
 
-            <p>
+            <p class="login-description">
                 Enter your credentials and select your role.
             </p>
 
+
             <form method="GET">
 
+                <!-- USERNAME -->
                 <p>
+
                     <label for="username">
                         <strong>Username:</strong>
                     </label>
+
                     <br>
 
                     <input
                         type="text"
                         id="username"
+                        name="username"
                         placeholder="Enter username"
                         required>
+
                 </p>
 
+
+                <!-- PASSWORD -->
                 <p>
+
                     <label for="password">
                         <strong>Password:</strong>
                     </label>
+
                     <br>
 
                     <input
                         type="password"
                         id="password"
+                        name="password"
                         placeholder="Enter password"
                         required>
+
                 </p>
 
+
+                <!-- ROLE -->
                 <fieldset>
 
                     <legend>
                         <strong>Login As</strong>
                     </legend>
 
-                    <p>
+                    <p class="login-role-buttons">
+
                         <button
                             type="submit"
                             formaction="employee-dashboard.html">
-
                             Employee
                         </button>
+
 
                         <button
                             type="submit"
                             formaction="technician-dashboard.html">
-
                             IT Technician
                         </button>
+
 
                         <button
                             type="submit"
                             formaction="admin-dashboard.html">
-
                             Administrator
                         </button>
+
                     </p>
 
                 </fieldset>
 
             </form>
 
-            <p>
-                <small>
-                    Prototype only — account credentials
-                    are not yet validated.
-                </small>
-            </p>
-
         </section>
 
     </main>
 
-    <hr>
 
     <footer>
+
         <p>
-            MotorPH IT Support Ticketing System
-            &copy; 2026
+            MotorPH IT Support Ticketing System &copy; 2026
         </p>
+
     </footer>
 
 </body>
