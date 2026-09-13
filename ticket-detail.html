@@ -28,8 +28,15 @@
             <p><a href="dashboard.html">My Tickets</a> / Ticket #1042</p>
             <h2>Cannot connect to office Wi-Fi</h2>
             <p>Submitted by J. Santos on August 28, 2026</p>
-            <p>Status: <strong>Open</strong> &nbsp; Priority: <strong>High</strong></p>
-
+            <p>Status: <strong id="ticketStatus">Open</strong> &nbsp; Priority: <strong>High</strong></p>
+                <p>
+                    <label for="statusSelect">Update status:</label><br>
+                    <select id="statusSelect">
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+                </p>
             <h3>Description</h3>
             <p>Unable to connect to the office Wi-Fi network since this morning. Laptop shows <em>"limited connectivity"</em> and other devices on the same floor seem unaffected.</p>
 
@@ -54,6 +61,17 @@
     <footer>
         <p>IT Helpdesk Ticketing System &copy; 2026</p>
     </footer>
+        
+    <script>
+        let statusText = document.getElementById("ticketStatus");
+        let statusSelect = document.getElementById("statusSelect");
+            
+        statusSelect.onchange = function () {
+
+          statusText.textContent = statusSelect.value;
+
+        };
+    </script>
 
 </body>
 </html>
