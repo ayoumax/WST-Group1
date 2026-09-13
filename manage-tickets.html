@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotorPH IT Support - Manage Tickets</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MotorPH IT Support Ticketing System</h1>
+        <p>IT Technician Portal</p>
+    </header>
+
+    <aside>
+
+        <nav aria-label="Technician Navigation">
+
+            <h3>Navigation</h3>
+
+            <ul>
+                <li>
+                    <a href="technician-dashboard.html">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="manage-tickets.html"
+                        aria-current="page">
+                        Assigned Tickets
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+
+    </aside>
+
+    <hr>
+
+    <main>
+
+        <article>
+
+            <h2>Manage Assigned Tickets</h2>
+
+            <p>
+                Search, review, communicate,
+                and update support tickets.
+            </p>
+
+            <section>
+
+                <h3>Search and Filter</h3>
+
+                <form
+                    action="#"
+                    method="GET">
+
+                    <p>
+                        <label for="staff-search">
+                            Search:
+                        </label>
+                        <br>
+
+                        <input
+                            type="search"
+                            id="staff-search"
+                            name="search"
+                            placeholder="Ticket ID, employee, or subject">
+                    </p>
+
+                    <p>
+                        <label for="staff-status">
+                            Status:
+                        </label>
+                        <br>
+
+                        <select
+                            id="staff-status"
+                            name="status">
+
+                            <option value="all">
+                                All
+                            </option>
+
+                            <option value="open">
+                                Open
+                            </option>
+
+                            <option value="in-progress">
+                                In Progress
+                            </option>
+
+                            <option value="resolved">
+                                Resolved
+                            </option>
+
+                            <option value="closed">
+                                Closed
+                            </option>
+
+                        </select>
+                    </p>
+
+                    <button type="submit">
+                        Filter
+                    </button>
+
+                </form>
+
+            </section>
+
+            <section>
+
+                <h3>Ticket List</h3>
+
+                <table border="1">
+
+                    <thead>
+
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Employee</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                TCK-1001
+                            </td>
+
+                            <td>
+                                J. Santos
+                            </td>
+
+                            <td>
+                                Network
+                            </td>
+
+                            <td>
+                                High
+                            </td>
+
+                            <td>
+                                Open
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                TCK-1002
+                            </td>
+
+                            <td>
+                                M. Cruz
+                            </td>
+
+                            <td>
+                                Hardware
+                            </td>
+
+                            <td>
+                                Urgent
+                            </td>
+
+                            <td>
+                                In Progress
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+            <section>
+
+                <h3>Ticket Details: TCK-1001</h3>
+
+                <p>
+                    <strong>Employee:</strong>
+                    J. Santos
+                </p>
+
+                <p>
+                    <strong>Department:</strong>
+                    Human Resources
+                </p>
+
+                <p>
+                    <strong>Category:</strong>
+                    Network
+                </p>
+
+                <p>
+                    <strong>Subject:</strong>
+                    Cannot Connect to Office Wi-Fi
+                </p>
+
+                <p>
+                    <strong>Priority:</strong>
+                    High
+                </p>
+
+                <p>
+                    <strong>Description:</strong>
+                    Employee cannot connect to the office
+                    Wi-Fi. The laptop detects the network
+                    but cannot establish a connection.
+                </p>
+
+                <form
+                    action="#"
+                    method="POST">
+
+                    <p>
+                        <label for="ticket-status">
+                            <strong>Update Status:</strong>
+                        </label>
+                        <br>
+
+                        <select
+                            id="ticket-status"
+                            name="ticket-status">
+
+                            <option
+                                value="open"
+                                selected>
+                                Open
+                            </option>
+
+                            <option value="in-progress">
+                                In Progress
+                            </option>
+
+                            <option value="resolved">
+                                Resolved
+                            </option>
+
+                            <option value="closed">
+                                Closed
+                            </option>
+
+                        </select>
+                    </p>
+
+                    <button type="submit">
+                        Update Status
+                    </button>
+
+                </form>
+
+            </section>
+
+            <section>
+
+                <h3>Message Thread</h3>
+
+                <ul>
+
+                    <li>
+                        <strong>Employee:</strong>
+                        I tried restarting my laptop,
+                        but the problem still remains.
+                    </li>
+
+                    <li>
+                        <strong>IT Technician:</strong>
+                        Please confirm whether another
+                        device can connect to the network.
+                    </li>
+
+                </ul>
+
+                <form
+                    action="#"
+                    method="POST">
+
+                    <p>
+                        <label for="technician-message">
+                            <strong>Send Message:</strong>
+                        </label>
+                        <br>
+
+                        <textarea
+                            id="technician-message"
+                            name="message"
+                            rows="4"
+                            cols="50"
+                            placeholder="Write your response..."
+                            required></textarea>
+                    </p>
+
+                    <button type="submit">
+                        Send Message
+                    </button>
+
+                </form>
+
+            </section>
+
+        </article>
+
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>
+            MotorPH IT Support Ticketing System
+            &copy; 2026
+        </p>
+    </footer>
+
+</body>
+
+</html>

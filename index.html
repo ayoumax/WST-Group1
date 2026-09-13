@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotorPH IT Support Ticketing System - Login</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MotorPH IT Support Ticketing System</h1>
+        <p>Employee and IT Support Portal</p>
+    </header>
+
+    <hr>
+
+    <main>
+
+        <section id="login-area">
+
+            <h2>Sign In</h2>
+
+            <p>
+                Enter your credentials and select your role.
+            </p>
+
+            <form method="GET">
+
+                <p>
+                    <label for="username">
+                        <strong>Username:</strong>
+                    </label>
+                    <br>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter username"
+                        required>
+                </p>
+
+                <p>
+                    <label for="password">
+                        <strong>Password:</strong>
+                    </label>
+                    <br>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        required>
+                </p>
+
+                <fieldset>
+
+                    <legend>
+                        <strong>Login As</strong>
+                    </legend>
+
+                    <p>
+                        <button
+                            type="submit"
+                            formaction="employee-dashboard.html">
+
+                            Employee
+                        </button>
+
+                        <button
+                            type="submit"
+                            formaction="technician-dashboard.html">
+
+                            IT Technician
+                        </button>
+
+                        <button
+                            type="submit"
+                            formaction="admin-dashboard.html">
+
+                            Administrator
+                        </button>
+                    </p>
+
+                </fieldset>
+
+            </form>
+
+            <p>
+                <small>
+                    Prototype only — account credentials
+                    are not yet validated.
+                </small>
+            </p>
+
+        </section>
+
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>
+            MotorPH IT Support Ticketing System
+            &copy; 2026
+        </p>
+    </footer>
+
+</body>
+
+</html>

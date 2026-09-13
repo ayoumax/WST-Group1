@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotorPH IT Support - My Tickets</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MotorPH IT Support Ticketing System</h1>
+        <p>Employee Portal</p>
+    </header>
+
+    <aside>
+
+        <nav aria-label="Employee Navigation">
+
+            <h3>Navigation</h3>
+
+            <ul>
+                <li>
+                    <a href="employee-dashboard.html">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="submit-ticket.html">
+                        Submit Ticket
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="my-tickets.html"
+                        aria-current="page">
+                        My Tickets
+                    </a>
+                </li>
+
+                <li>
+                    <a href="help.html">
+                        Help
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+
+    </aside>
+
+    <hr>
+
+    <main>
+
+        <article>
+
+            <h2>My Tickets</h2>
+
+            <p>
+                Search and monitor your submitted
+                IT support requests.
+            </p>
+
+            <section>
+
+                <h3>Search and Filter</h3>
+
+                <form
+                    action="#"
+                    method="GET">
+
+                    <p>
+                        <label for="ticket-search">
+                            Search:
+                        </label>
+                        <br>
+
+                        <input
+                            type="search"
+                            id="ticket-search"
+                            name="search"
+                            placeholder="Ticket ID or subject">
+                    </p>
+
+                    <p>
+                        <label for="status-filter">
+                            Status:
+                        </label>
+                        <br>
+
+                        <select
+                            id="status-filter"
+                            name="status">
+
+                            <option value="all">
+                                All
+                            </option>
+
+                            <option value="open">
+                                Open
+                            </option>
+
+                            <option value="in-progress">
+                                In Progress
+                            </option>
+
+                            <option value="resolved">
+                                Resolved
+                            </option>
+
+                            <option value="closed">
+                                Closed
+                            </option>
+
+                        </select>
+                    </p>
+
+                    <button type="submit">
+                        Filter
+                    </button>
+
+                </form>
+
+            </section>
+
+            <section>
+
+                <h3>Submitted Tickets</h3>
+
+                <table border="1">
+
+                    <thead>
+
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Subject</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Submitted</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                TCK-1001
+                            </td>
+
+                            <td>
+                                Cannot connect to office Wi-Fi
+                            </td>
+
+                            <td>
+                                Network
+                            </td>
+
+                            <td>
+                                High
+                            </td>
+
+                            <td>
+                                Open
+                            </td>
+
+                            <td>
+                                September 6, 2026
+                            </td>
+
+                            <td>
+                                <a href="ticket-detail.html">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                TCK-1002
+                            </td>
+
+                            <td>
+                                Laptop won't boot after update
+                            </td>
+
+                            <td>
+                                Hardware
+                            </td>
+
+                            <td>
+                                Urgent
+                            </td>
+
+                            <td>
+                                In Progress
+                            </td>
+
+                            <td>
+                                September 5, 2026
+                            </td>
+
+                            <td>
+                                <a href="ticket-detail.html">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                TCK-1003
+                            </td>
+
+                            <td>
+                                Need access to shared drive
+                            </td>
+
+                            <td>
+                                Account Access
+                            </td>
+
+                            <td>
+                                Low
+                            </td>
+
+                            <td>
+                                Resolved
+                            </td>
+
+                            <td>
+                                September 3, 2026
+                            </td>
+
+                            <td>
+                                <a href="ticket-detail.html">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+        </article>
+
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>
+            MotorPH IT Support Ticketing System
+            &copy; 2026
+        </p>
+    </footer>
+
+</body>
+
+</html>

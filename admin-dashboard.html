@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotorPH IT Support - Administrator Dashboard</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MotorPH IT Support Ticketing System</h1>
+        <p>Administrator Portal</p>
+    </header>
+
+    <aside>
+
+        <nav aria-label="Administrator Navigation">
+
+            <h3>Navigation</h3>
+
+            <ul>
+                <li>
+                    <a
+                        href="admin-dashboard.html"
+                        aria-current="page">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#all-tickets">
+                        All Tickets
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#assign-technician">
+                        Assign Technician
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+
+    </aside>
+
+    <hr>
+
+    <main>
+
+        <article>
+
+            <h2>Administrator Dashboard</h2>
+
+            <p>
+                Monitor support activity and
+                manage ticket assignments.
+            </p>
+
+            <section>
+
+                <h3>Ticket Overview</h3>
+
+                <ul>
+                    <li>
+                        <strong>Total Tickets:</strong>
+                        26
+                    </li>
+
+                    <li>
+                        <strong>Open:</strong>
+                        5
+                    </li>
+
+                    <li>
+                        <strong>In Progress:</strong>
+                        3
+                    </li>
+
+                    <li>
+                        <strong>Resolved:</strong>
+                        10
+                    </li>
+
+                    <li>
+                        <strong>Closed:</strong>
+                        8
+                    </li>
+                </ul>
+
+            </section>
+
+            <section id="all-tickets">
+
+                <h3>All Tickets</h3>
+
+                <table border="1">
+
+                    <thead>
+
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Employee</th>
+                            <th>Department</th>
+                            <th>Issue</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Assigned Technician</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                TCK-1001
+                            </td>
+
+                            <td>
+                                J. Santos
+                            </td>
+
+                            <td>
+                                Human Resources
+                            </td>
+
+                            <td>
+                                Cannot connect to office Wi-Fi
+                            </td>
+
+                            <td>
+                                High
+                            </td>
+
+                            <td>
+                                Open
+                            </td>
+
+                            <td>
+                                Unassigned
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                TCK-1002
+                            </td>
+
+                            <td>
+                                M. Cruz
+                            </td>
+
+                            <td>
+                                Finance
+                            </td>
+
+                            <td>
+                                Laptop won't boot after update
+                            </td>
+
+                            <td>
+                                Urgent
+                            </td>
+
+                            <td>
+                                In Progress
+                            </td>
+
+                            <td>
+                                Mark Santos
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                TCK-1003
+                            </td>
+
+                            <td>
+                                A. Reyes
+                            </td>
+
+                            <td>
+                                Payroll
+                            </td>
+
+                            <td>
+                                Need access to shared drive
+                            </td>
+
+                            <td>
+                                Low
+                            </td>
+
+                            <td>
+                                Resolved
+                            </td>
+
+                            <td>
+                                Ana Reyes
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+            <section id="assign-technician">
+
+                <h3>Assign Technician</h3>
+
+                <form
+                    action="#"
+                    method="POST">
+
+                    <p>
+                        <label for="admin-ticket">
+                            <strong>Ticket:</strong>
+                        </label>
+                        <br>
+
+                        <select
+                            id="admin-ticket"
+                            name="ticket">
+
+                            <option value="1001">
+                                TCK-1001 - Wi-Fi Issue
+                            </option>
+
+                            <option value="1002">
+                                TCK-1002 - Laptop Issue
+                            </option>
+
+                            <option value="1003">
+                                TCK-1003 - Shared Drive
+                            </option>
+
+                        </select>
+                    </p>
+
+                    <p>
+                        <label for="technician">
+                            <strong>Technician:</strong>
+                        </label>
+                        <br>
+
+                        <select
+                            id="technician"
+                            name="technician">
+
+                            <option value="">
+                                Select Technician
+                            </option>
+
+                            <option value="mark">
+                                Mark Santos
+                            </option>
+
+                            <option value="ana">
+                                Ana Reyes
+                            </option>
+
+                            <option value="team">
+                                IT Support Team
+                            </option>
+
+                        </select>
+                    </p>
+
+                    <button type="submit">
+                        Assign Technician
+                    </button>
+
+                </form>
+
+            </section>
+
+        </article>
+
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>
+            MotorPH IT Support Ticketing System
+            &copy; 2026
+        </p>
+    </footer>
+
+</body>
+
+</html>
