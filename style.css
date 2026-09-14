@@ -314,22 +314,16 @@ textarea:focus-visible {
 
 .sidebar {
     width: 250px;
-
     min-height: 100vh;
-
-    padding:
-        25px
-        15px;
+    padding: 25px 15px;
 
     display: flex;
-
     flex-direction: column;
+    flex-shrink: 0;
 
-    background-color:
-        var(--sidebar-bg);
-
-    color:
-        var(--sidebar-text);
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    border-right: 1px solid var(--sidebar-border);
 }
 
 
@@ -399,14 +393,17 @@ textarea:focus-visible {
 
 /* SIDEBAR NAVIGATION */
 
-.sidebar-nav {
-    margin-top: 30px;
-
+.sidebar-nav a {
     display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 12px 15px;
 
-    flex-direction: column;
+    border: 1px solid transparent;
+    border-radius: 5px;
 
-    gap: 8px;
+    color: var(--sidebar-text);
+    font-weight: bold;
 }
 
 .sidebar-nav a {
@@ -425,41 +422,38 @@ textarea:focus-visible {
 }
 
 .sidebar-nav a:hover {
-    background-color:
-        var(--sidebar-hover);
+    background-color: var(--sidebar-hover);
+    border-color: var(--sidebar-border);
 }
 
-.sidebar-nav a.active {
-    background-color:
-        var(--sidebar-active);
+.sidebar-nav a.active,
+.sidebar-nav a[aria-current="page"] {
+    background-color: var(--sidebar-active);
+    color: var(--sidebar-text);
 }
-
 
 /* LOGOUT */
 
 .logout-button {
+    min-height: 48px;
     margin-top: auto;
+    padding: 12px 15px;
 
-    padding:
-        13px
-        15px;
+    display: flex;
+    align-items: center;
 
+    border: 1px solid transparent;
     border-radius: 5px;
 
-    background-color:
-        var(--logout-bg);
-
-    color:
-        var(--sidebar-text);
-
+    background-color: var(--logout-bg);
+    color: var(--sidebar-text);
     font-weight: bold;
 }
 
 .logout-button:hover {
-    background-color:
-        var(--logout-hover);
+    background-color: var(--logout-hover);
+    border-color: var(--sidebar-border);
 }
-
 
 /* =========================
    DASHBOARD CONTENT
