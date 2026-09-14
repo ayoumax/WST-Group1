@@ -807,3 +807,55 @@ tbody tr:hover {
             1fr;
     }
 }
+
+/* =========================
+   SHARED BUTTONS
+========================= */
+
+.btn {
+    min-height: 44px;
+    padding: 10px 16px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    border: 1px solid transparent;
+    border-radius: 5px;
+
+    font-weight: bold;
+    line-height: 1;
+    cursor: pointer;
+}
+
+/* Main actions: Submit, Save, Create */
+
+.btn-primary {
+    background-color: var(--sidebar-active);
+    color: var(--sidebar-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--sidebar-hover);
+}
+
+/* Secondary actions: Cancel, Reset, Back */
+
+.btn-secondary {
+    background-color: var(--card-bg);
+    color: var(--text-dark);
+    border-color: var(--card-border);
+}
+
+.btn-secondary:hover {
+    background-color: #F4F7FB;
+    border-color: var(--sidebar-border);
+}
+
+/* Disabled button */
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
