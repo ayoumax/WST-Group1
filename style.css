@@ -859,3 +859,53 @@ tbody tr:hover {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* =========================
+   SHARED CARDS
+========================= */
+
+.card {
+    padding: 24px;
+
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--border-radius);
+}
+
+.card-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    border-bottom: 1px solid var(--card-border);
+}
+
+.card-title {
+    margin: 0;
+    color: var(--text-dark);
+    font-size: 20px;
+}
+
+.card-description {
+    margin: 5px 0 0;
+    color: var(--text-muted);
+}
+
+.card-body {
+    color: var(--text-dark);
+}
+
+.card-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    border-top: 1px solid var(--card-border);
+}
