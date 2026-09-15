@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MotorPH IT Support - All Tickets</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dashboard-page">
+
+    <div class="app-layout">
+
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+
+                <div class="sidebar-logo">
+
+                    <img
+                        src="images/motorph-logo.png"
+                        alt="MotorPH Logo">
+
+                    <div class="sidebar-title">
+
+                        <h1>MotorPH</h1>
+
+                        <p>IT Support</p>
+
+                        <span class="portal-label">
+                            Administrator Portal
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <a href="admin-dashboard.html">
+                    Dashboard
+                </a>
+
+                <a
+                    class="active"
+                    href="admin-tickets.html">
+                    All Tickets
+                </a>
+
+                <a href="assign-technician.html">
+                    Assign Technician
+                </a>
+
+            </nav>
+
+
+            <a
+                class="logout-button"
+                href="index.html">
+                Logout
+            </a>
+
+        </aside>
+
+
+        <main class="dashboard-content">
+
+            <header class="dashboard-header">
+
+                <div>
+
+                    <h2>All Tickets</h2>
+
+                    <p>
+                        View and monitor all IT support tickets.
+                    </p>
+
+                </div>
+
+            </header>
+
+
+            <section class="dashboard-card filter-card">
+
+                <h3>Search and Filter</h3>
+
+                <form class="filter-form">
+
+                    <p>
+
+                        <label for="admin-search">
+                            Search
+                        </label>
+
+                        <input
+                            type="search"
+                            id="admin-search"
+                            placeholder="Ticket ID, employee, or issue">
+
+                    </p>
+
+
+                    <p>
+
+                        <label for="admin-status">
+                            Status
+                        </label>
+
+                        <select id="admin-status">
+
+                            <option>All</option>
+                            <option>Open</option>
+                            <option>In Progress</option>
+                            <option>Resolved</option>
+                            <option>Closed</option>
+
+                        </select>
+
+                    </p>
+
+
+                    <button type="submit">
+                        Filter
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <section class="dashboard-card">
+
+                <h3>Ticket List</h3>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Employee</th>
+                                <th>Department</th>
+                                <th>Issue</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Assigned Technician</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <tr>
+                                <td>TCK-1001</td>
+                                <td>J. Santos</td>
+                                <td>Human Resources</td>
+                                <td>Cannot connect to office Wi-Fi</td>
+
+                                <td>
+                                    <span class="priority high">
+                                        High
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="status open">
+                                        Open
+                                    </span>
+                                </td>
+
+                                <td>Unassigned</td>
+                            </tr>
+
+
+                            <tr>
+                                <td>TCK-1002</td>
+                                <td>M. Cruz</td>
+                                <td>Finance</td>
+                                <td>Laptop won't boot after update</td>
+
+                                <td>
+                                    <span class="priority urgent">
+                                        Urgent
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="status progress">
+                                        In Progress
+                                    </span>
+                                </td>
+
+                                <td>Mark Santos</td>
+                            </tr>
+
+
+                            <tr>
+                                <td>TCK-1003</td>
+                                <td>A. Reyes</td>
+                                <td>Payroll</td>
+                                <td>Need access to shared drive</td>
+
+                                <td>
+                                    <span class="priority low">
+                                        Low
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="status resolved">
+                                        Resolved
+                                    </span>
+                                </td>
+
+                                <td>Ana Reyes</td>
+                            </tr>
+
+
+                            <tr>
+                                <td>TCK-1004</td>
+                                <td>R. Lim</td>
+                                <td>Operations</td>
+                                <td>Office printer keeps jamming</td>
+
+                                <td>
+                                    <span class="priority medium">
+                                        Medium
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="status open">
+                                        Open
+                                    </span>
+                                </td>
+
+                                <td>Unassigned</td>
+                            </tr>
+
+
+                            <tr>
+                                <td>TCK-1007</td>
+                                <td>P. Dela Cruz</td>
+                                <td>Sales</td>
+                                <td>Monitor not turning on</td>
+
+                                <td>
+                                    <span class="priority medium">
+                                        Medium
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="status closed">
+                                        Closed
+                                    </span>
+                                </td>
+
+                                <td>Mark Santos</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

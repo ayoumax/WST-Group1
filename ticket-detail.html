@@ -2,86 +2,233 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MotorPH IT Support - Ticket Details</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="dashboard-page">
+
     <div class="app-layout">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
 
-        <div class="sidebar-brand">
-            <div class="sidebar-logo">
-                <img src="images/motorph-logo.png" alt="MotorPH Logo">
-                <div>
-                    <h1>MotorPH</h1>
-                    <p>IT Support</p>
+            <div class="sidebar-brand">
+
+                <div class="sidebar-logo">
+
+                    <img
+                        src="images/motorph-logo.png"
+                        alt="MotorPH Logo">
+
+                    <div class="sidebar-title">
+
+                        <h1>MotorPH</h1>
+
+                        <p>IT Support</p>
+
+                        <span class="portal-label">
+                            Employee Portal
+                        </span>
+
+                    </div>
+
                 </div>
+
             </div>
-            <small>Employee Portal</small>
-        </div>
 
-        <nav class="sidebar-nav">
-            <a href="employee-dashboard.html">Dashboard</a>
-            <a href="submit-ticket.html">Submit Ticket</a>
-            <a class="active" href="my-tickets.html">My Tickets</a>
-            <a href="help.html">Help</a>
-        </nav>
 
-        <a class="logout-button" href="index.html">Logout</a>
+            <nav class="sidebar-nav">
 
-    </aside>
+                <a href="employee-dashboard.html">
+                    Dashboard
+                </a>
 
-    <main class="dashboard-content">
+                <a href="submit-ticket.html">
+                    Submit Ticket
+                </a>
 
-        <header class="dashboard-header">
-            <div>
-                <p><a href="my-tickets.html">My Tickets</a> / TCK-1001</p>
-                <h2>Cannot Connect to Office Wi-Fi</h2>
+                <a
+                    class="active"
+                    href="my-tickets.html">
+                    My Tickets
+                </a>
+
+                <a href="help.html">
+                    Help
+                </a>
+
+            </nav>
+
+
+            <a
+                class="logout-button"
+                href="index.html">
+                Logout
+            </a>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="dashboard-content">
+
+            <header class="ticket-detail-header">
+
+                <a
+                    class="back-button"
+                    href="my-tickets.html">
+                    ← Back to My Tickets
+                </a>
+
+                <div class="ticket-heading">
+
+                    <p>
+                        Ticket TCK-1001
+                    </p>
+
+                    <h2>
+                        Cannot Connect to Office Wi-Fi
+                    </h2>
+
+                </div>
+
+            </header>
+
+
+            <div class="ticket-detail-stack">
+
+                <!-- TICKET INFORMATION -->
+                <section class="dashboard-card">
+
+                    <h3>Ticket Information</h3>
+
+                    <div class="ticket-info-grid">
+
+                        <div class="ticket-info-item">
+                            <span>Ticket ID</span>
+                            <strong>TCK-1001</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Category</span>
+                            <strong>Network</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Priority</span>
+                            <strong>High</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Status</span>
+
+                            <strong>
+                                <span class="status open">
+                                    Open
+                                </span>
+                            </strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Submitted</span>
+                            <strong>September 6, 2026</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Assigned Technician</span>
+                            <strong>Unassigned</strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- DESCRIPTION -->
+                <section class="dashboard-card">
+
+                    <h3>Description</h3>
+
+                    <p>
+                        I am unable to connect to the office Wi-Fi.
+                        My laptop detects the network but cannot
+                        establish a connection.
+                    </p>
+
+                </section>
+
+
+                <!-- MESSAGE THREAD -->
+                <section class="dashboard-card">
+
+                    <h3>Message Thread</h3>
+
+
+                    <ul class="message-list">
+
+                        <li>
+                            <strong>Employee</strong>
+
+                            I tried restarting my laptop, but the
+                            problem is still happening.
+                        </li>
+
+                        <li>
+                            <strong>IT Support</strong>
+
+                            Please confirm your department and
+                            whether other devices can connect.
+                        </li>
+
+                    </ul>
+
+
+                    <form
+                        class="ticket-form stacked comment-form"
+                        action="#"
+                        method="POST">
+
+                        <div class="form-group">
+
+                            <label for="comment">
+                                Add Comment
+                            </label>
+
+                            <textarea
+                                id="comment"
+                                name="comment"
+                                rows="4"
+                                placeholder="Write your reply..."
+                                required></textarea>
+
+                        </div>
+
+
+                        <div class="comment-actions">
+
+                            <button
+                                class="btn btn-primary"
+                                type="submit">
+                                Add Comment
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
             </div>
-        </header>
 
-        <section class="dashboard-card">
-            <h3>Ticket Information</h3>
-            <p><strong>Ticket ID:</strong> TCK-1001</p>
-            <p><strong>Category:</strong> Network</p>
-            <p><strong>Priority:</strong> High</p>
-            <p><strong>Status:</strong> <span class="status open">Open</span></p>
-            <p><strong>Submitted:</strong> September 6, 2026</p>
-            <p><strong>Assigned Technician:</strong> Unassigned</p>
-        </section>
-
-        <section class="dashboard-card">
-            <h3>Description</h3>
-            <p>I am unable to connect to the office Wi-Fi. My laptop detects the network but cannot establish a connection.</p>
-        </section>
-
-        <section class="dashboard-card">
-            <h3>Message Thread</h3>
-
-            <ul>
-                <li><strong>Employee:</strong> I tried restarting my laptop, but the problem is still happening.</li>
-                <li><strong>IT Support:</strong> Please confirm your department and whether other devices can connect.</li>
-            </ul>
-
-            <form class="ticket-form" action="#" method="POST">
-                <p>
-                    <label for="comment"><strong>Add Comment:</strong></label>
-                    <br>
-                    <textarea id="comment" name="comment" rows="4" cols="50" placeholder="Write your reply..." required></textarea>
-                </p>
-                <button type="submit">Add Comment</button>
-            </form>
-
-        </section>
-
-    </main>
+        </main>
 
     </div>
+
 </body>
 
 </html>

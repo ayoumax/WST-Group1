@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MotorPH IT Support - Technician Ticket Details</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dashboard-page">
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+
+                <div class="sidebar-logo">
+
+                    <img
+                        src="images/motorph-logo.png"
+                        alt="MotorPH Logo">
+
+                    <div class="sidebar-title">
+
+                        <h1>MotorPH</h1>
+
+                        <p>IT Support</p>
+
+                        <span class="portal-label">
+                            Technician Portal
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <a href="technician-dashboard.html">
+                    Dashboard
+                </a>
+
+                <a
+                    class="active"
+                    href="manage-tickets.html">
+                    Assigned Tickets
+                </a>
+
+            </nav>
+
+
+            <a
+                class="logout-button"
+                href="index.html">
+                Logout
+            </a>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="dashboard-content">
+
+            <a
+                class="back-button"
+                href="manage-tickets.html">
+                ← Back to Assigned Tickets
+            </a>
+
+
+            <!-- TCK-1001 -->
+            <section
+                class="technician-ticket-panel"
+                id="tck-1001">
+
+                <header class="dashboard-header">
+
+                    <div>
+                        <p>Ticket TCK-1001</p>
+                        <h2>Cannot Connect to Office Wi-Fi</h2>
+                    </div>
+
+                </header>
+
+
+                <section class="dashboard-card">
+
+                    <h3>Ticket Information</h3>
+
+                    <div class="ticket-info-grid">
+
+                        <div class="ticket-info-item">
+                            <span>Employee</span>
+                            <strong>J. Santos</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Department</span>
+                            <strong>Human Resources</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Category</span>
+                            <strong>Network</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Priority</span>
+                            <strong>High</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Status</span>
+                            <strong>Open</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Ticket ID</span>
+                            <strong>TCK-1001</strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <section class="dashboard-card technician-description">
+
+                    <h3>Description</h3>
+
+                    <p>
+                        Employee cannot connect to the office Wi-Fi.
+                        The laptop detects the network but cannot
+                        establish a connection.
+                    </p>
+
+                </section>
+
+
+                <section class="dashboard-card">
+
+                    <h3>Update Ticket</h3>
+
+                    <form class="ticket-form stacked">
+
+                        <p>
+                            <label for="status-1001">
+                                Update Status
+                            </label>
+
+                            <select id="status-1001">
+
+                                <option selected>Open</option>
+                                <option>In Progress</option>
+                                <option>Resolved</option>
+                                <option>Closed</option>
+
+                            </select>
+                        </p>
+
+                        <button type="submit">
+                            Update Status
+                        </button>
+
+                    </form>
+
+                </section>
+
+
+                <section class="dashboard-card">
+
+                    <h3>Message Thread</h3>
+
+                    <ul class="message-list">
+
+                        <li>
+                            <strong>Employee</strong>
+                            I tried restarting my laptop, but the problem still remains.
+                        </li>
+
+                        <li>
+                            <strong>IT Technician</strong>
+                            Please confirm whether another device can connect to the network.
+                        </li>
+
+                    </ul>
+
+
+                    <form class="ticket-form stacked">
+
+                        <p>
+
+                            <label for="message-1001">
+                                Send Message
+                            </label>
+
+                            <textarea
+                                id="message-1001"
+                                placeholder="Write your response..."
+                                required></textarea>
+
+                        </p>
+
+                        <button type="submit">
+                            Send Message
+                        </button>
+
+                    </form>
+
+                </section>
+
+            </section>
+
+
+            <!-- TCK-1002 -->
+            <section
+                class="technician-ticket-panel"
+                id="tck-1002">
+
+                <header class="dashboard-header">
+
+                    <div>
+                        <p>Ticket TCK-1002</p>
+                        <h2>Laptop Won't Boot After Update</h2>
+                    </div>
+
+                </header>
+
+                <section class="dashboard-card">
+
+                    <h3>Ticket Information</h3>
+
+                    <div class="ticket-info-grid">
+
+                        <div class="ticket-info-item">
+                            <span>Employee</span>
+                            <strong>M. Cruz</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Department</span>
+                            <strong>Finance</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Category</span>
+                            <strong>Hardware</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Priority</span>
+                            <strong>Urgent</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Status</span>
+                            <strong>In Progress</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Ticket ID</span>
+                            <strong>TCK-1002</strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section class="dashboard-card technician-description">
+
+                    <h3>Description</h3>
+
+                    <p>
+                        The employee's laptop no longer boots normally
+                        after installing the latest system update.
+                    </p>
+
+                </section>
+
+            </section>
+
+
+            <!-- TCK-1004 -->
+            <section
+                class="technician-ticket-panel"
+                id="tck-1004">
+
+                <header class="dashboard-header">
+
+                    <div>
+                        <p>Ticket TCK-1004</p>
+                        <h2>Hardware Support Request</h2>
+                    </div>
+
+                </header>
+
+                <section class="dashboard-card">
+
+                    <h3>Ticket Information</h3>
+
+                    <div class="ticket-info-grid">
+
+                        <div class="ticket-info-item">
+                            <span>Employee</span>
+                            <strong>R. Lim</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Department</span>
+                            <strong>Operations</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Category</span>
+                            <strong>Hardware</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Priority</span>
+                            <strong>Medium</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Status</span>
+                            <strong>Open</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Ticket ID</span>
+                            <strong>TCK-1004</strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </section>
+
+
+            <!-- TCK-1005 -->
+            <section
+                class="technician-ticket-panel"
+                id="tck-1005">
+
+                <header class="dashboard-header">
+
+                    <div>
+                        <p>Ticket TCK-1005</p>
+                        <h2>Account Access Request</h2>
+                    </div>
+
+                </header>
+
+                <section class="dashboard-card">
+
+                    <h3>Ticket Information</h3>
+
+                    <div class="ticket-info-grid">
+
+                        <div class="ticket-info-item">
+                            <span>Employee</span>
+                            <strong>K. Tan</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Category</span>
+                            <strong>Account Access</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Priority</span>
+                            <strong>High</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Status</span>
+                            <strong>In Progress</strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </section>
+
+
+            <!-- TCK-1006 -->
+            <section
+                class="technician-ticket-panel"
+                id="tck-1006">
+
+                <header class="dashboard-header">
+
+                    <div>
+                        <p>Ticket TCK-1006</p>
+                        <h2>Account Access Request</h2>
+                    </div>
+
+                </header>
+
+                <section class="dashboard-card">
+
+                    <h3>Ticket Information</h3>
+
+                    <div class="ticket-info-grid">
+
+                        <div class="ticket-info-item">
+                            <span>Employee</span>
+                            <strong>L. Garcia</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Category</span>
+                            <strong>Account Access</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Priority</span>
+                            <strong>Low</strong>
+                        </div>
+
+                        <div class="ticket-info-item">
+                            <span>Status</span>
+                            <strong>Resolved</strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

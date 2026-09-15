@@ -2,125 +2,318 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MotorPH IT Support - Submit Ticket</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="dashboard-page">
+
     <div class="app-layout">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
 
-        <div class="sidebar-brand">
-            <div class="sidebar-logo">
-                <img src="images/motorph-logo.png" alt="MotorPH Logo">
-                <div>
-                    <h1>MotorPH</h1>
-                    <p>IT Support</p>
+            <div class="sidebar-brand">
+
+                <div class="sidebar-logo">
+
+                    <img
+                        src="images/motorph-logo.png"
+                        alt="MotorPH Logo">
+
+                    <div class="sidebar-title">
+
+                        <h1>MotorPH</h1>
+
+                        <p>IT Support</p>
+
+                        <span class="portal-label">
+                            Employee Portal
+                        </span>
+
+                    </div>
+
                 </div>
+
             </div>
-            <small>Employee Portal</small>
-        </div>
 
-        <nav class="sidebar-nav">
-            <a href="employee-dashboard.html">Dashboard</a>
-            <a class="active" href="submit-ticket.html">Submit Ticket</a>
-            <a href="my-tickets.html">My Tickets</a>
-            <a href="help.html">Help</a>
-        </nav>
 
-        <a class="logout-button" href="index.html">Logout</a>
+            <nav class="sidebar-nav">
 
-    </aside>
+                <a href="employee-dashboard.html">
+                    Dashboard
+                </a>
 
-    <main class="dashboard-content">
+                <a
+                    class="active"
+                    href="submit-ticket.html">
+                    Submit Ticket
+                </a>
 
-        <header class="dashboard-header">
-            <div>
-                <h2>Submit IT Support Ticket</h2>
-                <p>Describe your technical issue so the IT team can assist you.</p>
-            </div>
-        </header>
+                <a href="my-tickets.html">
+                    My Tickets
+                </a>
 
-        <section class="dashboard-card">
+                <a href="help.html">
+                    Help
+                </a>
 
-            <form class="ticket-form" action="my-tickets.html" method="GET">
+            </nav>
 
-                <p>
-                    <label for="subject"><strong>Subject:</strong></label>
-                    <br>
-                    <input type="text" id="subject" name="subject" placeholder="Brief summary of the issue" required>
-                </p>
 
-                <p>
-                    <label for="category"><strong>Category:</strong></label>
-                    <br>
-                    <select id="category" name="category" required>
-                        <option value="">Select category</option>
-                        <option value="network">Network / Internet</option>
-                        <option value="hardware">Hardware</option>
-                        <option value="software">Software</option>
-                        <option value="account">Account Access</option>
-                        <option value="email">Email</option>
-                        <option value="printer">Printer</option>
-                        <option value="other">Other</option>
-                    </select>
-                </p>
+            <a
+                class="logout-button"
+                href="index.html">
+                Logout
+            </a>
 
-                <p>
-                    <label for="priority"><strong>Priority:</strong></label>
-                    <br>
-                    <select id="priority" name="priority">
-                        <option value="low">Low</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="high">High</option>
-                        <option value="urgent">Urgent</option>
-                    </select>
-                </p>
-
-                <p>
-                    <label for="department"><strong>Department:</strong></label>
-                    <br>
-                    <input type="text" id="department" name="department" placeholder="Example: Human Resources">
-                </p>
-
-                <p>
-                    <label for="device"><strong>Device / Equipment:</strong></label>
-                    <br>
-                    <input type="text" id="device" name="device" placeholder="Example: Desktop PC">
-                </p>
-
-                <p>
-                    <label for="description"><strong>Problem Description:</strong></label>
-                    <br>
-                    <textarea id="description" name="description" rows="6" cols="50" placeholder="Describe what happened, when it started, and any error messages." required></textarea>
-                </p>
-
-                <p>
-                    <button type="reset">Clear</button>
-                    <button type="submit">Submit Ticket</button>
-                </p>
-
-            </form>
-
-        </section>
-
-        <aside class="dashboard-card quick-help">
-            <h3>Before Submitting</h3>
-            <ol>
-                <li>Restart the device or application.</li>
-                <li>Check your network connection.</li>
-                <li>Write down any error message.</li>
-                <li>Select the correct category and priority.</li>
-            </ol>
         </aside>
 
-    </main>
+
+        <!-- MAIN CONTENT -->
+        <main class="dashboard-content">
+
+            <header class="dashboard-header">
+
+                <div>
+                    <h2>Submit IT Support Ticket</h2>
+
+                    <p>
+                        Describe your technical issue so the IT team can assist you.
+                    </p>
+                </div>
+
+            </header>
+
+
+            <div class="submit-page-layout">
+
+                <!-- FORM CARD -->
+                <section class="dashboard-card submit-ticket-card">
+
+                    <h3>Ticket Information</h3>
+
+                    <p class="form-intro">
+                        Complete the details below to create a support request.
+                    </p>
+
+
+                    <form
+                        class="ticket-form submit-ticket-form"
+                        action="my-tickets.html"
+                        method="GET">
+
+
+                        <!-- SUBJECT -->
+                        <div class="form-group">
+
+                            <label for="subject">
+                                Subject
+                            </label>
+
+                            <input
+                                type="text"
+                                id="subject"
+                                name="subject"
+                                placeholder="Brief summary of the issue"
+                                required>
+
+                        </div>
+
+
+                        <!-- CATEGORY -->
+                        <div class="form-group">
+
+                            <label for="category">
+                                Category
+                            </label>
+
+                            <select
+                                id="category"
+                                name="category"
+                                required>
+
+                                <option value="">
+                                    Select category
+                                </option>
+
+                                <option value="network">
+                                    Network / Internet
+                                </option>
+
+                                <option value="hardware">
+                                    Hardware
+                                </option>
+
+                                <option value="software">
+                                    Software
+                                </option>
+
+                                <option value="account">
+                                    Account Access
+                                </option>
+
+                                <option value="email">
+                                    Email
+                                </option>
+
+                                <option value="printer">
+                                    Printer
+                                </option>
+
+                                <option value="other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- PRIORITY -->
+                        <div class="form-group">
+
+                            <label for="priority">
+                                Priority
+                            </label>
+
+                            <select
+                                id="priority"
+                                name="priority">
+
+                                <option value="low">
+                                    Low
+                                </option>
+
+                                <option
+                                    value="medium"
+                                    selected>
+                                    Medium
+                                </option>
+
+                                <option value="high">
+                                    High
+                                </option>
+
+                                <option value="urgent">
+                                    Urgent
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- DEPARTMENT -->
+                        <div class="form-group">
+
+                            <label for="department">
+                                Department
+                            </label>
+
+                            <input
+                                type="text"
+                                id="department"
+                                name="department"
+                                placeholder="Example: Human Resources">
+
+                        </div>
+
+
+                        <!-- DEVICE -->
+                        <div class="form-group form-full">
+
+                            <label for="device">
+                                Device / Equipment
+                            </label>
+
+                            <input
+                                type="text"
+                                id="device"
+                                name="device"
+                                placeholder="Example: Desktop PC, Laptop, Printer">
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+                        <div class="form-group form-full">
+
+                            <label for="description">
+                                Problem Description
+                            </label>
+
+                            <textarea
+                                id="description"
+                                name="description"
+                                rows="6"
+                                placeholder="Describe what happened, when it started, and any error messages."
+                                required></textarea>
+
+                        </div>
+
+
+                        <!-- BUTTONS -->
+                        <div class="form-actions form-full">
+
+                            <button
+                                class="btn btn-secondary"
+                                type="reset">
+                                Clear
+                            </button>
+
+                            <button
+                                class="btn btn-primary"
+                                type="submit">
+                                Submit Ticket
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- HELP CARD -->
+                <aside class="dashboard-card submit-help-card">
+
+                    <h3>Before Submitting</h3>
+
+                    <p>
+                        Try these quick steps before creating a ticket.
+                    </p>
+
+                    <ol>
+                        <li>
+                            Restart the device or application.
+                        </li>
+
+                        <li>
+                            Check your network connection.
+                        </li>
+
+                        <li>
+                            Write down any error message.
+                        </li>
+
+                        <li>
+                            Select the correct category and priority.
+                        </li>
+                    </ol>
+
+                </aside>
+
+            </div>
+
+        </main>
 
     </div>
+
 </body>
 
 </html>

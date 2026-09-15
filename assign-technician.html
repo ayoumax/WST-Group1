@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MotorPH IT Support - Assign Technician</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="dashboard-page">
+
+    <div class="app-layout">
+
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+
+                <div class="sidebar-logo">
+
+                    <img
+                        src="images/motorph-logo.png"
+                        alt="MotorPH Logo">
+
+                    <div class="sidebar-title">
+
+                        <h1>MotorPH</h1>
+
+                        <p>IT Support</p>
+
+                        <span class="portal-label">
+                            Administrator Portal
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <a href="admin-dashboard.html">
+                    Dashboard
+                </a>
+
+                <a href="admin-tickets.html">
+                    All Tickets
+                </a>
+
+                <a
+                    class="active"
+                    href="assign-technician.html">
+                    Assign Technician
+                </a>
+
+            </nav>
+
+
+            <a
+                class="logout-button"
+                href="index.html">
+                Logout
+            </a>
+
+        </aside>
+
+
+        <main class="dashboard-content">
+
+            <header class="dashboard-header">
+
+                <div>
+
+                    <h2>Assign Technician</h2>
+
+                    <p>
+                        Assign an IT support ticket to an available technician.
+                    </p>
+
+                </div>
+
+            </header>
+
+
+            <section class="dashboard-card assign-page-card">
+
+                <h3>Ticket Assignment</h3>
+
+                <p>
+                    Select a support ticket and the technician who will handle it.
+                </p>
+
+
+                <form
+                    class="ticket-form stacked assign-page-form"
+                    action="#"
+                    method="POST">
+
+
+                    <p>
+
+                        <label for="admin-ticket">
+                            Ticket
+                        </label>
+
+                        <select
+                            id="admin-ticket"
+                            name="ticket">
+
+                            <option value="">
+                                Select Ticket
+                            </option>
+
+                            <option value="1001">
+                                TCK-1001 - Wi-Fi Issue
+                            </option>
+
+                            <option value="1002">
+                                TCK-1002 - Laptop Issue
+                            </option>
+
+                            <option value="1003">
+                                TCK-1003 - Shared Drive
+                            </option>
+
+                            <option value="1004">
+                                TCK-1004 - Printer Issue
+                            </option>
+
+                        </select>
+
+                    </p>
+
+
+                    <p>
+
+                        <label for="technician">
+                            Technician
+                        </label>
+
+                        <select
+                            id="technician"
+                            name="technician">
+
+                            <option value="">
+                                Select Technician
+                            </option>
+
+                            <option value="mark">
+                                Mark Santos
+                            </option>
+
+                            <option value="ana">
+                                Ana Reyes
+                            </option>
+
+                            <option value="team">
+                                IT Support Team
+                            </option>
+
+                        </select>
+
+                    </p>
+
+
+                    <button type="submit">
+                        Assign Technician
+                    </button>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

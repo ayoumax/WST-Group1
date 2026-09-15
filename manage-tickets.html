@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>MotorPH IT Support - Manage Tickets</title>
+    <title>MotorPH IT Support - Assigned Tickets</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -25,16 +25,19 @@
                         src="images/motorph-logo.png"
                         alt="MotorPH Logo">
 
-                    <div>
+                    <div class="sidebar-title">
+
                         <h1>MotorPH</h1>
+
                         <p>IT Support</p>
+
+                        <span class="portal-label">
+                            Technician Portal
+                        </span>
+
                     </div>
 
                 </div>
-
-                <small>
-                    Technician Portal
-                </small>
 
             </div>
 
@@ -70,10 +73,10 @@
 
                 <div>
 
-                    <h2>Manage Assigned Tickets</h2>
+                    <h2>Assigned Tickets</h2>
 
                     <p>
-                        Search, review, communicate, and update support tickets.
+                        Search and review tickets assigned to you.
                     </p>
 
                 </div>
@@ -81,7 +84,7 @@
             </header>
 
 
-            <!-- SEARCH AND FILTER -->
+            <!-- SEARCH -->
             <section class="dashboard-card filter-card">
 
                 <h3>Search and Filter</h3>
@@ -92,6 +95,7 @@
                     method="GET">
 
                     <p>
+
                         <label for="staff-search">
                             Search
                         </label>
@@ -101,9 +105,12 @@
                             id="staff-search"
                             name="search"
                             placeholder="Ticket ID, employee, or subject">
+
                     </p>
 
+
                     <p>
+
                         <label for="staff-status">
                             Status
                         </label>
@@ -133,7 +140,9 @@
                             </option>
 
                         </select>
+
                     </p>
+
 
                     <button type="submit">
                         Filter
@@ -144,331 +153,243 @@
             </section>
 
 
-            <div class="dashboard-grid">
+            <!-- TICKET LIST -->
+            <section class="dashboard-card">
 
-                <!-- TICKET LIST -->
-                <section class="dashboard-card recent-tickets">
+                <div class="section-heading">
 
-                    <h3>Ticket List</h3>
+                    <div>
+                        <h3>Ticket List</h3>
 
-
-                    <div class="table-container">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-                                    <th>Ticket ID</th>
-                                    <th>Employee</th>
-                                    <th>Category</th>
-                                    <th>Priority</th>
-                                    <th>Status</th>
-                                </tr>
-
-                            </thead>
-
-
-                            <tbody>
-
-                                <tr class="selected-row">
-
-                                    <td>
-                                        <a
-                                            class="ticket-link"
-                                            href="#ticket-details">
-                                            TCK-1001
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        J. Santos
-                                    </td>
-
-                                    <td>
-                                        Network
-                                    </td>
-
-                                    <td>
-                                        <span class="priority high">
-                                            High
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="status open">
-                                            Open
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-
-                                    <td>
-                                        TCK-1002
-                                    </td>
-
-                                    <td>
-                                        M. Cruz
-                                    </td>
-
-                                    <td>
-                                        Hardware
-                                    </td>
-
-                                    <td>
-                                        <span class="priority urgent">
-                                            Urgent
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="status progress">
-                                            In Progress
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-
-                                    <td>
-                                        TCK-1004
-                                    </td>
-
-                                    <td>
-                                        R. Lim
-                                    </td>
-
-                                    <td>
-                                        Hardware
-                                    </td>
-
-                                    <td>
-                                        <span class="priority medium">
-                                            Medium
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="status open">
-                                            Open
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-
-                                    <td>
-                                        TCK-1005
-                                    </td>
-
-                                    <td>
-                                        K. Tan
-                                    </td>
-
-                                    <td>
-                                        Account Access
-                                    </td>
-
-                                    <td>
-                                        <span class="priority high">
-                                            High
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="status progress">
-                                            In Progress
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-
-                                    <td>
-                                        TCK-1006
-                                    </td>
-
-                                    <td>
-                                        L. Garcia
-                                    </td>
-
-                                    <td>
-                                        Account Access
-                                    </td>
-
-                                    <td>
-                                        <span class="priority low">
-                                            Low
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="status resolved">
-                                            Resolved
-                                        </span>
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-
+                        <p>
+                            Select View Details to open a support ticket.
+                        </p>
                     </div>
-
-                </section>
-
-
-                <!-- TICKET DETAILS AND MESSAGES -->
-                <div class="detail-stack">
-
-                    <section
-                        class="dashboard-card"
-                        id="ticket-details">
-
-                        <h3>Ticket Details: TCK-1001</h3>
-
-                        <div class="detail-list">
-
-                            <p>
-                                <strong>Employee</strong>
-                                <span>J. Santos</span>
-                            </p>
-
-                            <p>
-                                <strong>Department</strong>
-                                <span>Human Resources</span>
-                            </p>
-
-                            <p>
-                                <strong>Category</strong>
-                                <span>Network</span>
-                            </p>
-
-                            <p>
-                                <strong>Subject</strong>
-                                <span>Cannot Connect to Office Wi-Fi</span>
-                            </p>
-
-                            <p>
-                                <strong>Priority</strong>
-                                <span class="priority high">
-                                    High
-                                </span>
-                            </p>
-
-                            <p>
-                                <strong>Description</strong>
-                                <span>
-                                    Employee cannot connect to the office Wi-Fi.
-                                    The laptop detects the network but cannot
-                                    establish a connection.
-                                </span>
-                            </p>
-
-                        </div>
-
-
-                        <form
-                            class="ticket-form stacked"
-                            action="#"
-                            method="POST">
-
-                            <p>
-                                <label for="ticket-status">
-                                    Update Status
-                                </label>
-
-                                <select
-                                    id="ticket-status"
-                                    name="ticket-status">
-
-                                    <option
-                                        value="open"
-                                        selected>
-                                        Open
-                                    </option>
-
-                                    <option value="in-progress">
-                                        In Progress
-                                    </option>
-
-                                    <option value="resolved">
-                                        Resolved
-                                    </option>
-
-                                    <option value="closed">
-                                        Closed
-                                    </option>
-
-                                </select>
-                            </p>
-
-                            <button type="submit">
-                                Update Status
-                            </button>
-
-                        </form>
-
-                    </section>
-
-
-                    <section class="dashboard-card">
-
-                        <h3>Message Thread</h3>
-
-                        <ul class="message-list">
-
-                            <li>
-                                <strong>Employee</strong>
-                                I tried restarting my laptop, but the problem still remains.
-                            </li>
-
-                            <li>
-                                <strong>IT Technician</strong>
-                                Please confirm whether another device can connect to the network.
-                            </li>
-
-                        </ul>
-
-
-                        <form
-                            class="ticket-form stacked"
-                            action="#"
-                            method="POST">
-
-                            <p>
-                                <label for="technician-message">
-                                    Send Message
-                                </label>
-
-                                <textarea
-                                    id="technician-message"
-                                    name="message"
-                                    placeholder="Write your response..."
-                                    required></textarea>
-                            </p>
-
-                            <button type="submit">
-                                Send Message
-                            </button>
-
-                        </form>
-
-                    </section>
 
                 </div>
 
-            </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Employee</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>
+                                    <a
+                                        class="ticket-link"
+                                        href="technician-ticket-detail.html#tck-1001">
+                                        TCK-1001
+                                    </a>
+                                </td>
+
+                                <td>J. Santos</td>
+
+                                <td>Network</td>
+
+                                <td>
+                                    <span class="priority high">
+                                        High
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="status open">
+                                        Open
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        class="table-action-button"
+                                        href="technician-ticket-detail.html#tck-1001">
+                                        View Details
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <a
+                                        class="ticket-link"
+                                        href="technician-ticket-detail.html#tck-1002">
+                                        TCK-1002
+                                    </a>
+                                </td>
+
+                                <td>M. Cruz</td>
+
+                                <td>Hardware</td>
+
+                                <td>
+                                    <span class="priority urgent">
+                                        Urgent
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="status progress">
+                                        In Progress
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        class="table-action-button"
+                                        href="technician-ticket-detail.html#tck-1002">
+                                        View Details
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <a
+                                        class="ticket-link"
+                                        href="technician-ticket-detail.html#tck-1004">
+                                        TCK-1004
+                                    </a>
+                                </td>
+
+                                <td>R. Lim</td>
+
+                                <td>Hardware</td>
+
+                                <td>
+                                    <span class="priority medium">
+                                        Medium
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="status open">
+                                        Open
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        class="table-action-button"
+                                        href="technician-ticket-detail.html#tck-1004">
+                                        View Details
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <a
+                                        class="ticket-link"
+                                        href="technician-ticket-detail.html#tck-1005">
+                                        TCK-1005
+                                    </a>
+                                </td>
+
+                                <td>K. Tan</td>
+
+                                <td>Account Access</td>
+
+                                <td>
+                                    <span class="priority high">
+                                        High
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="status progress">
+                                        In Progress
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        class="table-action-button"
+                                        href="technician-ticket-detail.html#tck-1005">
+                                        View Details
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <a
+                                        class="ticket-link"
+                                        href="technician-ticket-detail.html#tck-1006">
+                                        TCK-1006
+                                    </a>
+                                </td>
+
+                                <td>L. Garcia</td>
+
+                                <td>Account Access</td>
+
+                                <td>
+                                    <span class="priority low">
+                                        Low
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="status resolved">
+                                        Resolved
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        class="table-action-button"
+                                        href="technician-ticket-detail.html#tck-1006">
+                                        View Details
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
 
         </main>
 

@@ -25,16 +25,19 @@
                         src="images/motorph-logo.png"
                         alt="MotorPH Logo">
 
-                    <div>
+                    <div class="sidebar-title">
+
                         <h1>MotorPH</h1>
+
                         <p>IT Support</p>
+
+                        <span class="portal-label">
+                            Administrator Portal
+                        </span>
+
                     </div>
 
                 </div>
-
-                <small>
-                    Administrator Portal
-                </small>
 
             </div>
 
@@ -47,11 +50,11 @@
                     Dashboard
                 </a>
 
-                <a href="#all-tickets">
+                <a href="admin-tickets.html">
                     All Tickets
                 </a>
 
-                <a href="#assign-technician">
+                <a href="assign-technician.html">
                     Assign Technician
                 </a>
 
@@ -70,6 +73,7 @@
         <!-- MAIN CONTENT -->
         <main class="dashboard-content">
 
+            <!-- HEADER -->
             <header class="dashboard-header">
 
                 <div>
@@ -77,7 +81,7 @@
                     <h2>Administrator Dashboard</h2>
 
                     <p>
-                        Monitor support activity and manage ticket assignments.
+                        Overview of IT support activity, ticket status, and technician workload.
                     </p>
 
                 </div>
@@ -85,338 +89,420 @@
             </header>
 
 
-            <!-- TICKET OVERVIEW -->
-            <section class="summary-grid">
+            <!-- MAIN SUMMARY -->
+            <section class="admin-summary-cards">
 
                 <article class="summary-card">
                     <p>Total Tickets</p>
                     <strong>26</strong>
+                    <small>All support requests</small>
                 </article>
 
                 <article class="summary-card">
                     <p>Open</p>
                     <strong>5</strong>
+                    <small>Waiting for action</small>
                 </article>
 
                 <article class="summary-card">
                     <p>In Progress</p>
                     <strong>3</strong>
+                    <small>Currently being handled</small>
                 </article>
 
                 <article class="summary-card">
                     <p>Resolved</p>
                     <strong>10</strong>
+                    <small>Successfully completed</small>
+                </article>
+
+                <article class="summary-card">
+                    <p>Unassigned</p>
+                    <strong>4</strong>
+                    <small>Needs technician</small>
+                </article>
+
+                <article class="summary-card">
+                    <p>Closed</p>
+                    <strong>8</strong>
+                    <small>Completed and closed</small>
                 </article>
 
             </section>
 
 
-            <div class="dashboard-grid">
+            <!-- MIDDLE OVERVIEW -->
+            <section class="admin-overview-grid">
 
-                <!-- ALL TICKETS -->
-                <section
-                    class="dashboard-card recent-tickets"
-                    id="all-tickets">
+                <!-- PRIORITY OVERVIEW -->
+                <article class="dashboard-card admin-overview-card">
 
-                    <h3>All Tickets</h3>
+                    <div class="admin-card-heading">
 
+                        <div>
+                            <h3>Priority Overview</h3>
 
-                    <div class="table-container">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-                                    <th>Ticket ID</th>
-                                    <th>Employee</th>
-                                    <th>Department</th>
-                                    <th>Issue</th>
-                                    <th>Priority</th>
-                                    <th>Status</th>
-                                    <th>Assigned Technician</th>
-                                </tr>
-
-                            </thead>
-
-
-                            <tbody>
-
-                                <tr>
-
-                                    <td>
-                                        TCK-1001
-                                    </td>
-
-                                    <td>
-                                        J. Santos
-                                    </td>
-
-                                    <td>
-                                        Human Resources
-                                    </td>
-
-                                    <td>
-                                        Cannot connect to office Wi-Fi
-                                    </td>
-
-                                    <td>
-                                        <span class="priority high">
-                                            High
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="status open">
-                                            Open
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        Unassigned
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-
-                                    <td>
-                                        TCK-1002
-                                    </td>
-
-                                    <td>
-                                        M. Cruz
-                                    </td>
-
-                                    <td>
-                                        Finance
-                                    </td>
-
-                                    <td>
-                                        Laptop won't boot after update
-                                    </td>
-
-                                    <td>
-                                        <span class="priority urgent">
-                                            Urgent
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="status progress">
-                                            In Progress
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        Mark Santos
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-
-                                    <td>
-                                        TCK-1003
-                                    </td>
-
-                                    <td>
-                                        A. Reyes
-                                    </td>
-
-                                    <td>
-                                        Payroll
-                                    </td>
-
-                                    <td>
-                                        Need access to shared drive
-                                    </td>
-
-                                    <td>
-                                        <span class="priority low">
-                                            Low
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="status resolved">
-                                            Resolved
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        Ana Reyes
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-
-                                    <td>
-                                        TCK-1004
-                                    </td>
-
-                                    <td>
-                                        R. Lim
-                                    </td>
-
-                                    <td>
-                                        Operations
-                                    </td>
-
-                                    <td>
-                                        Office printer keeps jamming
-                                    </td>
-
-                                    <td>
-                                        <span class="priority medium">
-                                            Medium
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="status open">
-                                            Open
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        Unassigned
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-
-                                    <td>
-                                        TCK-1007
-                                    </td>
-
-                                    <td>
-                                        P. Dela Cruz
-                                    </td>
-
-                                    <td>
-                                        Sales
-                                    </td>
-
-                                    <td>
-                                        Monitor not turning on
-                                    </td>
-
-                                    <td>
-                                        <span class="priority medium">
-                                            Medium
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="status closed">
-                                            Closed
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        Mark Santos
-                                    </td>
-
-                                </tr>
-
-                            </tbody>
-
-                        </table>
+                            <p>
+                                Current tickets grouped by priority level.
+                            </p>
+                        </div>
 
                     </div>
 
-                </section>
+
+                    <div class="priority-overview-list">
+
+                        <div class="overview-row">
+
+                            <div class="overview-label">
+
+                                <span class="priority urgent">
+                                    Urgent
+                                </span>
+
+                            </div>
+
+                            <strong>2</strong>
+
+                        </div>
 
 
-                <!-- ASSIGN TECHNICIAN -->
-                <aside
-                    class="dashboard-card"
-                    id="assign-technician">
+                        <div class="overview-row">
 
-                    <h3>Assign Technician</h3>
+                            <div class="overview-label">
 
-                    <p>
-                        Choose a ticket and assign it to an IT technician.
-                    </p>
+                                <span class="priority high">
+                                    High
+                                </span>
+
+                            </div>
+
+                            <strong>5</strong>
+
+                        </div>
 
 
-                    <form
-                        class="ticket-form stacked"
-                        action="#"
-                        method="POST">
+                        <div class="overview-row">
+
+                            <div class="overview-label">
+
+                                <span class="priority medium">
+                                    Medium
+                                </span>
+
+                            </div>
+
+                            <strong>8</strong>
+
+                        </div>
+
+
+                        <div class="overview-row">
+
+                            <div class="overview-label">
+
+                                <span class="priority low">
+                                    Low
+                                </span>
+
+                            </div>
+
+                            <strong>11</strong>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- TECHNICIAN WORKLOAD -->
+                <article class="dashboard-card admin-overview-card">
+
+                    <div class="admin-card-heading">
+
+                        <div>
+                            <h3>Technician Workload</h3>
+
+                            <p>
+                                Current number of tickets assigned to each technician.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="technician-list">
+
+                        <div class="technician-row">
+
+                            <div>
+
+                                <strong>Mark Santos</strong>
+
+                                <span>
+                                    IT Technician
+                                </span>
+
+                            </div>
+
+                            <div class="workload-count">
+                                4 Tickets
+                            </div>
+
+                        </div>
+
+
+                        <div class="technician-row">
+
+                            <div>
+
+                                <strong>Ana Reyes</strong>
+
+                                <span>
+                                    IT Technician
+                                </span>
+
+                            </div>
+
+                            <div class="workload-count">
+                                3 Tickets
+                            </div>
+
+                        </div>
+
+
+                        <div class="technician-row">
+
+                            <div>
+
+                                <strong>IT Support Team</strong>
+
+                                <span>
+                                    Shared Queue
+                                </span>
+
+                            </div>
+
+                            <div class="workload-count">
+                                5 Tickets
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- RECENT ACTIVITY + QUICK ACTIONS -->
+            <section class="admin-bottom-grid">
+
+                <!-- RECENT ACTIVITY -->
+                <article class="dashboard-card">
+
+                    <div class="admin-card-heading">
+
+                        <div>
+
+                            <h3>Recent Activity</h3>
+
+                            <p>
+                                Latest updates from the IT support system.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-list">
+
+                        <div class="activity-item">
+
+                            <div class="activity-icon">
+                                +
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    New ticket TCK-1004 created
+                                </strong>
+
+                                <p>
+                                    R. Lim submitted an office printer issue.
+                                </p>
+
+                                <small>
+                                    Today
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="activity-item">
+
+                            <div class="activity-icon">
+                                →
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    TCK-1002 assigned to Mark Santos
+                                </strong>
+
+                                <p>
+                                    Laptop boot issue was assigned for technician review.
+                                </p>
+
+                                <small>
+                                    Today
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="activity-item">
+
+                            <div class="activity-icon">
+                                ✓
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    TCK-1003 marked as Resolved
+                                </strong>
+
+                                <p>
+                                    Shared drive access issue has been completed.
+                                </p>
+
+                                <small>
+                                    Yesterday
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="activity-item">
+
+                            <div class="activity-icon">
+                                ✓
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    TCK-1007 closed
+                                </strong>
+
+                                <p>
+                                    Monitor support request was completed and closed.
+                                </p>
+
+                                <small>
+                                    Yesterday
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- QUICK ACTIONS -->
+                <aside class="dashboard-card admin-quick-actions">
+
+                    <div class="admin-card-heading">
+
+                        <div>
+
+                            <h3>Quick Actions</h3>
+
+                            <p>
+                                Common administrator tasks.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <a
+                        class="admin-action-link"
+                        href="admin-tickets.html">
+
+                        <div>
+
+                            <strong>
+                                View All Tickets
+                            </strong>
+
+                            <span>
+                                Review all support requests
+                            </span>
+
+                        </div>
+
+                        <span class="action-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        class="admin-action-link"
+                        href="assign-technician.html">
+
+                        <div>
+
+                            <strong>
+                                Assign Technician
+                            </strong>
+
+                            <span>
+                                Assign pending tickets
+                            </span>
+
+                        </div>
+
+                        <span class="action-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <div class="admin-queue-summary">
 
                         <p>
-                            <label for="admin-ticket">
-                                Ticket
-                            </label>
-
-                            <select
-                                id="admin-ticket"
-                                name="ticket">
-
-                                <option value="1001">
-                                    TCK-1001 - Wi-Fi Issue
-                                </option>
-
-                                <option value="1002">
-                                    TCK-1002 - Laptop Issue
-                                </option>
-
-                                <option value="1003">
-                                    TCK-1003 - Shared Drive
-                                </option>
-
-                                <option value="1004">
-                                    TCK-1004 - Printer Issue
-                                </option>
-
-                            </select>
+                            Tickets requiring attention
                         </p>
 
-                        <p>
-                            <label for="technician">
-                                Technician
-                            </label>
+                        <strong>
+                            4 Unassigned
+                        </strong>
 
-                            <select
-                                id="technician"
-                                name="technician">
-
-                                <option value="">
-                                    Select Technician
-                                </option>
-
-                                <option value="mark">
-                                    Mark Santos
-                                </option>
-
-                                <option value="ana">
-                                    Ana Reyes
-                                </option>
-
-                                <option value="team">
-                                    IT Support Team
-                                </option>
-
-                            </select>
-                        </p>
-
-                        <button type="submit">
-                            Assign Technician
-                        </button>
-
-                    </form>
+                    </div>
 
                 </aside>
 
-            </div>
+            </section>
 
         </main>
 
