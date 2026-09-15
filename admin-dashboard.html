@@ -4,300 +4,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MotorPH IT Support - Administrator Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="dashboard-page">
 
-    <header>
-        <h1>MotorPH IT Support Ticketing System</h1>
-        <p>Administrator Portal</p>
-    </header>
+    <div class="app-layout">
 
-    <aside>
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
 
-        <nav aria-label="Administrator Navigation">
+            <div class="sidebar-brand">
 
-            <h3>Navigation</h3>
+                <div class="sidebar-logo">
 
-            <ul>
-                <li>
-                    <a
-                        href="admin-dashboard.html"
-                        aria-current="page">
-                        Dashboard
-                    </a>
-                </li>
+                    <img
+                        src="images/motorph-logo.png"
+                        alt="MotorPH Logo">
 
-                <li>
-                    <a href="#all-tickets">
-                        All Tickets
-                    </a>
-                </li>
+                    <div>
+                        <h1>MotorPH</h1>
+                        <p>IT Support</p>
+                    </div>
 
-                <li>
-                    <a href="#assign-technician">
-                        Assign Technician
-                    </a>
-                </li>
+                </div>
 
-                <li>
-                    <a href="index.html">
-                        Logout
-                    </a>
-                </li>
-            </ul>
+                <small>
+                    Administrator Portal
+                </small>
 
-        </nav>
+            </div>
 
-    </aside>
 
-    <hr>
+            <nav class="sidebar-nav">
 
-    <main>
+                <a
+                    class="active"
+                    href="admin-dashboard.html">
+                    Dashboard
+                </a>
 
-        <article>
+                <a href="#all-tickets">
+                    All Tickets
+                </a>
 
-            <h2>Administrator Dashboard</h2>
+                <a href="#assign-technician">
+                    Assign Technician
+                </a>
 
-            <p>
-                Monitor support activity and
-                manage ticket assignments.
-            </p>
+            </nav>
 
-            <section>
 
-                <h3>Ticket Overview</h3>
+            <a
+                class="logout-button"
+                href="index.html">
+                Logout
+            </a>
 
-                <ul>
-                    <li>
-                        <strong>Total Tickets:</strong>
-                        26
-                    </li>
+        </aside>
 
-                    <li>
-                        <strong>Open:</strong>
-                        5
-                    </li>
 
-                    <li>
-                        <strong>In Progress:</strong>
-                        3
-                    </li>
+        <!-- MAIN CONTENT -->
+        <main class="dashboard-content">
 
-                    <li>
-                        <strong>Resolved:</strong>
-                        10
-                    </li>
+            <header class="dashboard-header">
 
-                    <li>
-                        <strong>Closed:</strong>
-                        8
-                    </li>
-                </ul>
+                <div>
 
-            </section>
-
-            <section id="all-tickets">
-
-                <h3>All Tickets</h3>
-
-                <table border="1">
-
-                    <thead>
-
-                        <tr>
-                            <th>Ticket ID</th>
-                            <th>Employee</th>
-                            <th>Department</th>
-                            <th>Issue</th>
-                            <th>Priority</th>
-                            <th>Status</th>
-                            <th>Assigned Technician</th>
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        <tr>
-                            <td>
-                                TCK-1001
-                            </td>
-
-                            <td>
-                                J. Santos
-                            </td>
-
-                            <td>
-                                Human Resources
-                            </td>
-
-                            <td>
-                                Cannot connect to office Wi-Fi
-                            </td>
-
-                            <td>
-                                High
-                            </td>
-
-                            <td>
-                                Open
-                            </td>
-
-                            <td>
-                                Unassigned
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                TCK-1002
-                            </td>
-
-                            <td>
-                                M. Cruz
-                            </td>
-
-                            <td>
-                                Finance
-                            </td>
-
-                            <td>
-                                Laptop won't boot after update
-                            </td>
-
-                            <td>
-                                Urgent
-                            </td>
-
-                            <td>
-                                In Progress
-                            </td>
-
-                            <td>
-                                Mark Santos
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                TCK-1003
-                            </td>
-
-                            <td>
-                                A. Reyes
-                            </td>
-
-                            <td>
-                                Payroll
-                            </td>
-
-                            <td>
-                                Need access to shared drive
-                            </td>
-
-                            <td>
-                                Low
-                            </td>
-
-                            <td>
-                                Resolved
-                            </td>
-
-                            <td>
-                                Ana Reyes
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </section>
-
-            <section id="assign-technician">
-
-                <h3>Assign Technician</h3>
-
-                <form
-                    action="#"
-                    method="POST">
+                    <h2>Administrator Dashboard</h2>
 
                     <p>
-                        <label for="admin-ticket">
-                            <strong>Ticket:</strong>
-                        </label>
-                        <br>
-
-                        <select
-                            id="admin-ticket"
-                            name="ticket">
-
-                            <option value="1001">
-                                TCK-1001 - Wi-Fi Issue
-                            </option>
-
-                            <option value="1002">
-                                TCK-1002 - Laptop Issue
-                            </option>
-
-                            <option value="1003">
-                                TCK-1003 - Shared Drive
-                            </option>
-
-                        </select>
+                        Monitor support activity and manage ticket assignments.
                     </p>
 
-                    <p>
-                        <label for="technician">
-                            <strong>Technician:</strong>
-                        </label>
-                        <br>
+                </div>
 
-                        <select
-                            id="technician"
-                            name="technician">
+            </header>
 
-                            <option value="">
-                                Select Technician
-                            </option>
 
-                            <option value="mark">
-                                Mark Santos
-                            </option>
+            <!-- TICKET OVERVIEW -->
+            <section class="summary-grid">
 
-                            <option value="ana">
-                                Ana Reyes
-                            </option>
+                <article class="summary-card">
+                    <p>Total Tickets</p>
+                    <strong>26</strong>
+                </article>
 
-                            <option value="team">
-                                IT Support Team
-                            </option>
+                <article class="summary-card">
+                    <p>Open</p>
+                    <strong>5</strong>
+                </article>
 
-                        </select>
-                    </p>
+                <article class="summary-card">
+                    <p>In Progress</p>
+                    <strong>3</strong>
+                </article>
 
-                    <button type="submit">
-                        Assign Technician
-                    </button>
-
-                </form>
+                <article class="summary-card">
+                    <p>Resolved</p>
+                    <strong>10</strong>
+                </article>
 
             </section>
 
-        </article>
 
-    </main>
+            <div class="dashboard-grid">
 
-    <hr>
+                <!-- ALL TICKETS -->
+                <section
+                    class="dashboard-card recent-tickets"
+                    id="all-tickets">
 
-    <footer>
-        <p>
-            MotorPH IT Support Ticketing System
-            &copy; 2026
-        </p>
-    </footer>
+                    <h3>All Tickets</h3>
+
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Employee</th>
+                                    <th>Department</th>
+                                    <th>Issue</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Assigned Technician</th>
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                <tr>
+
+                                    <td>
+                                        TCK-1001
+                                    </td>
+
+                                    <td>
+                                        J. Santos
+                                    </td>
+
+                                    <td>
+                                        Human Resources
+                                    </td>
+
+                                    <td>
+                                        Cannot connect to office Wi-Fi
+                                    </td>
+
+                                    <td>
+                                        <span class="priority high">
+                                            High
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="status open">
+                                            Open
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        Unassigned
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        TCK-1002
+                                    </td>
+
+                                    <td>
+                                        M. Cruz
+                                    </td>
+
+                                    <td>
+                                        Finance
+                                    </td>
+
+                                    <td>
+                                        Laptop won't boot after update
+                                    </td>
+
+                                    <td>
+                                        <span class="priority urgent">
+                                            Urgent
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="status progress">
+                                            In Progress
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        Mark Santos
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        TCK-1003
+                                    </td>
+
+                                    <td>
+                                        A. Reyes
+                                    </td>
+
+                                    <td>
+                                        Payroll
+                                    </td>
+
+                                    <td>
+                                        Need access to shared drive
+                                    </td>
+
+                                    <td>
+                                        <span class="priority low">
+                                            Low
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="status resolved">
+                                            Resolved
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        Ana Reyes
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        TCK-1004
+                                    </td>
+
+                                    <td>
+                                        R. Lim
+                                    </td>
+
+                                    <td>
+                                        Operations
+                                    </td>
+
+                                    <td>
+                                        Office printer keeps jamming
+                                    </td>
+
+                                    <td>
+                                        <span class="priority medium">
+                                            Medium
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="status open">
+                                            Open
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        Unassigned
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        TCK-1007
+                                    </td>
+
+                                    <td>
+                                        P. Dela Cruz
+                                    </td>
+
+                                    <td>
+                                        Sales
+                                    </td>
+
+                                    <td>
+                                        Monitor not turning on
+                                    </td>
+
+                                    <td>
+                                        <span class="priority medium">
+                                            Medium
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="status closed">
+                                            Closed
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        Mark Santos
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ASSIGN TECHNICIAN -->
+                <aside
+                    class="dashboard-card"
+                    id="assign-technician">
+
+                    <h3>Assign Technician</h3>
+
+                    <p>
+                        Choose a ticket and assign it to an IT technician.
+                    </p>
+
+
+                    <form
+                        class="ticket-form stacked"
+                        action="#"
+                        method="POST">
+
+                        <p>
+                            <label for="admin-ticket">
+                                Ticket
+                            </label>
+
+                            <select
+                                id="admin-ticket"
+                                name="ticket">
+
+                                <option value="1001">
+                                    TCK-1001 - Wi-Fi Issue
+                                </option>
+
+                                <option value="1002">
+                                    TCK-1002 - Laptop Issue
+                                </option>
+
+                                <option value="1003">
+                                    TCK-1003 - Shared Drive
+                                </option>
+
+                                <option value="1004">
+                                    TCK-1004 - Printer Issue
+                                </option>
+
+                            </select>
+                        </p>
+
+                        <p>
+                            <label for="technician">
+                                Technician
+                            </label>
+
+                            <select
+                                id="technician"
+                                name="technician">
+
+                                <option value="">
+                                    Select Technician
+                                </option>
+
+                                <option value="mark">
+                                    Mark Santos
+                                </option>
+
+                                <option value="ana">
+                                    Ana Reyes
+                                </option>
+
+                                <option value="team">
+                                    IT Support Team
+                                </option>
+
+                            </select>
+                        </p>
+
+                        <button type="submit">
+                            Assign Technician
+                        </button>
+
+                    </form>
+
+                </aside>
+
+            </div>
+
+        </main>
+
+    </div>
 
 </body>
 
