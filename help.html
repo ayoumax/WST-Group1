@@ -2,179 +2,115 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MotorPH IT Support - Help Center</title>
 </head>
 
-<body>
+<body class="dashboard-page">
+    <div class="app-layout">
 
-    <header>
-        <h1>MotorPH IT Support Ticketing System</h1>
-        <p>Employee Portal</p>
-    </header>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-    <aside>
+        <div class="sidebar-brand">
 
-        <nav aria-label="Employee Navigation">
+            <div class="sidebar-logo">
 
-            <h3>Navigation</h3>
+                <img
+                    src="images/motorph-logo.png"
+                    alt="MotorPH Logo">
 
-            <ul>
-                <li>
-                    <a href="employee-dashboard.html">
-                        Dashboard
-                    </a>
-                </li>
+                <div>
+                    <h1>MotorPH</h1>
+                    <p>IT Support</p>
+                </div>
 
-                <li>
-                    <a href="submit-ticket.html">
-                        Submit Ticket
-                    </a>
-                </li>
+            </div>
 
-                <li>
-                    <a href="my-tickets.html">
-                        My Tickets
-                    </a>
-                </li>
+            <small>
+                Employee Portal
+            </small>
 
-                <li>
-                    <a
-                        href="help.html"
-                        aria-current="page">
-                        Help
-                    </a>
-                </li>
+        </div>
 
-                <li>
-                    <a href="index.html">
-                        Logout
-                    </a>
-                </li>
-            </ul>
+        <nav class="sidebar-nav">
+
+            <a href="employee-dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="submit-ticket.html">
+                Submit Ticket
+            </a>
+
+            <a href="my-tickets.html">
+                My Tickets
+            </a>
+
+            <a class="active" href="help.html">
+                Help
+            </a>
 
         </nav>
 
+        <a class="logout-button" href="index.html">
+            Logout
+        </a>
+
     </aside>
 
-    <hr>
+    <main class="dashboard-content">
 
-    <main>
+        <header class="dashboard-header">
+            <div>
+                <h2>Help Center</h2>
+                <p>Try these basic troubleshooting steps before submitting a ticket.</p>
+            </div>
+        </header>
 
-        <article>
+        <section class="dashboard-card">
+            <h3>Network Problems</h3>
+            <ol>
+                <li>Check that Wi-Fi is enabled.</li>
+                <li>Disconnect and reconnect to the network.</li>
+                <li>Restart your device.</li>
+                <li>Submit a ticket if the issue continues.</li>
+            </ol>
+        </section>
 
-            <h2>Help Center</h2>
+        <section class="dashboard-card">
+            <h3>Login Problems</h3>
+            <ol>
+                <li>Check your username and password.</li>
+                <li>Make sure Caps Lock is turned off.</li>
+                <li>Try resetting your password.</li>
+                <li>Contact IT if you still cannot log in.</li>
+            </ol>
+        </section>
 
-            <p>
-                Try these basic troubleshooting
-                steps before submitting a ticket.
-            </p>
+        <section class="dashboard-card">
+            <h3>Printer Problems</h3>
+            <ol>
+                <li>Check that the printer is powered on.</li>
+                <li>Check the paper and cable connections.</li>
+                <li>Cancel and resend the print job.</li>
+                <li>Submit a ticket if the issue continues.</li>
+            </ol>
+        </section>
 
-            <section>
-
-                <h3>Network Problems</h3>
-
-                <ol>
-                    <li>
-                        Check that Wi-Fi is enabled.
-                    </li>
-
-                    <li>
-                        Disconnect and reconnect
-                        to the network.
-                    </li>
-
-                    <li>
-                        Restart your device.
-                    </li>
-
-                    <li>
-                        Submit a ticket if the
-                        issue continues.
-                    </li>
-                </ol>
-
-            </section>
-
-            <section>
-
-                <h3>Login Problems</h3>
-
-                <ol>
-                    <li>
-                        Check your username and password.
-                    </li>
-
-                    <li>
-                        Make sure Caps Lock is turned off.
-                    </li>
-
-                    <li>
-                        Try resetting your password.
-                    </li>
-
-                    <li>
-                        Contact IT if you still cannot log in.
-                    </li>
-                </ol>
-
-            </section>
-
-            <section>
-
-                <h3>Printer Problems</h3>
-
-                <ol>
-                    <li>
-                        Check that the printer is powered on.
-                    </li>
-
-                    <li>
-                        Check the paper and cable connections.
-                    </li>
-
-                    <li>
-                        Cancel and resend the print job.
-                    </li>
-
-                    <li>
-                        Submit a ticket if the issue continues.
-                    </li>
-                </ol>
-
-            </section>
-
-        </article>
-
-        <aside>
-
+        <aside class="dashboard-card quick-help">
             <h3>Still Need Help?</h3>
-
-            <p>
-                If the problem continues,
-                create a support request.
-            </p>
-
-            <p>
-                <a href="submit-ticket.html">
-                    Submit a Ticket
-                </a>
-            </p>
-
+            <p>If the problem continues, create a support request.</p>
+            <a class="create-ticket-button" href="submit-ticket.html">
+                Submit a Ticket
+            </a>
         </aside>
 
     </main>
 
-    <hr>
-
-    <footer>
-        <p>
-            MotorPH IT Support Ticketing System
-            &copy; 2026
-        </p>
-    </footer>
-
+    </div>
 </body>
 
 </html>

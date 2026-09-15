@@ -1107,4 +1107,71 @@ tbody tr.selected-row:hover {
         grid-template-columns:
             1fr;
     }
-}
+    
+    /* =========================
+    TICKET FORM
+    ========================= */
+
+    .ticket-form p {
+        margin-bottom: 18px;
+    }
+
+    .ticket-form label {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--text-dark);
+    }
+
+    .ticket-form input[type="text"],
+    .ticket-form select,
+    .ticket-form textarea {
+        width: 100%;
+        max-width: 480px;
+        padding: 10px 12px;
+        border: 1px solid var(--card-border);
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 14px;
+        color: var(--text-dark);
+    }
+
+    .ticket-form input[type="text"]:focus,
+    .ticket-form select:focus,
+    .ticket-form textarea:focus {
+        outline: none;
+        border-color: var(--sidebar-active);
+    }
+
+    .ticket-form textarea {
+        resize: vertical;
+    }
+
+    .ticket-form button {
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .ticket-form button[type="submit"] {
+        background-color: var(--sidebar-active);
+        color: #FFFFFF;
+    }
+
+    .ticket-form button[type="submit"]:hover {
+        background-color: var(--sidebar-hover);
+    }
+
+    .ticket-form button[type="reset"] {
+        background-color: var(--page-bg);
+        color: var(--text-dark);
+        border: 1px solid var(--card-border);
+    }
+
+    .ticket-form button[type="reset"]:hover {
+        background-color: var(--card-border);
+    }
+
+}   
