@@ -2989,3 +2989,67 @@ small,
 .ticket-info-item > strong {
     font-size: 13px;
 }
+
+/* WEEK 4 - SUBMIT TICKET JAVASCRIPT FEEDBACK */
+
+/* =========================================================
+   WEEK 4 - SUBMIT TICKET JAVASCRIPT FEEDBACK
+========================================================= */
+
+.ticket-feedback {
+    margin-top: 24px;
+    padding: 18px 20px;
+
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+
+    background-color: #F8FAFD;
+}
+
+.ticket-feedback[hidden] {
+    display: none;
+}
+
+.ticket-feedback.success {
+    background-color: #EFFAF4;
+    border-color: #A9D8BB;
+}
+
+.ticket-feedback.error {
+    background-color: #FFF1F0;
+    border-color: #E6B3AF;
+}
+
+.ticket-feedback h3 {
+    margin: 0 0 8px;
+}
+
+.ticket-feedback.success h3 {
+    color: #25764A;
+}
+
+.ticket-feedback.error h3 {
+    color: #B42318;
+}
+
+.ticket-feedback > p {
+    margin: 0 0 15px;
+
+    color: var(--text-muted);
+}
+
+.submitted-ticket-summary {
+    padding-top: 12px;
+
+    border-top: 1px solid var(--card-border);
+}
+
+.submitted-ticket-summary p {
+    margin: 7px 0;
+
+    font-size: 13px;
+}
+
+.submitted-ticket-summary strong {
+    color: var(--text-dark);
+}
