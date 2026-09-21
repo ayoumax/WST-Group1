@@ -144,11 +144,26 @@
                     </p>
 
 
-                    <button type="submit">
+                    <button
+                        type="submit"
+                        id="filter-submit-btn">
                         Filter
                     </button>
 
+                    <button
+                        type="button"
+                        id="filter-reset-btn"
+                        class="btn-secondary">
+                        Reset
+                    </button>
+
                 </form>
+
+                <p
+                    id="filter-feedback"
+                    style="margin-top: 12px; margin-bottom: 0; font-size: 13px; color: var(--text-muted);">
+                    Showing all 5 tickets
+                </p>
 
             </section>
 
@@ -394,6 +409,8 @@
         </main>
 
     </div>
+
+    <script src="manage-tickets.js"></script>
 
 </body>
 
