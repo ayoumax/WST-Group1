@@ -80,11 +80,13 @@
             <header class="dashboard-header">
 
                 <div>
+
                     <h2>Submit IT Support Ticket</h2>
 
                     <p>
                         Describe your technical issue so the IT team can assist you.
                     </p>
+
                 </div>
 
             </header>
@@ -103,12 +105,10 @@
 
 
                     <form
-                        class="ticket-form submit-ticket-form"
-                        action="my-tickets.html"
-                        method="GET">
+                        id="ticketForm"
+                        class="ticket-form submit-ticket-form">
 
 
-                        <!-- SUBJECT -->
                         <div class="form-group">
 
                             <label for="subject">
@@ -125,7 +125,6 @@
                         </div>
 
 
-                        <!-- CATEGORY -->
                         <div class="form-group">
 
                             <label for="category">
@@ -174,7 +173,6 @@
                         </div>
 
 
-                        <!-- PRIORITY -->
                         <div class="form-group">
 
                             <label for="priority">
@@ -208,7 +206,6 @@
                         </div>
 
 
-                        <!-- DEPARTMENT -->
                         <div class="form-group">
 
                             <label for="department">
@@ -224,7 +221,6 @@
                         </div>
 
 
-                        <!-- DEVICE -->
                         <div class="form-group form-full">
 
                             <label for="device">
@@ -240,7 +236,6 @@
                         </div>
 
 
-                        <!-- DESCRIPTION -->
                         <div class="form-group form-full">
 
                             <label for="description">
@@ -257,7 +252,6 @@
                         </div>
 
 
-                        <!-- BUTTONS -->
                         <div class="form-actions form-full">
 
                             <button
@@ -276,6 +270,51 @@
 
                     </form>
 
+
+                    <!-- JAVASCRIPT FEEDBACK -->
+                    <div
+                        id="ticketFeedback"
+                        class="ticket-feedback"
+                        hidden>
+
+                        <h3 id="feedbackTitle">
+                            Ticket Submitted
+                        </h3>
+
+                        <p id="feedbackMessage"></p>
+
+
+                        <div class="submitted-ticket-summary">
+
+                            <p>
+                                <strong>Subject:</strong>
+                                <span id="submittedSubject"></span>
+                            </p>
+
+                            <p>
+                                <strong>Category:</strong>
+                                <span id="submittedCategory"></span>
+                            </p>
+
+                            <p>
+                                <strong>Priority:</strong>
+                                <span id="submittedPriority"></span>
+                            </p>
+
+                            <p>
+                                <strong>Department:</strong>
+                                <span id="submittedDepartment"></span>
+                            </p>
+
+                            <p>
+                                <strong>Device:</strong>
+                                <span id="submittedDevice"></span>
+                            </p>
+
+                        </div>
+
+                    </div>
+
                 </section>
 
 
@@ -289,6 +328,7 @@
                     </p>
 
                     <ol>
+
                         <li>
                             Restart the device or application.
                         </li>
@@ -304,6 +344,7 @@
                         <li>
                             Select the correct category and priority.
                         </li>
+
                     </ol>
 
                 </aside>
@@ -313,6 +354,9 @@
         </main>
 
     </div>
+
+
+    <script src="script.js"></script>
 
 </body>
 
