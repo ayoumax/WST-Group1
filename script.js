@@ -370,3 +370,31 @@ if (commentForm) {
     });
 
 }
+
+
+// =========================================================
+// HELP CENTER - EXPAND/COLLAPSE TROUBLESHOOTING STEPS
+// =========================================================
+
+const faqHeadings = document.querySelectorAll(".faq-section h3");
+
+if (faqHeadings.length > 0) {
+
+    faqHeadings.forEach(function (heading) {
+
+        heading.classList.add("faq-toggle");
+
+        const stepsList = heading.nextElementSibling;
+
+        stepsList.hidden = true;
+
+        heading.addEventListener("click", function () {
+
+            stepsList.hidden = !stepsList.hidden;
+
+        });
+
+    });
+
+}
+
