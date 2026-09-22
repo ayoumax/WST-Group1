@@ -307,3 +307,66 @@ if (ticketFilterForm) {
     );
 
 }
+
+
+// =========================================================
+// TICKET DETAIL - STATUS UPDATE
+// =========================================================
+
+const statusUpdateForm = document.getElementById("statusUpdateForm");
+
+if (statusUpdateForm) {
+
+    const statusSelect = document.getElementById("statusSelect");
+    const ticketStatusBadge = document.getElementById("ticketStatusBadge");
+    const statusFeedback = document.getElementById("statusFeedback");
+
+    statusUpdateForm.addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+        const newStatus = statusSelect.value;
+        const newStatusText = statusSelect.options[statusSelect.selectedIndex].text;
+
+        ticketStatusBadge.textContent = newStatusText;
+        ticketStatusBadge.className = "status " + newStatus;
+
+        statusFeedback.textContent = "Status updated to " + newStatusText + ".";
+        statusFeedback.hidden = false;
+
+    });
+
+}
+
+
+// =========================================================
+// TICKET DETAIL - ADD COMMENT
+// =========================================================
+
+const commentForm = document.getElementById("commentForm");
+
+if (commentForm) {
+
+    const commentInput = document.getElementById("comment");
+    const messageList = document.getElementById("messageList");
+
+    commentForm.addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+        const commentText = commentInput.value.trim();
+
+        if (commentText === "") {
+            return;
+        }
+
+        const newMessage = document.createElement("li");
+        newMessage.innerHTML = "<strong>IT Support</strong> " + commentText;
+
+        messageList.appendChild(newMessage);
+
+        commentInput.value = "";
+
+    });
+
+}

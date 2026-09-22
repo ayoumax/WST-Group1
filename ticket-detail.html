@@ -21,20 +21,12 @@
 
                 <div class="sidebar-logo">
 
-                    <img
-                        src="images/motorph-logo.png"
-                        alt="MotorPH Logo">
+                    <img src="images/motorph-logo.png" alt="MotorPH Logo">
 
                     <div class="sidebar-title">
-
                         <h1>MotorPH</h1>
-
                         <p>IT Support</p>
-
-                        <span class="portal-label">
-                            Employee Portal
-                        </span>
-
+                        <span class="portal-label">Employee Portal</span>
                     </div>
 
                 </div>
@@ -43,33 +35,14 @@
 
 
             <nav class="sidebar-nav">
-
-                <a href="employee-dashboard.html">
-                    Dashboard
-                </a>
-
-                <a href="submit-ticket.html">
-                    Submit Ticket
-                </a>
-
-                <a
-                    class="active"
-                    href="my-tickets.html">
-                    My Tickets
-                </a>
-
-                <a href="help.html">
-                    Help
-                </a>
-
+                <a href="employee-dashboard.html">Dashboard</a>
+                <a href="submit-ticket.html">Submit Ticket</a>
+                <a class="active" href="my-tickets.html">My Tickets</a>
+                <a href="help.html">Help</a>
             </nav>
 
 
-            <a
-                class="logout-button"
-                href="index.html">
-                Logout
-            </a>
+            <a class="logout-button" href="index.html">Logout</a>
 
         </aside>
 
@@ -79,22 +52,11 @@
 
             <header class="ticket-detail-header">
 
-                <a
-                    class="back-button"
-                    href="my-tickets.html">
-                    ← Back to My Tickets
-                </a>
+                <a class="back-button" href="my-tickets.html">← Back to My Tickets</a>
 
                 <div class="ticket-heading">
-
-                    <p>
-                        Ticket TCK-1001
-                    </p>
-
-                    <h2>
-                        Cannot Connect to Office Wi-Fi
-                    </h2>
-
+                    <p>Ticket TCK-1001</p>
+                    <h2>Cannot Connect to Office Wi-Fi</h2>
                 </div>
 
             </header>
@@ -126,12 +88,7 @@
 
                         <div class="ticket-info-item">
                             <span>Status</span>
-
-                            <strong>
-                                <span class="status open">
-                                    Open
-                                </span>
-                            </strong>
+                            <strong><span class="status open" id="ticketStatusBadge">Open</span></strong>
                         </div>
 
                         <div class="ticket-info-item">
@@ -146,20 +103,35 @@
 
                     </div>
 
+
+                    <form id="statusUpdateForm" class="ticket-form stacked">
+
+                        <div class="form-group">
+                            <label for="statusSelect">Update Status</label>
+                            <select id="statusSelect" name="status">
+                                <option value="open">Open</option>
+                                <option value="progress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">Update Status</button>
+
+                        <p id="statusFeedback" hidden></p>
+
+                    </form>
+
                 </section>
 
 
                 <!-- DESCRIPTION -->
                 <section class="dashboard-card">
-
                     <h3>Description</h3>
-
                     <p>
                         I am unable to connect to the office Wi-Fi.
                         My laptop detects the network but cannot
                         establish a connection.
                     </p>
-
                 </section>
 
 
@@ -168,55 +140,28 @@
 
                     <h3>Message Thread</h3>
 
-
-                    <ul class="message-list">
-
+                    <ul class="message-list" id="messageList">
                         <li>
                             <strong>Employee</strong>
-
                             I tried restarting my laptop, but the
                             problem is still happening.
                         </li>
-
                         <li>
                             <strong>IT Support</strong>
-
                             Please confirm your department and
                             whether other devices can connect.
                         </li>
-
                     </ul>
 
-
-                    <form
-                        class="ticket-form stacked comment-form"
-                        action="#"
-                        method="POST">
+                    <form id="commentForm" class="ticket-form stacked comment-form" action="#" method="POST">
 
                         <div class="form-group">
-
-                            <label for="comment">
-                                Add Comment
-                            </label>
-
-                            <textarea
-                                id="comment"
-                                name="comment"
-                                rows="4"
-                                placeholder="Write your reply..."
-                                required></textarea>
-
+                            <label for="comment">Add Comment</label>
+                            <textarea id="comment" name="comment" rows="4" placeholder="Write your reply..." required></textarea>
                         </div>
 
-
                         <div class="comment-actions">
-
-                            <button
-                                class="btn btn-primary"
-                                type="submit">
-                                Add Comment
-                            </button>
-
+                            <button class="btn btn-primary" type="submit">Add Comment</button>
                         </div>
 
                     </form>
@@ -228,6 +173,9 @@
         </main>
 
     </div>
+
+
+    <script src="script.js"></script>
 
 </body>
 
