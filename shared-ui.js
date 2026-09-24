@@ -35,6 +35,18 @@ if (sidebar) {
     });
 });
 
+document.addEventListener("click", function (event) {
+    const clickedOutside =
+        !sidebar.contains(event.target) &&
+        !menuButton.contains(event.target);
+
+    if (sidebar.classList.contains("is-open") && clickedOutside) {
+        sidebar.classList.remove("is-open");
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.textContent = "☰ Menu";
+    }
+});
+
 }
 
 // Highlight the sidebar link for the current page.
