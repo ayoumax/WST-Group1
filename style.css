@@ -3109,3 +3109,24 @@ small,
 .back-to-top[hidden] {
     display: none;
 }
+
+.shared-toast {
+    position: fixed;
+    right: 24px;
+    bottom: 80px;
+    z-index: 1000;
+    max-width: min(360px, calc(100vw - 48px));
+    padding: 14px 18px;
+    border-radius: 8px;
+    color: #fff;
+    font: inherit;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.shared-toast-success {
+    background-color: #25764a;
+}
+
+.shared-toast-error {
+    background-color: #b42318;
+}

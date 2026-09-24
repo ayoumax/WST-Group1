@@ -84,3 +84,40 @@ if (document.querySelector(".dashboard-page")) {
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
 }
+
+let toastTimer;
+
+window.showToast = function (message, type = "success") {
+    document.querySelector(".shared-toast")?.remove();
+    clearTimeout(toastTimer);
+
+    const toast = document.createElement("div");
+    toast.className =
+        type === "error"
+            ? "shared-toast shared-toast-error"
+            : "shared-toast shared-toast-success";
+    toast.setAttribute("role", type === "error" ? "alert" : "status");
+    toast.textContent = message;
+    document.body.append(toast);
+
+    toastTimer = setTimeout(function () {
+        toast.remove();
+    }, 4000);
+};
+
+const originalButtonLabels = new WeakMap();
+
+window.setButtonLoading = function (button, isLoading) {
+    if (isLoading) {
+        if (button.disabled) return;
+
+        originalButtonLabels.set(button, button.textContent);
+        button.disabled = true;
+        button.textContent = "Please wait...";
+    } else {
+        button.disabled = false;
+        button.textContent =
+            originalButtonLabels.get(button) ?? button.textContent;
+        originalButtonLabels.delete(button);
+    }
+};

@@ -156,6 +156,12 @@ if (ticketForm) {
 
         ticketFeedback.hidden = true;
 
+    ticketForm.addEventListener("reset", function () {
+    
+        ticketFeedback.hidden = true;
+        window.showToast("Form cleared.");
+    });
+
     });
 
 }
