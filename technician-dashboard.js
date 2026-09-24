@@ -59,19 +59,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 isMatch = true;
             }
 
+            row.hidden = !isMatch;
             if (isMatch) {
-                row.style.display = '';
                 visibleCount++;
-            } else {
-                row.style.display = 'none';
             }
         }
 
         if (filterBanner) {
             if (targetStatus === 'all') {
-                filterBanner.style.display = 'none';
+                filterBanner.hidden = true;
             } else {
-                filterBanner.style.display = 'flex';
+                filterBanner.hidden = false;
                 const labelMap = {
                     open: 'Open',
                     progress: 'In Progress',
@@ -85,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Summary card click listeners
     summaryCards.forEach(function (card) {
-        card.style.cursor = 'pointer';
         card.addEventListener('click', function () {
             const filterType = card.getAttribute('data-filter');
             if (filterType) filterTableByStatus(filterType);
