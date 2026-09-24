@@ -73,9 +73,6 @@
         <!-- MAIN CONTENT -->
         <main class="dashboard-content">
 
-            <!-- LIVE ANNOUNCEMENT CONTAINER -->
-            <div id="admin-announcement-container"></div>
-
             <!-- HEADER -->
             <header class="dashboard-header">
 
@@ -95,78 +92,43 @@
             <!-- MAIN SUMMARY -->
             <section class="admin-summary-cards">
 
-                <article
-                    class="summary-card"
-                    data-metric="total"
-                    title="Click for Total Tickets breakdown">
+                <article class="summary-card">
                     <p>Total Tickets</p>
                     <strong>26</strong>
                     <small>All support requests</small>
                 </article>
 
-                <article
-                    class="summary-card"
-                    data-metric="open"
-                    title="Click for Open Tickets breakdown">
+                <article class="summary-card">
                     <p>Open</p>
                     <strong>5</strong>
                     <small>Waiting for action</small>
                 </article>
 
-                <article
-                    class="summary-card"
-                    data-metric="progress"
-                    title="Click for In Progress breakdown">
+                <article class="summary-card">
                     <p>In Progress</p>
                     <strong>3</strong>
                     <small>Currently being handled</small>
                 </article>
 
-                <article
-                    class="summary-card"
-                    data-metric="resolved"
-                    title="Click for Resolved breakdown">
+                <article class="summary-card">
                     <p>Resolved</p>
                     <strong>10</strong>
                     <small>Successfully completed</small>
                 </article>
 
-                <article
-                    class="summary-card"
-                    data-metric="unassigned"
-                    title="Click for Unassigned breakdown">
+                <article class="summary-card">
                     <p>Unassigned</p>
                     <strong>4</strong>
                     <small>Needs technician</small>
                 </article>
 
-                <article
-                    class="summary-card"
-                    data-metric="closed"
-                    title="Click for Closed breakdown">
+                <article class="summary-card">
                     <p>Closed</p>
                     <strong>8</strong>
                     <small>Completed and closed</small>
                 </article>
 
             </section>
-
-            <!-- METRIC DETAIL BANNER -->
-            <div
-                id="admin-metric-detail"
-                style="display: none; justify-content: space-between; align-items: center; background-color: #E8F1FF; border: 1px solid #B8D5FC; padding: 10px 14px; border-radius: 6px; margin-bottom: 20px; font-size: 13px;">
-                <span
-                    id="admin-metric-text"
-                    style="font-weight: bold; color: var(--sidebar-active);">
-                </span>
-                <button
-                    type="button"
-                    id="admin-clear-metric"
-                    class="btn-secondary"
-                    style="padding: 4px 10px; font-size: 12px; cursor: pointer;">
-                    Dismiss
-                </button>
-            </div>
 
 
             <!-- MIDDLE OVERVIEW -->
@@ -584,37 +546,6 @@
                         </strong>
 
                     </div>
-
-                    <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 18px 0 14px 0;">
-
-                    <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--text-dark);">
-                        Broadcast Announcement
-                    </h4>
-                    <p style="margin: 0 0 10px 0; font-size: 12px; color: var(--text-muted);">
-                        Post a live notice to all portal dashboards.
-                    </p>
-
-                    <input
-                        type="text"
-                        id="system-notice-input"
-                        placeholder="Type notice message..."
-                        style="width: 100%; box-sizing: border-box; padding: 8px; font-size: 12px; border: 1px solid var(--card-border); border-radius: 5px; margin-bottom: 8px;">
-
-                    <select
-                        id="system-notice-type"
-                        aria-label="Announcement type"
-                        style="width: 100%; box-sizing: border-box; padding: 7px; font-size: 12px; border: 1px solid var(--card-border); border-radius: 5px; margin-bottom: 8px;">
-                        <option value="info">General Info</option>
-                        <option value="urgent">Urgent Alert</option>
-                    </select>
-
-                    <button
-                        type="button"
-                        id="post-notice-btn"
-                        class="primary-button"
-                        style="width: 100%; font-size: 12px; padding: 8px; cursor: pointer;">
-                        Post Announcement
-                    </button>
 
                 </aside>
 
