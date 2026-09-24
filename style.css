@@ -3053,3 +3053,59 @@ small,
 .submitted-ticket-summary strong {
     color: var(--text-dark);
 }
+
+
+/* =========================================================
+   WEEK 4 - DASHBOARD FILTERS
+========================================================= */
+
+.card-heading-row {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 14px;
+}
+
+.activity-filter-bar {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+.activity-filter-btn {
+    padding: 5px 11px;
+
+    border: 1px solid var(--card-border);
+    border-radius: 5px;
+
+    background-color: var(--card-bg);
+    color: var(--text-dark);
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.activity-filter-btn.is-active {
+    background-color: var(--sidebar-active);
+    color: var(--sidebar-text);
+
+    font-weight: bold;
+}
+
+.filter-count {
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+.activity-item[hidden] {
+    display: none;
+}

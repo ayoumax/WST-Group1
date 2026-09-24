@@ -12,20 +12,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Highlight selected filter chip
             activityFilterBtns.forEach(function (b) {
-                b.style.backgroundColor = 'var(--card-bg)';
-                b.style.color = 'var(--text-dark)';
+                b.classList.remove('is-active');
             });
-            e.target.style.backgroundColor = 'var(--sidebar-active)';
-            e.target.style.color = '#FFFFFF';
+            e.target.classList.add('is-active');
 
             for (var j = 0; j < activityItems.length; j++) {
                 var item = activityItems[j];
                 var itemType = item.getAttribute('data-type');
                 if (filterType === 'all' || itemType === filterType) {
-                    item.style.display = 'flex';
+                    item.hidden = false;
                     visibleCount++;
                 } else {
-                    item.style.display = 'none';
+                    item.hidden = true;
                 }
             }
 

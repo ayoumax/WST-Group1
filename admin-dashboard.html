@@ -317,41 +317,37 @@
 
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-                        <div class="activity-filter-bar" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <div class="card-heading-row">
+                        <div class="activity-filter-bar">
                             <button
                                 type="button"
-                                class="activity-filter-btn"
-                                data-type="all"
-                                style="padding: 5px 11px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border); background-color: var(--sidebar-active); color: #FFFFFF; font-weight: bold; cursor: pointer;">
+                                class="activity-filter-btn is-active"
+                                data-type="all">
                                 All
                             </button>
                             <button
                                 type="button"
                                 class="activity-filter-btn"
-                                data-type="ticket"
-                                style="padding: 5px 11px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border); background-color: var(--card-bg); color: var(--text-dark); cursor: pointer;">
+                                data-type="ticket">
                                 New Tickets
                             </button>
                             <button
                                 type="button"
                                 class="activity-filter-btn"
-                                data-type="assigned"
-                                style="padding: 5px 11px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border); background-color: var(--card-bg); color: var(--text-dark); cursor: pointer;">
+                                data-type="assigned">
                                 Assignments
                             </button>
                             <button
                                 type="button"
                                 class="activity-filter-btn"
-                                data-type="resolved"
-                                style="padding: 5px 11px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border); background-color: var(--card-bg); color: var(--text-dark); cursor: pointer;">
+                                data-type="resolved">
                                 Resolved / Closed
                             </button>
                         </div>
 
                         <small
                             id="activity-filter-count"
-                            style="font-size: 12px; color: var(--text-muted);">
+                            class="filter-count">
                             Showing 4 of 4 activities
                         </small>
                     </div>
