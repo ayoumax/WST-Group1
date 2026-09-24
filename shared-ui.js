@@ -26,6 +26,15 @@ if (sidebar) {
             menuButton.focus();
         }
     });
+
+    sidebar.querySelectorAll("a").forEach(function (link) {
+    link.addEventListener("click", function () {
+        sidebar.classList.remove("is-open");
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.textContent = "☰ Menu";
+    });
+});
+
 }
 
 // Highlight the sidebar link for the current page.
