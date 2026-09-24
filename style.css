@@ -3053,3 +3053,36 @@ small,
 .submitted-ticket-summary strong {
     color: var(--text-dark);
 }
+
+/* Shared mobile sidebar menu */
+.mobile-menu-button {
+    display: none;
+}
+
+@media (max-width: 700px) {
+    .dashboard-page .mobile-menu-button {
+        display: block;
+        width: 100%;
+        padding: 14px 20px;
+        border: 0;
+        background: var(--sidebar-bg);
+        color: var(--sidebar-text);
+        text-align: left;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .dashboard-page .mobile-menu-button:focus-visible {
+        outline: 3px solid var(--sidebar-active);
+        outline-offset: -3px;
+    }
+
+    .dashboard-page .sidebar {
+        display: none;
+    }
+
+    .dashboard-page .sidebar.is-open {
+        display: flex;
+    }
+}
