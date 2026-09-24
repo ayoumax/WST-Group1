@@ -41,22 +41,25 @@ if (ticketForm) {
 
 
         // Check required information
-        if (
-            subject === "" ||
-            category === "" ||
-            description === ""
-        ) {
+        if (subject === "" || category === "" || description === "") {
 
-            feedbackTitle.textContent =
-                "Unable to Submit Ticket";
+            feedbackTitle.textContent = "Please Complete the Form";
 
             feedbackMessage.textContent =
-                "Please complete the Subject, Category, and Problem Description fields.";
+                "Subject, Category, and Problem Description are required.";
 
-            ticketFeedback.className =
-                "ticket-feedback error";
-
+            ticketFeedback.className = "ticket-feedback error";
             ticketFeedback.hidden = false;
+
+            window.showToast("Please complete the required fields.", "error");
+
+            if (subject === "") {
+                subjectInput.focus();
+            } else if (category === "") {
+                categoryInput.focus();
+            } else {
+                descriptionInput.focus();
+            }
 
             return;
         }
@@ -74,30 +77,17 @@ if (ticketForm) {
 
 
         // Different message depending on priority
+        feedbackTitle.textContent = "Ticket Details Preview";
+
         if (priority === "urgent") {
-
-            feedbackTitle.textContent =
-                "Urgent Ticket Submitted";
-
             feedbackMessage.textContent =
-                "Your urgent request has been received and will be prioritized by the IT Support team.";
-
+                "Review your urgent ticket details below.";
         } else if (priority === "high") {
-
-            feedbackTitle.textContent =
-                "High Priority Ticket Submitted";
-
             feedbackMessage.textContent =
-                "Your high-priority request has been received and will be reviewed as soon as possible.";
-
+                "Review your high-priority ticket details below.";
         } else {
-
-            feedbackTitle.textContent =
-                "Ticket Submitted Successfully";
-
             feedbackMessage.textContent =
-                "Your support request has been received. The IT Support team will review your ticket.";
-
+                "Review your ticket details below.";
         }
 
 
@@ -156,11 +146,11 @@ if (ticketForm) {
 
         ticketFeedback.hidden = true;
 
-    ticketForm.addEventListener("reset", function () {
-    
-        ticketFeedback.hidden = true;
-        window.showToast("Form cleared.");
-    });
+        ticketForm.addEventListener("reset", function () {
+
+            ticketFeedback.hidden = true;
+            window.showToast("Form cleared.");
+        });
 
     });
 
