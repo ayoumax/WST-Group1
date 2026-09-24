@@ -1,4 +1,4 @@
-const sidebar = document.querySelector(".dashboard-page .sidebar");
+const sidebar = document.querySelector(".dashboard-page .sidebar"); 
 
 if (sidebar) {
     const menuButton = document.createElement("button");
@@ -27,3 +27,19 @@ if (sidebar) {
         }
     });
 }
+
+// Highlight the sidebar link for the current page.
+const currentPage = window.location.pathname.split("/").pop();
+
+document.querySelectorAll(".sidebar-nav a").forEach(function (link) {
+    const linkPage = new URL(link.href).pathname.split("/").pop();
+    const isCurrentPage = linkPage === currentPage;
+
+    link.classList.toggle("active", isCurrentPage);
+
+    if (isCurrentPage) {
+        link.setAttribute("aria-current", "page");
+    } else {
+        link.removeAttribute("aria-current");
+    }
+});
