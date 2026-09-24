@@ -64,3 +64,23 @@ document.querySelectorAll(".sidebar-nav a").forEach(function (link) {
         link.removeAttribute("aria-current");
     }
 });
+
+if (document.querySelector(".dashboard-page")) {
+    const topButton = document.createElement("button");
+    topButton.type = "button";
+    topButton.className = "back-to-top";
+    topButton.textContent = "↑ Back to top";
+    topButton.setAttribute("aria-label", "Back to top");
+    document.body.append(topButton);
+
+    function updateTopButton() {
+        topButton.hidden = window.scrollY < 300;
+    }
+
+    window.addEventListener("scroll", updateTopButton);
+    updateTopButton();
+
+    topButton.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}
