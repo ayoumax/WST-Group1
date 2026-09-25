@@ -3161,3 +3161,11 @@ small,
 
     font-size: 12px;
 }
+
+.filter-feedback {
+    margin: 12px 0 0;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+}
