@@ -1,6 +1,6 @@
 // Technician Dashboard - Summary Card Filter & Quick Status Update
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     const summaryCards = document.querySelectorAll('.summary-grid .summary-card');
     const countAssigned = document.getElementById('count-assigned');
     const countOpen = document.getElementById('count-open');
@@ -13,117 +13,120 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const tableBody = document.querySelector('.recent-tickets tbody');
     const ticketRows = tableBody ? tableBody.querySelectorAll('tr') : [];
+    const statusSelects = document.querySelectorAll('.quick-status-select');
+
+    // Badge text for each filter/select value
+    const statusLabels = {
+        open: 'Open',
+        progress: 'In Progress',
+        resolved: 'Resolved'
+    };
+
+    // Banner text matches the summary card titles
+    const bannerLabels = {
+        open: 'Open',
+        progress: 'In Progress',
+        resolved: 'Resolved Today'
+    };
 
     let currentFilter = 'all';
 
-    // Recount status badges across the assigned table
+    function getStatusText(row) {
+        const badge = row.querySelector('.status');
+        return badge ? badge.textContent.trim().toLowerCase() : '';
+    }
+
     function updateCounts() {
         let openCount = 0;
         let progressCount = 0;
         let resolvedCount = 0;
-        const totalCount = ticketRows.length;
 
-        for (const row of ticketRows) {
-            const badge = row.querySelector('.status');
-            if (badge) {
-                const text = badge.textContent.trim().toLowerCase();
-                if (text === 'open') openCount++;
-                else if (text === 'in progress') progressCount++;
-                else if (text === 'resolved') resolvedCount++;
+        ticketRows.forEach((row) => {
+            const statusText = getStatusText(row);
+            if (statusText === 'open') {
+                openCount++;
+            } else if (statusText === 'in progress') {
+                progressCount++;
+            } else if (statusText === 'resolved') {
+                resolvedCount++;
             }
-        }
+        });
 
-        if (countAssigned) countAssigned.textContent = totalCount;
-        if (countOpen) countOpen.textContent = openCount;
-        if (countProgress) countProgress.textContent = progressCount;
-        if (countResolved) countResolved.textContent = resolvedCount;
+        if (countAssigned) {
+            countAssigned.textContent = ticketRows.length;
+        }
+        if (countOpen) {
+            countOpen.textContent = openCount;
+        }
+        if (countProgress) {
+            countProgress.textContent = progressCount;
+        }
+        if (countResolved) {
+            countResolved.textContent = resolvedCount;
+        }
     }
 
-    // Filter table rows when clicking a summary card
     function filterTableByStatus(targetStatus) {
         currentFilter = targetStatus;
         let visibleCount = 0;
 
-        for (const row of ticketRows) {
-            const badge = row.querySelector('.status');
-            const statusText = badge ? badge.textContent.trim().toLowerCase() : '';
-
-            let isMatch = false;
-            if (targetStatus === 'all') {
-                isMatch = true;
-            } else if (targetStatus === 'open' && statusText === 'open') {
-                isMatch = true;
-            } else if (targetStatus === 'progress' && statusText === 'in progress') {
-                isMatch = true;
-            } else if (targetStatus === 'resolved' && statusText === 'resolved') {
-                isMatch = true;
-            }
+        ticketRows.forEach((row) => {
+            const isMatch = targetStatus === 'all' ||
+                getStatusText(row) === statusLabels[targetStatus].toLowerCase();
 
             row.hidden = !isMatch;
             if (isMatch) {
                 visibleCount++;
             }
+        });
+
+        if (!filterBanner) {
+            return;
         }
 
-        if (filterBanner) {
-            if (targetStatus === 'all') {
-                filterBanner.hidden = true;
-            } else {
-                filterBanner.hidden = false;
-                const labelMap = {
-                    open: 'Open',
-                    progress: 'In Progress',
-                    resolved: 'Resolved Today'
-                };
-                const displayLabel = labelMap[targetStatus] || targetStatus;
-                filterBannerText.textContent = `Filtered by: ${displayLabel} (${visibleCount} ticket${visibleCount === 1 ? '' : 's'})`;
-            }
+        if (targetStatus === 'all') {
+            filterBanner.hidden = true;
+        } else {
+            const plural = visibleCount === 1 ? '' : 's';
+            filterBannerText.textContent = `Filtered by: ${bannerLabels[targetStatus]} (${visibleCount} ticket${plural})`;
+            filterBanner.hidden = false;
         }
     }
 
-    // Summary card click listeners
-    summaryCards.forEach(function (card) {
-        card.addEventListener('click', function () {
-            const filterType = card.getAttribute('data-filter');
-            if (filterType) filterTableByStatus(filterType);
+    summaryCards.forEach((card) => {
+        card.addEventListener('click', () => {
+            const filterType = card.dataset.filter;
+            if (filterType) {
+                filterTableByStatus(filterType);
+            }
         });
     });
 
     if (resetFilterBtn) {
-        resetFilterBtn.addEventListener('click', function (e) {
-            e.preventDefault();
+        resetFilterBtn.addEventListener('click', () => {
             filterTableByStatus('all');
         });
     }
 
-    // Quick status dropdowns per ticket row
-    const statusSelects = document.querySelectorAll('.quick-status-select');
-    statusSelects.forEach(function (select) {
-        select.addEventListener('change', function (event) {
-            const newStatus = event.target.value;
-            const row = event.target.closest('tr');
-            const badge = row.querySelector('.status');
+    statusSelects.forEach((select) => {
+        select.addEventListener('change', () => {
+            const newStatus = select.value;
+            const badge = select.closest('tr').querySelector('.status');
 
-            if (newStatus === 'open') {
-                badge.textContent = 'Open';
-                badge.className = 'status open';
-            } else if (newStatus === 'progress') {
-                badge.textContent = 'In Progress';
-                badge.className = 'status progress';
-            } else if (newStatus === 'resolved') {
-                badge.textContent = 'Resolved';
-                badge.className = 'status resolved';
+            if (badge && statusLabels[newStatus]) {
+                badge.textContent = statusLabels[newStatus];
+                badge.className = `status ${newStatus}`;
             }
 
             updateCounts();
 
-            // Re-apply current card filter if active
+            // Re-apply the active card filter, so a row whose new status
+            // no longer matches is hidden straight away
             if (currentFilter !== 'all') {
                 filterTableByStatus(currentFilter);
             }
         });
     });
 
-    // Calculate initial counts on page load
     updateCounts();
 });
