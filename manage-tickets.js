@@ -1,113 +1,489 @@
 // ==========================================================================
-// MotorPH IT Support - Manage / Assigned Tickets Interactivity (Week 4)
+// MotorPH IT Support - Assigned Tickets
 // ==========================================================================
 
-// Run once the DOM content is fully loaded
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-    // 1. LOCATE WEBPAGE ELEMENTS
-    var filterForm = document.querySelector('.filter-form');
-    var searchInput = document.getElementById('staff-search');
-    var statusSelect = document.getElementById('staff-status');
-    var filterSubmitBtn = document.getElementById('filter-submit-btn');
-    var filterResetBtn = document.getElementById('filter-reset-btn');
-    var filterFeedback = document.getElementById('filter-feedback');
-    var tableBody = document.querySelector('.table-container tbody');
-    var ticketRows = tableBody.querySelectorAll('tr');
+    var STORAGE_KEY =
+        "motorphTickets";
 
-    var totalTickets = ticketRows.length;
 
-    // 2. FUNCTION TO APPLY SEARCH AND STATUS FILTERS
+    var filterForm =
+        document.querySelector(".filter-form");
+
+    var searchInput =
+        document.getElementById("staff-search");
+
+    var statusSelect =
+        document.getElementById("staff-status");
+
+    var filterResetBtn =
+        document.getElementById("filter-reset-btn");
+
+    var filterFeedback =
+        document.getElementById("filter-feedback");
+
+    var tableBody =
+        document.getElementById("technicianTicketTableBody");
+
+
+    // Get tickets saved by the employee
+    function getSavedTickets() {
+
+        var savedTickets =
+            localStorage.getItem(STORAGE_KEY);
+
+
+        if (savedTickets === null) {
+            return [];
+        }
+
+
+        return JSON.parse(savedTickets);
+
+    }
+
+
+    // Add assigned localStorage tickets
+    function loadAssignedTickets() {
+
+        var savedTickets =
+            getSavedTickets();
+
+
+        for (
+            var i = 0;
+            i < savedTickets.length;
+            i++
+        ) {
+
+            var ticket =
+                savedTickets[i];
+
+
+            // Only display tickets that were assigned
+            if (
+                !ticket.technician ||
+                ticket.technician === ""
+            ) {
+
+                continue;
+
+            }
+
+
+            var row =
+                document.createElement("tr");
+
+
+            // Ticket ID
+            var idCell =
+                document.createElement("td");
+
+            idCell.textContent =
+                ticket.id;
+
+
+            // Employee
+            var employeeCell =
+                document.createElement("td");
+
+            employeeCell.textContent =
+                "Employee";
+
+
+            // Category
+            var categoryCell =
+                document.createElement("td");
+
+            categoryCell.textContent =
+                ticket.categoryText ||
+                ticket.category;
+
+
+            // Priority
+            var priorityCell =
+                document.createElement("td");
+
+            var priorityBadge =
+                document.createElement("span");
+
+            priorityBadge.className =
+                "priority " +
+                ticket.priority;
+
+            priorityBadge.textContent =
+                ticket.priorityText ||
+                ticket.priority;
+
+            priorityCell.appendChild(
+                priorityBadge
+            );
+
+
+            // Status
+            var statusCell =
+                document.createElement("td");
+
+            var statusBadge =
+                document.createElement("span");
+
+
+            if (
+                ticket.status === "in-progress"
+            ) {
+
+                statusBadge.className =
+                    "status progress";
+
+                statusBadge.textContent =
+                    "In Progress";
+
+            } else if (
+                ticket.status === "resolved"
+            ) {
+
+                statusBadge.className =
+                    "status resolved";
+
+                statusBadge.textContent =
+                    "Resolved";
+
+            } else if (
+                ticket.status === "closed"
+            ) {
+
+                statusBadge.className =
+                    "status closed";
+
+                statusBadge.textContent =
+                    "Closed";
+
+            } else {
+
+                statusBadge.className =
+                    "status open";
+
+                statusBadge.textContent =
+                    "Open";
+
+            }
+
+
+            statusCell.appendChild(
+                statusBadge
+            );
+
+
+            // Assigned technician
+            var technicianCell =
+                document.createElement("td");
+
+            technicianCell.textContent =
+                ticket.technician;
+
+
+            // Add cells to row
+            row.appendChild(
+                idCell
+            );
+
+            row.appendChild(
+                employeeCell
+            );
+
+            row.appendChild(
+                categoryCell
+            );
+
+            row.appendChild(
+                priorityCell
+            );
+
+            row.appendChild(
+                statusCell
+            );
+
+            row.appendChild(
+                technicianCell
+            );
+
+
+            tableBody.appendChild(
+                row
+            );
+
+        }
+
+    }
+
+
+    // Load assigned tickets first
+    loadAssignedTickets();
+
+
+    // Get all rows after local tickets are added
+    var ticketRows =
+        tableBody.querySelectorAll("tr");
+
+
+    var totalTickets =
+        ticketRows.length;
+
+
+    // Search and filter
     function filterTickets() {
-        // ACCEPT USER INPUT
-        var searchText = searchInput.value.toLowerCase().trim();
-        var selectedStatus = statusSelect.value.toLowerCase().trim();
-        var visibleCount = 0;
 
-        // Loop through each ticket row
-        for (var i = 0; i < ticketRows.length; i++) {
-            var row = ticketRows[i];
+        var searchText =
+            searchInput.value
+                .toLowerCase()
+                .trim();
 
-            // Locate specific cell elements inside this row
-            var ticketId = row.cells[0].textContent.toLowerCase();
-            var employee = row.cells[1].textContent.toLowerCase();
-            var category = row.cells[2].textContent.toLowerCase();
-            var priority = row.cells[3].textContent.toLowerCase();
-            var statusElement = row.cells[4].querySelector('.status');
-            var statusText = statusElement ? statusElement.textContent.toLowerCase().trim() : '';
+        var selectedStatus =
+            statusSelect.value
+                .toLowerCase()
+                .trim();
 
-            // EVALUATE CONDITIONS
-            // Check if search matches Ticket ID, Employee, Category, or Priority
-            var matchesSearch = searchText === '' ||
-                ticketId.includes(searchText) ||
-                employee.includes(searchText) ||
-                category.includes(searchText) ||
-                priority.includes(searchText);
+        var visibleCount =
+            0;
 
-            // Check if status dropdown matches
-            var matchesStatus = false;
-            if (selectedStatus === 'all') {
-                matchesStatus = true;
-            } else if (selectedStatus === 'in-progress' && statusText === 'in progress') {
-                matchesStatus = true;
-            } else if (selectedStatus === statusText) {
-                matchesStatus = true;
+
+        for (
+            var i = 0;
+            i < ticketRows.length;
+            i++
+        ) {
+
+            var row =
+                ticketRows[i];
+
+
+            var ticketId =
+                row.cells[0]
+                    .textContent
+                    .toLowerCase();
+
+            var employee =
+                row.cells[1]
+                    .textContent
+                    .toLowerCase();
+
+            var category =
+                row.cells[2]
+                    .textContent
+                    .toLowerCase();
+
+            var priority =
+                row.cells[3]
+                    .textContent
+                    .toLowerCase();
+
+            var technician =
+                row.cells[5]
+                    .textContent
+                    .toLowerCase();
+
+
+            var statusElement =
+                row.cells[4]
+                    .querySelector(
+                        ".status"
+                    );
+
+
+            var statusText =
+                statusElement
+                    ? statusElement
+                        .textContent
+                        .toLowerCase()
+                        .trim()
+                    : "";
+
+
+            // Search condition
+            var matchesSearch =
+                searchText === "" ||
+                ticketId.includes(
+                    searchText
+                ) ||
+                employee.includes(
+                    searchText
+                ) ||
+                category.includes(
+                    searchText
+                ) ||
+                priority.includes(
+                    searchText
+                ) ||
+                technician.includes(
+                    searchText
+                );
+
+
+            // Status condition
+            var matchesStatus =
+                false;
+
+
+            if (
+                selectedStatus === "all"
+            ) {
+
+                matchesStatus =
+                    true;
+
+            } else if (
+                selectedStatus ===
+                    "in-progress" &&
+                statusText ===
+                    "in progress"
+            ) {
+
+                matchesStatus =
+                    true;
+
+            } else if (
+                selectedStatus ===
+                statusText
+            ) {
+
+                matchesStatus =
+                    true;
+
             }
 
-            // DISPLAY DIFFERENT RESULTS BASED ON CONDITIONS
-            if (matchesSearch && matchesStatus) {
-                row.style.display = '';
+
+            // Show or hide row
+            if (
+                matchesSearch &&
+                matchesStatus
+            ) {
+
+                row.style.display =
+                    "";
+
                 visibleCount++;
+
             } else {
-                row.style.display = 'none';
+
+                row.style.display =
+                    "none";
+
             }
+
         }
 
-        // UPDATE WEBPAGE CONTENT (Feedback message)
-        if (filterFeedback) {
-            if (visibleCount === 0) {
-                filterFeedback.textContent = 'No tickets match your search criteria. Try a different keyword or status.';
-                filterFeedback.style.color = '#B91C1C'; // Warning/red tint
-            } else if (visibleCount === totalTickets) {
-                filterFeedback.textContent = 'Showing all ' + totalTickets + ' tickets.';
-                filterFeedback.style.color = 'var(--text-muted)';
-            } else {
-                filterFeedback.textContent = 'Showing ' + visibleCount + ' of ' + totalTickets + ' tickets.';
-                filterFeedback.style.color = 'var(--text-muted)';
-            }
+
+        // Update message
+        if (visibleCount === 0) {
+
+            filterFeedback.textContent =
+                "No tickets match your search criteria.";
+
+            filterFeedback.style.color =
+                "#B91C1C";
+
+        } else if (
+            visibleCount === totalTickets
+        ) {
+
+            filterFeedback.textContent =
+                "Showing all " +
+                totalTickets +
+                " tickets.";
+
+            filterFeedback.style.color =
+                "var(--text-muted)";
+
+        } else {
+
+            filterFeedback.textContent =
+                "Showing " +
+                visibleCount +
+                " of " +
+                totalTickets +
+                " tickets.";
+
+            filterFeedback.style.color =
+                "var(--text-muted)";
+
         }
+
     }
 
-    // 3. RESPOND TO BUTTON CLICKS & USER INPUT
+
+    // Display correct initial total
+    filterFeedback.textContent =
+        "Showing all " +
+        totalTickets +
+        " tickets.";
+
+
+    // Filter button
     if (filterForm) {
-        // Handle form submission (click Filter button or press Enter)
-        filterForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent page reload
-            filterTickets();
-        });
+
+        filterForm.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+                filterTickets();
+
+            }
+        );
+
     }
 
+
+    // Search while typing
     if (searchInput) {
-        // Also respond dynamically while typing
-        searchInput.addEventListener('input', function () {
-            filterTickets();
-        });
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                filterTickets();
+
+            }
+        );
+
     }
 
+
+    // Filter when status changes
     if (statusSelect) {
-        // Respond when status dropdown changes
-        statusSelect.addEventListener('change', function () {
-            filterTickets();
-        });
+
+        statusSelect.addEventListener(
+            "change",
+            function () {
+
+                filterTickets();
+
+            }
+        );
+
     }
 
+
+    // Reset search/filter
     if (filterResetBtn) {
-        // Reset button clears search, resets dropdown, and restores rows
-        filterResetBtn.addEventListener('click', function () {
-            searchInput.value = '';
-            statusSelect.value = 'all';
-            filterTickets();
-        });
+
+        filterResetBtn.addEventListener(
+            "click",
+            function () {
+
+                searchInput.value =
+                    "";
+
+                statusSelect.value =
+                    "all";
+
+                filterTickets();
+
+            }
+        );
+
     }
 
 });

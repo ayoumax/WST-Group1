@@ -76,7 +76,7 @@
                     <h2>Assigned Tickets</h2>
 
                     <p>
-                        Search and review tickets assigned to you.
+                        Search and review tickets assigned to the IT support team.
                     </p>
 
                 </div>
@@ -104,7 +104,7 @@
                             type="search"
                             id="staff-search"
                             name="search"
-                            placeholder="Ticket ID, employee, or subject">
+                            placeholder="Ticket ID, employee, category, or priority">
 
                     </p>
 
@@ -159,10 +159,11 @@
 
                 </form>
 
+
                 <p
                     id="filter-feedback"
                     style="margin-top: 12px; margin-bottom: 0; font-size: 13px; color: var(--text-muted);">
-                    Showing all 5 tickets
+                    Showing all tickets
                 </p>
 
             </section>
@@ -174,11 +175,13 @@
                 <div class="section-heading">
 
                     <div>
+
                         <h3>Ticket List</h3>
 
                         <p>
-                            Select View Details to open a support ticket.
+                            Review tickets currently assigned to IT support.
                         </p>
+
                     </div>
 
                 </div>
@@ -196,14 +199,15 @@
                                 <th>Category</th>
                                 <th>Priority</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                                <th>Assigned To</th>
                             </tr>
 
                         </thead>
 
 
-                        <tbody>
+                        <tbody id="technicianTicketTableBody">
 
+                            <!-- DEFAULT SAMPLE TICKET 1001 -->
                             <tr>
 
                                 <td>
@@ -214,35 +218,38 @@
                                     </a>
                                 </td>
 
-                                <td>J. Santos</td>
-
-                                <td>Network</td>
+                                <td>
+                                    J. Santos
+                                </td>
 
                                 <td>
+                                    Network
+                                </td>
+
+                                <td>
+
                                     <span class="priority high">
                                         High
                                     </span>
+
                                 </td>
 
                                 <td>
+
                                     <span class="status open">
                                         Open
                                     </span>
+
                                 </td>
 
                                 <td>
-
-                                    <a
-                                        class="table-action-button"
-                                        href="technician-ticket-detail.html#tck-1001">
-                                        View Details
-                                    </a>
-
+                                    IT Support Team
                                 </td>
 
                             </tr>
 
 
+                            <!-- DEFAULT SAMPLE TICKET 1002 -->
                             <tr>
 
                                 <td>
@@ -253,147 +260,108 @@
                                     </a>
                                 </td>
 
-                                <td>M. Cruz</td>
-
-                                <td>Hardware</td>
+                                <td>
+                                    M. Cruz
+                                </td>
 
                                 <td>
+                                    Hardware
+                                </td>
+
+                                <td>
+
                                     <span class="priority urgent">
                                         Urgent
                                     </span>
+
                                 </td>
 
                                 <td>
+
                                     <span class="status progress">
                                         In Progress
                                     </span>
+
                                 </td>
 
                                 <td>
-
-                                    <a
-                                        class="table-action-button"
-                                        href="technician-ticket-detail.html#tck-1002">
-                                        View Details
-                                    </a>
-
+                                    Mark Santos
                                 </td>
 
                             </tr>
 
 
+                            <!-- DEFAULT SAMPLE TICKET 1005 -->
                             <tr>
 
                                 <td>
-                                    <a
-                                        class="ticket-link"
-                                        href="technician-ticket-detail.html#tck-1004">
-                                        TCK-1004
-                                    </a>
-                                </td>
-
-                                <td>R. Lim</td>
-
-                                <td>Hardware</td>
-
-                                <td>
-                                    <span class="priority medium">
-                                        Medium
-                                    </span>
+                                    TCK-1005
                                 </td>
 
                                 <td>
-                                    <span class="status open">
-                                        Open
-                                    </span>
+                                    K. Tan
+                                </td>
+
+                                <td>
+                                    Account Access
                                 </td>
 
                                 <td>
 
-                                    <a
-                                        class="table-action-button"
-                                        href="technician-ticket-detail.html#tck-1004">
-                                        View Details
-                                    </a>
-
-                                </td>
-
-                            </tr>
-
-
-                            <tr>
-
-                                <td>
-                                    <a
-                                        class="ticket-link"
-                                        href="technician-ticket-detail.html#tck-1005">
-                                        TCK-1005
-                                    </a>
-                                </td>
-
-                                <td>K. Tan</td>
-
-                                <td>Account Access</td>
-
-                                <td>
                                     <span class="priority high">
                                         High
                                     </span>
+
                                 </td>
 
                                 <td>
+
                                     <span class="status progress">
                                         In Progress
                                     </span>
+
                                 </td>
 
                                 <td>
-
-                                    <a
-                                        class="table-action-button"
-                                        href="technician-ticket-detail.html#tck-1005">
-                                        View Details
-                                    </a>
-
+                                    Ana Reyes
                                 </td>
 
                             </tr>
 
 
+                            <!-- DEFAULT SAMPLE TICKET 1006 -->
                             <tr>
 
                                 <td>
-                                    <a
-                                        class="ticket-link"
-                                        href="technician-ticket-detail.html#tck-1006">
-                                        TCK-1006
-                                    </a>
+                                    TCK-1006
                                 </td>
 
-                                <td>L. Garcia</td>
-
-                                <td>Account Access</td>
+                                <td>
+                                    L. Garcia
+                                </td>
 
                                 <td>
+                                    Account Access
+                                </td>
+
+                                <td>
+
                                     <span class="priority low">
                                         Low
                                     </span>
+
                                 </td>
 
                                 <td>
+
                                     <span class="status resolved">
                                         Resolved
                                     </span>
+
                                 </td>
 
                                 <td>
-
-                                    <a
-                                        class="table-action-button"
-                                        href="technician-ticket-detail.html#tck-1006">
-                                        View Details
-                                    </a>
-
+                                    IT Support Team
                                 </td>
 
                             </tr>
@@ -409,6 +377,7 @@
         </main>
 
     </div>
+
 
     <script src="manage-tickets.js"></script>
 

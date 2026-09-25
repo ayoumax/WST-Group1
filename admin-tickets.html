@@ -86,11 +86,14 @@
             </header>
 
 
+            <!-- SEARCH AND FILTER -->
             <section class="dashboard-card filter-card">
 
                 <h3>Search and Filter</h3>
 
-                <form class="filter-form">
+                <form
+                    id="adminTicketFilterForm"
+                    class="filter-form">
 
                     <p>
 
@@ -114,26 +117,56 @@
 
                         <select id="admin-status">
 
-                            <option>All</option>
-                            <option>Open</option>
-                            <option>In Progress</option>
-                            <option>Resolved</option>
-                            <option>Closed</option>
+                            <option value="all">
+                                All
+                            </option>
+
+                            <option value="open">
+                                Open
+                            </option>
+
+                            <option value="in-progress">
+                                In Progress
+                            </option>
+
+                            <option value="resolved">
+                                Resolved
+                            </option>
+
+                            <option value="closed">
+                                Closed
+                            </option>
 
                         </select>
 
                     </p>
 
 
-                    <button type="submit">
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
                         Filter
+                    </button>
+
+                    <button
+                        type="button"
+                        id="adminClearFilters"
+                        class="btn btn-secondary">
+                        Clear
                     </button>
 
                 </form>
 
+
+                <p
+                    id="adminFilterResult"
+                    hidden>
+                </p>
+
             </section>
 
 
+            <!-- TICKET LIST -->
             <section class="dashboard-card">
 
                 <h3>Ticket List</h3>
@@ -157,13 +190,25 @@
                         </thead>
 
 
-                        <tbody>
+                        <tbody id="adminTicketTableBody">
 
-                            <tr>
+                            <!-- DEFAULT SAMPLE TICKET 1001 -->
+                            <tr
+                                class="admin-ticket-row"
+                                data-ticket-id="TCK-1001"
+                                data-employee="J. Santos"
+                                data-subject="Cannot connect to office Wi-Fi"
+                                data-status="open">
+
                                 <td>TCK-1001</td>
+
                                 <td>J. Santos</td>
+
                                 <td>Human Resources</td>
-                                <td>Cannot connect to office Wi-Fi</td>
+
+                                <td>
+                                    Cannot connect to office Wi-Fi
+                                </td>
 
                                 <td>
                                     <span class="priority high">
@@ -177,15 +222,30 @@
                                     </span>
                                 </td>
 
-                                <td>Unassigned</td>
+                                <td>
+                                    Unassigned
+                                </td>
+
                             </tr>
 
 
-                            <tr>
+                            <!-- DEFAULT SAMPLE TICKET 1002 -->
+                            <tr
+                                class="admin-ticket-row"
+                                data-ticket-id="TCK-1002"
+                                data-employee="M. Cruz"
+                                data-subject="Laptop won't boot after update"
+                                data-status="in-progress">
+
                                 <td>TCK-1002</td>
+
                                 <td>M. Cruz</td>
+
                                 <td>Finance</td>
-                                <td>Laptop won't boot after update</td>
+
+                                <td>
+                                    Laptop won't boot after update
+                                </td>
 
                                 <td>
                                     <span class="priority urgent">
@@ -199,15 +259,30 @@
                                     </span>
                                 </td>
 
-                                <td>Mark Santos</td>
+                                <td>
+                                    Mark Santos
+                                </td>
+
                             </tr>
 
 
-                            <tr>
+                            <!-- DEFAULT SAMPLE TICKET 1003 -->
+                            <tr
+                                class="admin-ticket-row"
+                                data-ticket-id="TCK-1003"
+                                data-employee="A. Reyes"
+                                data-subject="Need access to shared drive"
+                                data-status="resolved">
+
                                 <td>TCK-1003</td>
+
                                 <td>A. Reyes</td>
+
                                 <td>Payroll</td>
-                                <td>Need access to shared drive</td>
+
+                                <td>
+                                    Need access to shared drive
+                                </td>
 
                                 <td>
                                     <span class="priority low">
@@ -221,37 +296,30 @@
                                     </span>
                                 </td>
 
-                                <td>Ana Reyes</td>
+                                <td>
+                                    Ana Reyes
+                                </td>
+
                             </tr>
 
 
-                            <tr>
-                                <td>TCK-1004</td>
-                                <td>R. Lim</td>
-                                <td>Operations</td>
-                                <td>Office printer keeps jamming</td>
+                            <!-- DEFAULT SAMPLE TICKET 1007 -->
+                            <tr
+                                class="admin-ticket-row"
+                                data-ticket-id="TCK-1007"
+                                data-employee="P. Dela Cruz"
+                                data-subject="Monitor not turning on"
+                                data-status="closed">
 
-                                <td>
-                                    <span class="priority medium">
-                                        Medium
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class="status open">
-                                        Open
-                                    </span>
-                                </td>
-
-                                <td>Unassigned</td>
-                            </tr>
-
-
-                            <tr>
                                 <td>TCK-1007</td>
+
                                 <td>P. Dela Cruz</td>
+
                                 <td>Sales</td>
-                                <td>Monitor not turning on</td>
+
+                                <td>
+                                    Monitor not turning on
+                                </td>
 
                                 <td>
                                     <span class="priority medium">
@@ -265,7 +333,10 @@
                                     </span>
                                 </td>
 
-                                <td>Mark Santos</td>
+                                <td>
+                                    Mark Santos
+                                </td>
+
                             </tr>
 
                         </tbody>
@@ -274,11 +345,21 @@
 
                 </div>
 
+
+                <p
+                    id="adminNoTicketsMessage"
+                    hidden>
+                    No tickets matched your search.
+                </p>
+
             </section>
 
         </main>
 
     </div>
+
+
+    <script src="script.js"></script>
 
 </body>
 

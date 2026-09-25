@@ -104,22 +104,22 @@
 
                 <article class="summary-card">
                     <p>Total Tickets</p>
-                    <strong>3</strong>
+                    <strong id="employeeTotalTickets">3</strong>
                 </article>
 
                 <article class="summary-card">
                     <p>Open</p>
-                    <strong>1</strong>
+                    <strong id="employeeOpenTickets">1</strong>
                 </article>
 
                 <article class="summary-card">
                     <p>In Progress</p>
-                    <strong>1</strong>
+                    <strong id="employeeProgressTickets">1</strong>
                 </article>
 
                 <article class="summary-card">
                     <p>Resolved</p>
-                    <strong>1</strong>
+                    <strong id="employeeResolvedTickets">1</strong>
                 </article>
 
             </section>
@@ -150,8 +150,9 @@
                             </thead>
 
 
-                            <tbody>
+                            <tbody id="employeeRecentTickets">
 
+                                <!-- DEFAULT TICKET 1001 -->
                                 <tr>
 
                                     <td>
@@ -183,6 +184,7 @@
                                 </tr>
 
 
+                                <!-- DEFAULT TICKET 1002 -->
                                 <tr>
 
                                     <td>
@@ -210,6 +212,7 @@
                                 </tr>
 
 
+                                <!-- DEFAULT TICKET 1003 -->
                                 <tr>
 
                                     <td>
@@ -280,6 +283,9 @@
         </main>
 
     </div>
+
+
+    <script src="script.js"></script>
 
 </body>
 
