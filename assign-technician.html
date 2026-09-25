@@ -14,6 +14,7 @@
 
     <div class="app-layout">
 
+        <!-- SIDEBAR -->
         <aside class="sidebar">
 
             <div class="sidebar-brand">
@@ -69,6 +70,7 @@
         </aside>
 
 
+        <!-- MAIN CONTENT -->
         <main class="dashboard-content">
 
             <header class="dashboard-header">
@@ -96,11 +98,11 @@
 
 
                 <form
-                    class="ticket-form stacked assign-page-form"
-                    action="#"
-                    method="POST">
+                    id="assignTechnicianForm"
+                    class="ticket-form stacked assign-page-form">
 
 
+                    <!-- TICKET -->
                     <p>
 
                         <label for="admin-ticket">
@@ -136,6 +138,7 @@
                     </p>
 
 
+                    <!-- TECHNICIAN -->
                     <p>
 
                         <label for="technician">
@@ -167,17 +170,37 @@
                     </p>
 
 
-                    <button type="submit">
+                    <button
+                        class="btn btn-primary"
+                        type="submit">
                         Assign Technician
                     </button>
 
                 </form>
+
+
+                <!-- JAVASCRIPT FEEDBACK -->
+                <div
+                    id="assignmentFeedback"
+                    class="ticket-feedback"
+                    hidden>
+
+                    <h3 id="assignmentFeedbackTitle">
+                        Assignment Complete
+                    </h3>
+
+                    <p id="assignmentFeedbackMessage"></p>
+
+                </div>
 
             </section>
 
         </main>
 
     </div>
+
+
+    <script src="assign-technician.js"></script>
 
 </body>
 
