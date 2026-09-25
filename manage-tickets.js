@@ -52,14 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filterFeedback) {
             if (visibleCount === 0) {
                 filterFeedback.textContent = 'No tickets match your search criteria. Try a different keyword or status.';
-                filterFeedback.style.color = '#B91C1C';
             } else if (visibleCount === totalTickets) {
                 filterFeedback.textContent = `Showing all ${totalTickets} tickets.`;
-                filterFeedback.style.color = 'var(--text-muted)';
             } else {
                 filterFeedback.textContent = `Showing ${visibleCount} of ${totalTickets} tickets.`;
-                filterFeedback.style.color = 'var(--text-muted)';
             }
+            filterFeedback.classList.toggle('is-empty', visibleCount === 0);
         }
 
         console.log('Filtered tickets count:', visibleCount);

@@ -3169,3 +3169,9 @@ small,
 
     font-size: 13px;
 }
+
+.filter-feedback.is-empty {
+    color: var(--text-dark);
+
+    font-weight: bold;
+}
