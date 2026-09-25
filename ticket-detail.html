@@ -169,8 +169,11 @@
                     <h3>Message Thread</h3>
 
 
-                    <ul class="message-list">
+                    <ul
+                        class="message-list"
+                        id="messageList">
 
+                        <!-- DEFAULT SAMPLE MESSAGE -->
                         <li>
                             <strong>Employee</strong>
 
@@ -178,6 +181,7 @@
                             problem is still happening.
                         </li>
 
+                        <!-- DEFAULT SAMPLE MESSAGE -->
                         <li>
                             <strong>IT Support</strong>
 
@@ -189,9 +193,8 @@
 
 
                     <form
-                        class="ticket-form stacked comment-form"
-                        action="#"
-                        method="POST">
+                        id="employeeCommentForm"
+                        class="ticket-form stacked comment-form">
 
                         <div class="form-group">
 
@@ -221,6 +224,12 @@
 
                     </form>
 
+
+                    <p
+                        id="commentFeedback"
+                        hidden>
+                    </p>
+
                 </section>
 
             </div>
@@ -228,6 +237,9 @@
         </main>
 
     </div>
+
+
+    <script src="ticket-messages.js"></script>
 
 </body>
 
