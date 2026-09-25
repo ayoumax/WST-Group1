@@ -134,32 +134,26 @@
                 <!-- ASSIGNED TICKETS -->
                 <section class="dashboard-card recent-tickets">
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <h3 style="margin: 0;">Assigned Tickets</h3>
-                        <small style="color: var(--text-muted); font-size: 12px;">Click summary cards to filter</small>
+                    <div class="card-heading-row">
+                        <h3>Assigned Tickets</h3>
+                        <small class="filter-count">Click summary cards to filter</small>
                     </div>
 
-                    <!-- ACTIVE FILTER & NOTIFICATION BANNERS -->
+                    <!-- ACTIVE FILTER BANNER -->
                     <div
                         id="technician-filter-banner"
-                        style="display: none; justify-content: space-between; align-items: center; background-color: #E8F1FF; border: 1px solid #B8D5FC; padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px;">
+                        class="filter-banner"
+                        hidden>
                         <span
-                            id="technician-filter-text"
-                            style="font-weight: bold; color: var(--sidebar-active);">
+                            id="technician-filter-text">
                             Filtered by: Open
                         </span>
                         <button
                             type="button"
                             id="technician-reset-filter"
-                            class="btn-secondary"
-                            style="padding: 4px 10px; font-size: 12px; cursor: pointer;">
+                            class="btn-secondary">
                             Show All
                         </button>
-                    </div>
-
-                    <div
-                        id="technician-update-toast"
-                        style="display: none; background-color: #E5F6EC; border: 1px solid #99E2B4; color: #065F46; padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; font-size: 13px; font-weight: bold;">
                     </div>
 
 
@@ -216,8 +210,7 @@
                                     <td>
                                         <select
                                             class="quick-status-select"
-                                            aria-label="Update ticket status"
-                                            style="padding: 5px 8px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border);">
+                                            aria-label="Update ticket status">
                                             <option value="open" selected>Open</option>
                                             <option value="progress">In Progress</option>
                                             <option value="resolved">Resolved</option>
@@ -260,8 +253,7 @@
                                     <td>
                                         <select
                                             class="quick-status-select"
-                                            aria-label="Update ticket status"
-                                            style="padding: 5px 8px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border);">
+                                            aria-label="Update ticket status">
                                             <option value="open">Open</option>
                                             <option value="progress" selected>In Progress</option>
                                             <option value="resolved">Resolved</option>
@@ -304,8 +296,7 @@
                                     <td>
                                         <select
                                             class="quick-status-select"
-                                            aria-label="Update ticket status"
-                                            style="padding: 5px 8px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border);">
+                                            aria-label="Update ticket status">
                                             <option value="open" selected>Open</option>
                                             <option value="progress">In Progress</option>
                                             <option value="resolved">Resolved</option>
@@ -348,8 +339,7 @@
                                     <td>
                                         <select
                                             class="quick-status-select"
-                                            aria-label="Update ticket status"
-                                            style="padding: 5px 8px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border);">
+                                            aria-label="Update ticket status">
                                             <option value="open">Open</option>
                                             <option value="progress" selected>In Progress</option>
                                             <option value="resolved">Resolved</option>
@@ -392,8 +382,7 @@
                                     <td>
                                         <select
                                             class="quick-status-select"
-                                            aria-label="Update ticket status"
-                                            style="padding: 5px 8px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border);">
+                                            aria-label="Update ticket status">
                                             <option value="open">Open</option>
                                             <option value="progress">In Progress</option>
                                             <option value="resolved" selected>Resolved</option>
@@ -438,34 +427,6 @@
                         href="manage-tickets.html">
                         Open Ticket Queue
                     </a>
-
-                    <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 18px 0 14px 0;">
-
-                    <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--text-dark);">
-                        Shift Handover Notes
-                    </h4>
-                    <p style="margin: 0 0 8px 0; font-size: 12px; color: var(--text-muted);">
-                        Log quick reminders for other technicians.
-                    </p>
-
-                    <textarea
-                        id="shift-note-input"
-                        placeholder="Type a shift note or reminder..."
-                        rows="2"
-                        style="width: 100%; box-sizing: border-box; padding: 8px; font-size: 12px; border: 1px solid var(--card-border); border-radius: 5px; font-family: inherit; resize: vertical;"></textarea>
-
-                    <button
-                        type="button"
-                        id="save-note-btn"
-                        class="btn-secondary"
-                        style="margin-top: 8px; width: 100%; font-size: 12px; padding: 7px; cursor: pointer;">
-                        Save Shift Note
-                    </button>
-
-                    <ul
-                        id="technician-notes-list"
-                        style="margin: 10px 0 0 0; padding-left: 18px; font-size: 12px; color: var(--text-dark);">
-                    </ul>
 
                 </aside>
 

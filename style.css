@@ -3053,3 +3053,125 @@ small,
 .submitted-ticket-summary strong {
     color: var(--text-dark);
 }
+
+
+/* =========================================================
+   WEEK 4 - DASHBOARD FILTERS
+========================================================= */
+
+.card-heading-row {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 14px;
+}
+
+.activity-filter-bar {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+.activity-filter-btn {
+    padding: 5px 11px;
+
+    border: 1px solid var(--card-border);
+    border-radius: 5px;
+
+    background-color: var(--card-bg);
+    color: var(--text-dark);
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.activity-filter-btn.is-active {
+    background-color: var(--sidebar-active);
+    color: var(--sidebar-text);
+
+    font-weight: bold;
+}
+
+.filter-count {
+    color: var(--text-muted);
+
+    font-size: 12px;
+}
+
+.activity-item[hidden] {
+    display: none;
+}
+
+.card-heading-row h3 {
+    margin: 0;
+}
+
+.summary-card[data-filter] {
+    cursor: pointer;
+}
+
+.filter-banner {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 12px;
+    padding: 8px 12px;
+
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+
+    background-color: var(--page-bg);
+
+    font-size: 13px;
+}
+
+.filter-banner[hidden] {
+    display: none;
+}
+
+.filter-banner span {
+    color: var(--sidebar-active);
+
+    font-weight: bold;
+}
+
+.filter-banner button {
+    padding: 4px 10px;
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.quick-status-select {
+    padding: 5px 8px;
+
+    border: 1px solid var(--card-border);
+    border-radius: 5px;
+
+    font-size: 12px;
+}
+
+.filter-feedback {
+    margin: 12px 0 0;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+}
+
+.filter-feedback.is-empty {
+    color: var(--text-dark);
+
+    font-weight: bold;
+}
