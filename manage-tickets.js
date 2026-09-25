@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterResetBtn = document.getElementById('filter-reset-btn');
     const filterFeedback = document.getElementById('filter-feedback');
     const tableBody = document.querySelector('.table-container tbody');
-    const ticketRows = tableBody.querySelectorAll('tr');
+    const ticketRows = tableBody ? tableBody.querySelectorAll('tr') : [];
 
     const totalTickets = ticketRows.length;
 
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedStatus = statusSelect.value.toLowerCase().trim();
         let visibleCount = 0;
 
-        ticketRows.forEach(row => {
+        ticketRows.forEach((row) => {
             const ticketId = row.cells[0].textContent.toLowerCase();
             const employee = row.cells[1].textContent.toLowerCase();
             const category = row.cells[2].textContent.toLowerCase();
@@ -31,15 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 category.includes(query) ||
                 priority.includes(query);
 
-            // Note: select value uses hyphen ('in-progress') while badge text is 'in progress'
-            let matchesStatus = false;
-            if (selectedStatus === 'all') {
-                matchesStatus = true;
-            } else if (selectedStatus === 'in-progress' && statusText === 'in progress') {
-                matchesStatus = true;
-            } else if (selectedStatus === statusText) {
-                matchesStatus = true;
-            }
+            // Select value uses a hyphen ('in-progress') while the badge text is 'in progress'
+            const matchesStatus = selectedStatus === 'all' ||
+                selectedStatus.replace('-', ' ') === statusText;
 
             const isMatch = matchesSearch && matchesStatus;
             row.hidden = !isMatch;
@@ -59,12 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             filterFeedback.classList.toggle('is-empty', visibleCount === 0);
         }
-
-        console.log('Filtered tickets count:', visibleCount);
     }
 
     if (filterForm) {
-        filterForm.addEventListener('submit', e => {
+        filterForm.addEventListener('submit', (e) => {
             e.preventDefault();
             applyFilter();
         });
