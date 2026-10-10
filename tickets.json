@@ -1,0 +1,16 @@
+[
+  {
+    "id": "TCK-1004",
+    "subject": "Printer not working",
+    "category": "hardware",
+    "categoryText": "Hardware",
+    "priority": "high",
+    "priorityText": "High",
+    "department": "Accounting",
+    "device": "Desktop PC",
+    "description": "The office printer is not responding when I try to print.",
+    "status": "open",
+    "statusText": "Open",
+    "submitted": "October 10, 2026"
+  }
+]

@@ -29,7 +29,6 @@ function saveTickets(tickets) {
         STORAGE_KEY,
         JSON.stringify(tickets)
     );
-
 }
 
 
@@ -39,7 +38,6 @@ function generateTicketId() {
     const savedTickets = getSavedTickets();
 
     let highestNumber = 1003;
-
 
     savedTickets.forEach(function (ticket) {
 
@@ -54,9 +52,7 @@ function generateTicketId() {
 
     });
 
-
     return "TCK-" + (highestNumber + 1);
-
 }
 
 
@@ -88,7 +84,6 @@ if (ticketForm) {
     const descriptionInput =
         document.getElementById("description");
 
-
     const ticketFeedback =
         document.getElementById("ticketFeedback");
 
@@ -97,7 +92,6 @@ if (ticketForm) {
 
     const feedbackMessage =
         document.getElementById("feedbackMessage");
-
 
     const submittedSubject =
         document.getElementById("submittedSubject");
@@ -121,7 +115,6 @@ if (ticketForm) {
         function (event) {
 
             event.preventDefault();
-
 
             // Read user input
             const subject =
@@ -246,6 +239,27 @@ if (ticketForm) {
                 savedTickets
             );
 
+            // Send the new ticket to the Express backend
+            fetch("/tickets", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newTicket)
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log("Backend response:", data);
+                })
+                .catch(function (error) {
+                    console.error(
+                        "Unable to save ticket to backend:",
+                        error
+                    );
+                });
+
 
             // Conditional feedback based on priority
             if (priority === "urgent") {
@@ -274,7 +288,6 @@ if (ticketForm) {
                 feedbackMessage.textContent =
                     newTicketId +
                     " has been saved. The IT Support team will review your request.";
-
             }
 
 
@@ -301,7 +314,6 @@ if (ticketForm) {
 
             ticketFeedback.hidden =
                 false;
-
 
             ticketFeedback.scrollIntoView({
                 behavior: "smooth",
@@ -347,10 +359,8 @@ if (ticketTableBody) {
             const row =
                 document.createElement("tr");
 
-
             row.className =
                 "ticket-row";
-
 
             row.dataset.ticketId =
                 ticket.id;
@@ -401,11 +411,40 @@ if (ticketTableBody) {
             const statusBadge =
                 document.createElement("span");
 
-            statusBadge.className =
-                "status open";
 
-            statusBadge.textContent =
-                ticket.statusText;
+            if (ticket.status === "in-progress") {
+
+                statusBadge.className =
+                    "status progress";
+
+                statusBadge.textContent =
+                    "In Progress";
+
+            } else if (ticket.status === "resolved") {
+
+                statusBadge.className =
+                    "status resolved";
+
+                statusBadge.textContent =
+                    "Resolved";
+
+            } else if (ticket.status === "closed") {
+
+                statusBadge.className =
+                    "status closed";
+
+                statusBadge.textContent =
+                    "Closed";
+
+            } else {
+
+                statusBadge.className =
+                    "status open";
+
+                statusBadge.textContent =
+                    "Open";
+            }
+
 
             statusCell.appendChild(
                 statusBadge
@@ -522,7 +561,6 @@ if (ticketFilterForm) {
                 ".ticket-row"
             );
 
-
         let visibleTickets = 0;
 
 
@@ -572,7 +610,6 @@ if (ticketFilterForm) {
 
                     row.style.display =
                         "none";
-
                 }
 
             }
@@ -610,7 +647,6 @@ if (ticketFilterForm) {
 
             noTicketsMessage.hidden =
                 true;
-
         }
 
     }
@@ -667,6 +703,7 @@ if (ticketFilterForm) {
     );
 
 }
+
 
 // =========================================================
 // EMPLOYEE DASHBOARD
@@ -731,7 +768,6 @@ if (employeeRecentTickets) {
             ) {
 
                 resolvedTickets++;
-
             }
 
         }
@@ -840,7 +876,6 @@ if (employeeRecentTickets) {
 
                     statusBadge.textContent =
                         "Open";
-
                 }
 
 
@@ -881,6 +916,7 @@ if (employeeRecentTickets) {
         );
 
 }
+
 
 // =========================================================
 // ADMIN - ALL TICKETS
@@ -1018,7 +1054,6 @@ if (adminTicketTableBody) {
 
                 statusBadge.textContent =
                     "Open";
-
             }
 
 
@@ -1130,7 +1165,6 @@ if (adminTicketFilterForm) {
                 ".admin-ticket-row"
             );
 
-
         let visibleTickets =
             0;
 
@@ -1185,7 +1219,6 @@ if (adminTicketFilterForm) {
 
                     row.style.display =
                         "none";
-
                 }
 
             }
@@ -1222,7 +1255,6 @@ if (adminTicketFilterForm) {
 
             adminNoTicketsMessage.hidden =
                 true;
-
         }
 
     }
