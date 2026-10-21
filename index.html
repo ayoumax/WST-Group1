@@ -48,7 +48,7 @@
             </p>
 
 
-            <form method="GET">
+            <form id="loginForm" method="POST" action="/login">
 
                 <!-- USERNAME -->
                 <p>
@@ -97,30 +97,22 @@
 
                     <p class="login-role-buttons">
 
-                        <button
-                            type="submit"
-                            formaction="employee-dashboard.html">
+                        <button type="submit" data-role="employee">
                             Employee
                         </button>
 
-
-                        <button
-                            type="submit"
-                            formaction="technician-dashboard.html">
+                        <button type="submit" data-role="technician">
                             IT Technician
                         </button>
 
-
-                        <button
-                            type="submit"
-                            formaction="admin-dashboard.html">
+                        <button type="submit" data-role="admin">
                             Administrator
                         </button>
 
                     </p>
 
                 </fieldset>
-
+                        <p id="loginFeedback" role="alert" hidden></p>
             </form>
 
         </section>
@@ -135,7 +127,7 @@
         </p>
 
     </footer>
-
+            <script src="login.js"></script>
 </body>
 
 </html>
