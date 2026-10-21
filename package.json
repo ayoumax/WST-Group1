@@ -2,8 +2,9 @@
   "name": "wst-group1",
   "version": "1.0.0",
   "description": "A browser-based IT support ticketing system for MotorPH employees, IT technicians, and administrators.",
-  "main": "admin-dashboard.js",
+  "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

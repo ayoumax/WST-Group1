@@ -1,0 +1,34 @@
+[
+  {
+    "id": "USR-001",
+    "username": "employee1",
+    "password": "password123",
+    "name": "Irisha Montaño",
+    "role": "employee",
+    "department": "Accounting"
+  },
+  {
+    "id": "USR-002",
+    "username": "tech_mark",
+    "password": "password123",
+    "name": "Mark Santos",
+    "role": "technician",
+    "department": "IT Support"
+  },
+  {
+    "id": "USR-003",
+    "username": "tech_ana",
+    "password": "password123",
+    "name": "Ana Reyes",
+    "role": "technician",
+    "department": "IT Support"
+  },
+  {
+    "id": "USR-004",
+    "username": "admin1",
+    "password": "password123",
+    "name": "Cris Tan",
+    "role": "admin",
+    "department": "IT Administration"
+  }
+]
