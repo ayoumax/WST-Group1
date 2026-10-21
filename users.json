@@ -1,0 +1,23 @@
+[
+  {
+    "id": "EMP-001",
+    "name": "Demo Employee",
+    "username": "employee",
+    "passwordHash": "$2b$12$tk5lPQeeRYz3WRC.EjGfj.REWTfMUCIUhP1Cz7wRpJItH/V0TIZkW",
+    "role": "employee"
+  },
+  {
+    "id": "TECH-001",
+    "name": "Mark Santos",
+    "username": "technician",
+    "passwordHash": "$2b$12$TvC4U3qVZOAlbv7vnSzWfeXNBhZ8GMJFvtMSaiSmd7bNhm3QKvXvG",
+    "role": "technician"
+  },
+  {
+    "id": "ADMIN-001",
+    "name": "Demo Administrator",
+    "username": "admin",
+    "passwordHash": "$2b$12$/CKNQANq3ALCrV3F2tpEKOYm/R98keNO1AkSSeU1buGZR2acdhilu",
+    "role": "admin"
+  }
+]
