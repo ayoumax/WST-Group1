@@ -1,5 +1,69 @@
 [
   {
+    "id": "TCK-1001",
+    "subject": "Cannot connect to office Wi-Fi",
+    "category": "network",
+    "categoryText": "Network",
+    "priority": "high",
+    "priorityText": "High",
+    "department": "IT Support",
+    "device": "Office Laptop",
+    "description": "Unable to connect to MotorPH-Corp Wi-Fi network after password update.",
+    "status": "open",
+    "statusText": "Open",
+    "submittedBy": "employee1",
+    "submitted": "September 6, 2026",
+    "assignedTech": "Unassigned",
+    "technician": "Unassigned",
+    "messages": [
+      {
+        "id": "MSG-1001-1",
+        "ticketId": "TCK-1001",
+        "sender": "Irisha Montaño",
+        "senderRole": "employee",
+        "text": "I tried forgetting the network and reconnecting, but still getting authentication error.",
+        "time": "09:15 AM",
+        "timestamp": "2026-09-06T09:15:00Z"
+      }
+    ]
+  },
+  {
+    "id": "TCK-1002",
+    "subject": "Laptop won't boot after update",
+    "category": "hardware",
+    "categoryText": "Hardware",
+    "priority": "urgent",
+    "priorityText": "Urgent",
+    "department": "Accounting",
+    "device": "Lenovo ThinkPad",
+    "description": "Black screen after installing the latest Windows security update.",
+    "status": "in-progress",
+    "statusText": "In Progress",
+    "submittedBy": "employee1",
+    "submitted": "September 5, 2026",
+    "assignedTech": "Mark Santos",
+    "technician": "Mark Santos",
+    "messages": []
+  },
+  {
+    "id": "TCK-1003",
+    "subject": "Need access to shared drive",
+    "category": "account-access",
+    "categoryText": "Account Access",
+    "priority": "low",
+    "priorityText": "Low",
+    "department": "Human Resources",
+    "device": "Desktop PC",
+    "description": "Need read/write access to HR-Confidential network shared folder.",
+    "status": "resolved",
+    "statusText": "Resolved",
+    "submittedBy": "employee1",
+    "submitted": "September 3, 2026",
+    "assignedTech": "Ana Reyes",
+    "technician": "Ana Reyes",
+    "messages": []
+  },
+  {
     "id": "TCK-1004",
     "subject": "Printer not working",
     "category": "hardware",
@@ -11,6 +75,10 @@
     "description": "The office printer is not responding when I try to print.",
     "status": "open",
     "statusText": "Open",
-    "submitted": "October 10, 2026"
+    "submittedBy": "employee1",
+    "submitted": "October 10, 2026",
+    "assignedTech": "Unassigned",
+    "technician": "Unassigned",
+    "messages": []
   }
 ]
