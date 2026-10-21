@@ -1,16 +1,38 @@
 [
   {
-    "id": "TCK-1004",
-    "subject": "Printer not working",
-    "category": "hardware",
-    "categoryText": "Hardware",
-    "priority": "high",
-    "priorityText": "High",
-    "department": "Accounting",
-    "device": "Desktop PC",
-    "description": "The office printer is not responding when I try to print.",
+    "id": "TCK-1005",
+    "employeeId": "EMP-001",
+    "employeeName": "Demo Employee",
+    "subject": "Test 1 — Office printer not printing",
+    "category": "printer",
+    "categoryText": "Printer",
+    "priority": "medium",
+    "priorityText": "Medium",
+    "department": "Human Resources",
+    "device": "Office Printer",
+    "description": "The printer shows offline even though it is turned on. I restarted it, but documents remain in the print queue.",
     "status": "open",
     "statusText": "Open",
-    "submitted": "October 10, 2026"
+    "technician": "Unassigned",
+    "submitted": "October 21, 2026",
+    "createdAt": "2026-10-21T10:20:27.159Z"
+  },
+  {
+    "id": "TCK-1006",
+    "employeeId": "EMP-001",
+    "employeeName": "Demo Employee",
+    "subject": "Test 2 — Cannot access company email",
+    "category": "email",
+    "categoryText": "Email",
+    "priority": "high",
+    "priorityText": "High",
+    "department": "Finance",
+    "device": "Office Laptop",
+    "description": "I cannot sign in to my company email. It displays “Account access denied.” I restarted the browser, but the issue continues.",
+    "status": "open",
+    "statusText": "Open",
+    "technician": "Unassigned",
+    "submitted": "October 21, 2026",
+    "createdAt": "2026-10-21T10:21:35.263Z"
   }
 ]

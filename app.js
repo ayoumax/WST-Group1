@@ -113,22 +113,132 @@ app.post("/logout", (req, res, next) => {
     });
 });
 
-// EXISTING TICKET CREATION
+// CREATE TICKET
 app.post("/tickets", requireRole("employee"), (req, res, next) => {
     try {
+        const body = req.body || {};
+
+        const categoryLabels = {
+            network: "Network / Internet",
+            hardware: "Hardware",
+            software: "Software",
+            account: "Account Access",
+            email: "Email",
+            printer: "Printer",
+            other: "Other"
+        };
+
+        const priorityLabels = {
+            low: "Low",
+            medium: "Medium",
+            high: "High",
+            urgent: "Urgent"
+        };
+
+        // Validate text fields before using them
+        if (
+            typeof body.subject !== "string" ||
+            body.subject.trim() === "" ||
+            typeof body.description !== "string" ||
+            body.description.trim() === ""
+        ) {
+            return res.status(400).json({
+                message: "Please enter a subject and problem description."
+            });
+        }
+
+        if (
+            typeof body.category !== "string" ||
+            !Object.hasOwn(categoryLabels, body.category) ||
+            typeof body.priority !== "string" ||
+            !Object.hasOwn(priorityLabels, body.priority)
+        ) {
+            return res.status(400).json({
+                message: "Please select a valid category and priority."
+            });
+        }
+
+        if (
+            (body.department !== undefined &&
+                typeof body.department !== "string") ||
+            (body.device !== undefined &&
+                typeof body.device !== "string")
+        ) {
+            return res.status(400).json({
+                message: "Department and device must be text."
+            });
+        }
+
         const tickets = JSON.parse(
             fs.readFileSync(ticketsPath, "utf8")
         );
 
-        tickets.push(req.body);
+        if (!Array.isArray(tickets)) {
+            throw new Error("tickets.json must contain an array.");
+        }
+
+        // Generate the next number from tickets saved on the server
+        let highestNumber = 1003;
+
+        tickets.forEach(function (ticket) {
+            const match = /^TCK-(\d+)$/.exec(ticket.id);
+
+            if (match) {
+                const number = Number(match[1]);
+
+                if (Number.isSafeInteger(number)) {
+                    highestNumber = Math.max(highestNumber, number);
+                }
+            }
+        });
+
+        const now = new Date();
+
+        // Only accept editable fields from the form
+        const newTicket = {
+            id: "TCK-" + (highestNumber + 1),
+
+            employeeId: req.session.user.id,
+            employeeName: req.session.user.name,
+
+            subject: body.subject.trim(),
+
+            category: body.category,
+            categoryText: categoryLabels[body.category],
+
+            priority: body.priority,
+            priorityText: priorityLabels[body.priority],
+
+            department: body.department?.trim() || "Not provided",
+            device: body.device?.trim() || "Not provided",
+
+            description: body.description.trim(),
+
+            status: "open",
+            statusText: "Open",
+
+            technician: "Unassigned",
+
+            submitted: now.toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            }),
+
+            createdAt: now.toISOString()
+        };
+
+        tickets.push(newTicket);
 
         fs.writeFileSync(
             ticketsPath,
-            JSON.stringify(tickets, null, 2)
+            JSON.stringify(tickets, null, 2),
+            "utf8"
         );
 
-        res.json({
-            message: "Ticket submitted successfully."
+        res.status(201).json({
+            message: "Ticket submitted successfully.",
+            ticket: newTicket
         });
     } catch (error) {
         next(error);
