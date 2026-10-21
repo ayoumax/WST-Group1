@@ -44,11 +44,11 @@
             <h2>Sign In</h2>
 
             <p class="login-description">
-                Enter your credentials and select your role.
+                Enter your username and password.
             </p>
 
 
-            <form method="GET">
+            <form id="loginForm">
 
                 <!-- USERNAME -->
                 <p>
@@ -88,38 +88,16 @@
                 </p>
 
 
-                <!-- ROLE -->
-                <fieldset>
-
-                    <legend>
-                        <strong>Login As</strong>
-                    </legend>
-
-                    <p class="login-role-buttons">
-
-                        <button
-                            type="submit"
-                            formaction="employee-dashboard.html">
-                            Employee
-                        </button>
+                <button type="submit">
+                    Sign In
+                </button>
 
 
-                        <button
-                            type="submit"
-                            formaction="technician-dashboard.html">
-                            IT Technician
-                        </button>
-
-
-                        <button
-                            type="submit"
-                            formaction="admin-dashboard.html">
-                            Administrator
-                        </button>
-
-                    </p>
-
-                </fieldset>
+                <p
+                    id="loginMessage"
+                    style="margin-top: 15px;"
+                    hidden>
+                </p>
 
             </form>
 
@@ -135,6 +113,9 @@
         </p>
 
     </footer>
+
+
+    <script src="login.js"></script>
 
 </body>
 
