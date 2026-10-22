@@ -5,323 +5,526 @@ const bcrypt = require("bcryptjs");
 const session = require("express-session");
 const crypto = require("crypto");
 
+
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-const USERS_FILE = path.join(__dirname, "users.json");
-const TICKETS_FILE = path.join(__dirname, "tickets.json");
+const PORT =
+    process.env.PORT || 3000;
 
 
-// ======================================================
+const usersPath =
+    path.join(
+        __dirname,
+        "users.json"
+    );
+
+
+const ticketsPath =
+    path.join(
+        __dirname,
+        "tickets.json"
+    );
+
+
+// =========================================================
 // MIDDLEWARE
-// ======================================================
-
-app.use(express.json());
+// =========================================================
 
 app.use(
+    express.json()
+);
+
+
+// Remember the authenticated user
+app.use(
     session({
-        name: "motorph.sid",
+
+        name:
+            "motorph.sid",
 
         secret:
             process.env.SESSION_SECRET ||
-            crypto.randomBytes(32).toString("hex"),
+            crypto
+                .randomBytes(32)
+                .toString("hex"),
 
-        resave: false,
+        resave:
+            false,
 
-        saveUninitialized: false,
+        saveUninitialized:
+            false,
 
         cookie: {
-            httpOnly: true,
-            sameSite: "lax",
-            secure: false,
-            maxAge: 60 * 60 * 1000
+
+            httpOnly:
+                true,
+
+            sameSite:
+                "lax",
+
+            secure:
+                false,
+
+            maxAge:
+                60 * 60 * 1000
+
         }
+
     })
 );
 
 
-// ======================================================
-// ROLE CHECK
-// ======================================================
+// =========================================================
+// ROLE PROTECTION
+// =========================================================
 
-function requireRole(...allowedRoles) {
+function requireRole(
+    ...allowedRoles
+) {
 
-    return function (req, res, next) {
+    return function (
+        req,
+        res,
+        next
+    ) {
 
-        if (!req.session.user) {
+        if (
+            !req.session.user
+        ) {
 
-            return res.status(401).json({
-                message: "Please log in first."
-            });
+            return res
+                .status(401)
+                .json({
+
+                    message:
+                        "Please log in first."
+
+                });
 
         }
 
-        if (!allowedRoles.includes(req.session.user.role)) {
 
-            return res.status(403).json({
-                message: "Access denied."
-            });
+        if (
+            !allowedRoles.includes(
+                req.session.user.role
+            )
+        ) {
+
+            return res
+                .status(403)
+                .json({
+
+                    message:
+                        "You do not have permission to do this."
+
+                });
 
         }
+
 
         next();
+
     };
+
 }
 
 
-// ======================================================
-// CHECK IF USER CAN VIEW TICKET
-// ======================================================
+// =========================================================
+// CHECK IF USER CAN VIEW A TICKET
+// =========================================================
 
-function canViewTicket(user, ticket) {
+function canViewTicket(
+    user,
+    ticket
+) {
 
     // Administrator can view all tickets
-    if (user.role === "admin") {
+    if (
+        user.role === "admin"
+    ) {
+
         return true;
+
     }
 
 
     // Employee can only view their own tickets
-    if (user.role === "employee") {
+    if (
+        user.role === "employee"
+    ) {
 
         return (
-            ticket.submittedBy === user.username ||
-            ticket.employeeId === user.id
+
+            ticket.employeeId ===
+                user.id ||
+
+            ticket.submittedBy ===
+                user.username
+
         );
 
     }
 
 
-    // Technician can only view assigned tickets
-    if (user.role === "technician") {
+    // Technician can only view tickets assigned to them
+    if (
+        user.role === "technician"
+    ) {
 
         return (
-            ticket.assignedTech === user.name ||
-            ticket.technician === user.name
+
+            ticket.assignedTech ===
+                user.name ||
+
+            ticket.technician ===
+                user.name
+
         );
 
     }
 
 
     return false;
+
 }
 
 
-// ======================================================
+// =========================================================
 // LOGIN
-// ======================================================
+// =========================================================
 
-app.post("/login", async (req, res, next) => {
+app.post(
+    "/login",
+    async (
+        req,
+        res,
+        next
+    ) => {
 
-    try {
+        try {
 
-        const { username, password } = req.body || {};
-
-
-        if (
-            typeof username !== "string" ||
-            typeof password !== "string" ||
-            username.trim() === "" ||
-            password === ""
-        ) {
-
-            return res.status(400).json({
-                message: "Please enter your username and password."
-            });
-
-        }
+            const {
+                username,
+                password
+            } =
+                req.body || {};
 
 
-        const users = JSON.parse(
-            fs.readFileSync(
-                USERS_FILE,
-                "utf8"
-            )
-        );
+            if (
+                typeof username !==
+                    "string" ||
+
+                typeof password !==
+                    "string" ||
+
+                username.trim() ===
+                    "" ||
+
+                password ===
+                    ""
+            ) {
+
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Please enter your username and password."
+
+                    });
+
+            }
 
 
-        const user = users.find(
-            function (account) {
+            const users =
+                JSON.parse(
+                    fs.readFileSync(
+                        usersPath,
+                        "utf8"
+                    )
+                );
 
-                return (
-                    account.username ===
-                    username.trim()
+
+            if (
+                !Array.isArray(users)
+            ) {
+
+                throw new Error(
+                    "users.json must contain an array."
                 );
 
             }
-        );
 
 
-        // Supports both plain password and bcrypt passwordHash
-        let passwordMatches = false;
+            const user =
+                users.find(
+                    function (
+                        account
+                    ) {
 
-
-        if (user) {
-
-            if (
-                typeof user.passwordHash === "string"
-            ) {
-
-                passwordMatches =
-                    await bcrypt.compare(
-                        password,
-                        user.passwordHash
-                    );
-
-            } else if (
-                typeof user.password === "string"
-            ) {
-
-                passwordMatches =
-                    password === user.password;
-
-            }
-
-        }
-
-
-        if (!passwordMatches) {
-
-            return res.status(401).json({
-                message: "Invalid username or password."
-            });
-
-        }
-
-
-        req.session.regenerate(
-            function (error) {
-
-                if (error) {
-                    return next(error);
-                }
-
-
-                req.session.user = {
-
-                    id: user.id,
-
-                    username:
-                        user.username,
-
-                    name:
-                        user.name,
-
-                    role:
-                        user.role,
-
-                    department:
-                        user.department || ""
-
-                };
-
-
-                req.session.save(
-                    function (error) {
-
-                        if (error) {
-                            return next(error);
-                        }
-
-
-                        res.json({
-
-                            message:
-                                "Login successful.",
-
-                            user:
-                                req.session.user
-
-                        });
+                        return (
+                            account.username ===
+                            username.trim()
+                        );
 
                     }
                 );
 
+
+            // Supports both the newer passwordHash format
+            // and older plain password format.
+            let passwordMatches =
+                false;
+
+
+            if (user) {
+
+                if (
+                    typeof user.passwordHash ===
+                    "string"
+                ) {
+
+                    passwordMatches =
+                        await bcrypt.compare(
+                            password,
+                            user.passwordHash
+                        );
+
+                } else if (
+                    typeof user.password ===
+                    "string"
+                ) {
+
+                    passwordMatches =
+                        password ===
+                        user.password;
+
+                }
+
             }
-        );
 
-    } catch (error) {
 
-        next(error);
+            if (
+                !passwordMatches
+            ) {
+
+                return res
+                    .status(401)
+                    .json({
+
+                        message:
+                            "Invalid username or password."
+
+                    });
+
+            }
+
+
+            req.session.regenerate(
+                function (
+                    error
+                ) {
+
+                    if (error) {
+
+                        return next(
+                            error
+                        );
+
+                    }
+
+
+                    req.session.user = {
+
+                        id:
+                            user.id,
+
+                        name:
+                            user.name,
+
+                        username:
+                            user.username,
+
+                        role:
+                            user.role,
+
+                        department:
+                            user.department ||
+                            ""
+
+                    };
+
+
+                    req.session.save(
+                        function (
+                            error
+                        ) {
+
+                            if (error) {
+
+                                return next(
+                                    error
+                                );
+
+                            }
+
+
+                            res.json({
+
+                                message:
+                                    "Login successful.",
+
+                                user:
+                                    req.session.user
+
+                            });
+
+                        }
+                    );
+
+                }
+            );
+
+        } catch (
+            error
+        ) {
+
+            next(
+                error
+            );
+
+        }
 
     }
+);
 
-});
+
+// =========================================================
+// CHECK CURRENT LOGIN
+// =========================================================
+
+app.get(
+    "/me",
+    (
+        req,
+        res
+    ) => {
+
+        if (
+            !req.session.user
+        ) {
+
+            return res
+                .status(401)
+                .json({
+
+                    message:
+                        "Please log in first."
+
+                });
+
+        }
 
 
-// ======================================================
-// CHECK CURRENT USER
-// ======================================================
+        res.json({
 
-app.get("/me", (req, res) => {
+            user:
+                req.session.user
 
-    if (!req.session.user) {
-
-        return res.status(401).json({
-            message: "Please log in first."
         });
 
     }
+);
 
 
-    res.json({
-        user: req.session.user
-    });
-
-});
-
-
-// ======================================================
+// =========================================================
 // LOGOUT
-// ======================================================
+// =========================================================
 
-app.post("/logout", (req, res, next) => {
+app.post(
+    "/logout",
+    (
+        req,
+        res,
+        next
+    ) => {
 
-    req.session.destroy(
-        function (error) {
+        req.session.destroy(
+            function (
+                error
+            ) {
 
-            if (error) {
-                return next(error);
+                if (error) {
+
+                    return next(
+                        error
+                    );
+
+                }
+
+
+                res.clearCookie(
+                    "motorph.sid",
+                    {
+                        path:
+                            "/"
+                    }
+                );
+
+
+                res.json({
+
+                    message:
+                        "Logged out successfully."
+
+                });
+
             }
+        );
+
+    }
+);
 
 
-            res.clearCookie("motorph.sid");
-
-
-            res.json({
-                message: "Logged out successfully."
-            });
-
-        }
-    );
-
-});
-
-
-// ======================================================
+// =========================================================
 // GET TICKETS
-// ======================================================
+// =========================================================
+// Employee   -> own tickets
+// Technician -> assigned tickets
+// Admin      -> all tickets
+// =========================================================
 
 app.get(
     "/tickets",
+
     requireRole(
         "employee",
         "technician",
         "admin"
     ),
-    (req, res, next) => {
+
+    (
+        req,
+        res,
+        next
+    ) => {
 
         try {
 
-            const tickets = JSON.parse(
-                fs.readFileSync(
-                    TICKETS_FILE,
-                    "utf8"
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+
+            if (
+                !Array.isArray(
+                    tickets
                 )
-            );
-
-
-            if (!Array.isArray(tickets)) {
+            ) {
 
                 throw new Error(
                     "tickets.json must contain an array."
@@ -332,7 +535,9 @@ app.get(
 
             const visibleTickets =
                 tickets.filter(
-                    function (ticket) {
+                    function (
+                        ticket
+                    ) {
 
                         return canViewTicket(
                             req.session.user,
@@ -344,12 +549,19 @@ app.get(
 
 
             res.json({
-                tickets: visibleTickets
+
+                tickets:
+                    visibleTickets
+
             });
 
-        } catch (error) {
+        } catch (
+            error
+        ) {
 
-            next(error);
+            next(
+                error
+            );
 
         }
 
@@ -357,30 +569,41 @@ app.get(
 );
 
 
-// ======================================================
+// =========================================================
 // GET ONE TICKET BY ID
-// ======================================================
+// =========================================================
 
 app.get(
     "/tickets/:id",
+
     requireRole(
         "employee",
         "technician",
         "admin"
     ),
-    (req, res, next) => {
+
+    (
+        req,
+        res,
+        next
+    ) => {
 
         try {
 
-            const tickets = JSON.parse(
-                fs.readFileSync(
-                    TICKETS_FILE,
-                    "utf8"
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+
+            if (
+                !Array.isArray(
+                    tickets
                 )
-            );
-
-
-            if (!Array.isArray(tickets)) {
+            ) {
 
                 throw new Error(
                     "tickets.json must contain an array."
@@ -389,23 +612,33 @@ app.get(
             }
 
 
-            const ticket = tickets.find(
-                function (item) {
+            const ticket =
+                tickets.find(
+                    function (
+                        item
+                    ) {
 
-                    return (
-                        item.id ===
-                        req.params.id
-                    );
+                        return (
+                            item.id ===
+                            req.params.id
+                        );
 
-                }
-            );
+                    }
+                );
 
 
-            if (!ticket) {
+            if (
+                !ticket
+            ) {
 
-                return res.status(404).json({
-                    message: "Ticket not found."
-                });
+                return res
+                    .status(404)
+                    .json({
+
+                        message:
+                            "Ticket not found."
+
+                    });
 
             }
 
@@ -417,21 +650,32 @@ app.get(
                 )
             ) {
 
-                return res.status(403).json({
-                    message:
-                        "You do not have permission to view this ticket."
-                });
+                return res
+                    .status(403)
+                    .json({
+
+                        message:
+                            "You do not have permission to view this ticket."
+
+                    });
 
             }
 
 
             res.json({
-                ticket: ticket
+
+                ticket:
+                    ticket
+
             });
 
-        } catch (error) {
+        } catch (
+            error
+        ) {
 
-            next(error);
+            next(
+                error
+            );
 
         }
 
@@ -439,18 +683,27 @@ app.get(
 );
 
 
-// ======================================================
+// =========================================================
 // CREATE TICKET
-// ======================================================
+// =========================================================
 
 app.post(
     "/tickets",
-    requireRole("employee"),
-    (req, res, next) => {
+
+    requireRole(
+        "employee"
+    ),
+
+    (
+        req,
+        res,
+        next
+    ) => {
 
         try {
 
-            const body = req.body || {};
+            const body =
+                req.body || {};
 
 
             const categoryLabels = {
@@ -499,51 +752,107 @@ app.post(
             };
 
 
+            // Validate required fields
             if (
-                typeof body.subject !== "string" ||
-                body.subject.trim() === "" ||
-                typeof body.description !== "string" ||
-                body.description.trim() === ""
+                typeof body.subject !==
+                    "string" ||
+
+                body.subject.trim() ===
+                    "" ||
+
+                typeof body.description !==
+                    "string" ||
+
+                body.description.trim() ===
+                    ""
             ) {
 
-                return res.status(400).json({
-                    message:
-                        "Please enter a subject and problem description."
-                });
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Please enter a subject and problem description."
+
+                    });
 
             }
 
 
             if (
-                typeof body.category !== "string" ||
+                typeof body.category !==
+                    "string" ||
+
                 !Object.hasOwn(
                     categoryLabels,
                     body.category
                 ) ||
-                typeof body.priority !== "string" ||
+
+                typeof body.priority !==
+                    "string" ||
+
                 !Object.hasOwn(
                     priorityLabels,
                     body.priority
                 )
             ) {
 
-                return res.status(400).json({
-                    message:
-                        "Please select a valid category and priority."
-                });
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Please select a valid category and priority."
+
+                    });
 
             }
 
 
-            const tickets = JSON.parse(
-                fs.readFileSync(
-                    TICKETS_FILE,
-                    "utf8"
+            if (
+                (
+                    body.department !==
+                        undefined &&
+
+                    typeof body.department !==
+                        "string"
+                ) ||
+
+                (
+                    body.device !==
+                        undefined &&
+
+                    typeof body.device !==
+                        "string"
                 )
-            );
+            ) {
+
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Department and device must be text."
+
+                    });
+
+            }
 
 
-            if (!Array.isArray(tickets)) {
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+
+            if (
+                !Array.isArray(
+                    tickets
+                )
+            ) {
 
                 throw new Error(
                     "tickets.json must contain an array."
@@ -552,11 +861,15 @@ app.post(
             }
 
 
-            let highestNumber = 1000;
+            // Generate the next ticket number
+            let highestNumber =
+                1000;
 
 
             tickets.forEach(
-                function (ticket) {
+                function (
+                    ticket
+                ) {
 
                     const match =
                         /^TCK-(\d+)$/.exec(
@@ -564,22 +877,26 @@ app.post(
                         );
 
 
-                    if (match) {
+                    if (
+                        match
+                    ) {
 
-                        const ticketNumber =
-                            Number(match[1]);
+                        const number =
+                            Number(
+                                match[1]
+                            );
 
 
                         if (
                             Number.isSafeInteger(
-                                ticketNumber
+                                number
                             )
                         ) {
 
                             highestNumber =
                                 Math.max(
                                     highestNumber,
-                                    ticketNumber
+                                    number
                                 );
 
                         }
@@ -590,14 +907,18 @@ app.post(
             );
 
 
-            const now = new Date();
+            const now =
+                new Date();
 
 
             const newTicket = {
 
                 id:
                     "TCK-" +
-                    (highestNumber + 1),
+                    (
+                        highestNumber +
+                        1
+                    ),
 
                 employeeId:
                     req.session.user.id,
@@ -628,15 +949,27 @@ app.post(
                     ],
 
                 department:
-                    typeof body.department === "string" &&
-                    body.department.trim() !== ""
+                    (
+                        typeof body.department ===
+                            "string" &&
+
+                        body.department.trim() !==
+                            ""
+                    )
                         ? body.department.trim()
-                        : req.session.user.department ||
-                          "Not provided",
+                        : (
+                            req.session.user.department ||
+                            "Not provided"
+                        ),
 
                 device:
-                    typeof body.device === "string" &&
-                    body.device.trim() !== ""
+                    (
+                        typeof body.device ===
+                            "string" &&
+
+                        body.device.trim() !==
+                            ""
+                    )
                         ? body.device.trim()
                         : "Not provided",
 
@@ -655,15 +988,23 @@ app.post(
                 technician:
                     "Unassigned",
 
-                messages: [],
+                messages:
+                    [],
 
                 submitted:
                     now.toLocaleDateString(
                         "en-US",
                         {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric"
+
+                            month:
+                                "long",
+
+                            day:
+                                "numeric",
+
+                            year:
+                                "numeric"
+
                         }
                     ),
 
@@ -673,33 +1014,43 @@ app.post(
             };
 
 
-            tickets.push(newTicket);
+            tickets.push(
+                newTicket
+            );
 
 
             fs.writeFileSync(
-                TICKETS_FILE,
+                ticketsPath,
+
                 JSON.stringify(
                     tickets,
                     null,
                     2
                 ),
+
                 "utf8"
             );
 
 
-            res.status(201).json({
+            res
+                .status(201)
+                .json({
 
-                message:
-                    "Ticket submitted successfully.",
+                    message:
+                        "Ticket submitted successfully.",
 
-                ticket:
-                    newTicket
+                    ticket:
+                        newTicket
 
-            });
+                });
 
-        } catch (error) {
+        } catch (
+            error
+        ) {
 
-            next(error);
+            next(
+                error
+            );
 
         }
 
@@ -707,9 +1058,9 @@ app.post(
 );
 
 
-// ======================================================
+// =========================================================
 // PROTECTED PAGES
-// ======================================================
+// =========================================================
 
 const pageRoles = {
 
@@ -751,14 +1102,23 @@ const pageRoles = {
 };
 
 
+// Check access before serving protected pages
 app.use(
-    function (req, res, next) {
+    (
+        req,
+        res,
+        next
+    ) => {
 
         const requiredRole =
-            pageRoles[req.path];
+            pageRoles[
+                req.path
+            ];
 
 
-        if (!requiredRole) {
+        if (
+            !requiredRole
+        ) {
 
             return next();
 
@@ -771,7 +1131,9 @@ app.use(
         );
 
 
-        if (!req.session.user) {
+        if (
+            !req.session.user
+        ) {
 
             return res.redirect(
                 "/index.html"
@@ -800,37 +1162,160 @@ app.use(
 );
 
 
-// ======================================================
-// STATIC FILES
-// ======================================================
+// =========================================================
+// FRONTEND FILES
+// =========================================================
+// Only explicitly listed frontend files are publicly served.
+// JSON data files are not exposed directly.
+// =========================================================
 
+const publicFiles =
+    new Set([
+
+        "index.html",
+
+        "employee-dashboard.html",
+
+        "submit-ticket.html",
+
+        "my-tickets.html",
+
+        "ticket-detail.html",
+
+        "help.html",
+
+        "technician-dashboard.html",
+
+        "manage-tickets.html",
+
+        "technician-ticket-detail.html",
+
+        "admin-dashboard.html",
+
+        "admin-tickets.html",
+
+        "assign-technician.html",
+
+        "style.css",
+
+        "login.js",
+
+        "logout.js",
+
+        "script.js",
+
+        "my-tickets.js",
+
+        "admin-tickets.js",
+
+        "admin-dashboard.js",
+
+        "assign-technician.js",
+
+        "manage-tickets.js",
+
+        "technician-dashboard.js",
+
+        "technician-ticket-messages.js",
+
+        "ticket-messages.js"
+
+    ]);
+
+
+// Allow images to load
 app.use(
-    express.static(__dirname)
+    "/images",
+
+    express.static(
+        path.join(
+            __dirname,
+            "images"
+        )
+    )
 );
 
 
-// ======================================================
+// =========================================================
 // HOME PAGE
-// ======================================================
+// =========================================================
 
-app.get("/", (req, res) => {
+app.get(
+    "/",
+    (
+        req,
+        res
+    ) => {
 
-    res.sendFile(
-        path.join(
-            __dirname,
-            "index.html"
-        )
-    );
+        res.sendFile(
+            path.join(
+                __dirname,
+                "index.html"
+            )
+        );
 
-});
+    }
+);
 
 
-// ======================================================
-// ERROR HANDLER
-// ======================================================
+// =========================================================
+// SERVE ALLOWED FRONTEND FILES
+// =========================================================
 
 app.use(
-    function (error, req, res, next) {
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        const filename =
+            req.path.slice(
+                1
+            );
+
+
+        if (
+            (
+                req.method ===
+                    "GET" ||
+
+                req.method ===
+                    "HEAD"
+            ) &&
+
+            publicFiles.has(
+                filename
+            )
+        ) {
+
+            return res.sendFile(
+                path.join(
+                    __dirname,
+                    filename
+                )
+            );
+
+        }
+
+
+        next();
+
+    }
+);
+
+
+// =========================================================
+// ERROR HANDLER
+// =========================================================
+
+app.use(
+    (
+        error,
+        req,
+        res,
+        next
+    ) => {
 
         console.error(
             "Server error:",
@@ -838,18 +1323,22 @@ app.use(
         );
 
 
-        res.status(500).json({
-            message:
-                "A server error occurred. Please try again."
-        });
+        res
+            .status(500)
+            .json({
+
+                message:
+                    "A server error occurred. Please try again."
+
+            });
 
     }
 );
 
 
-// ======================================================
+// =========================================================
 // START SERVER
-// ======================================================
+// =========================================================
 
 app.listen(
     PORT,

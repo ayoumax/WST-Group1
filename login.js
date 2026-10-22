@@ -1,3 +1,7 @@
+// ==========================================================================
+// MotorPH IT Support - Login
+// ==========================================================================
+
 document.addEventListener(
     "DOMContentLoaded",
     function () {
@@ -7,21 +11,36 @@ document.addEventListener(
                 "loginForm"
             );
 
-        const usernameInput =
+
+        const loginFeedback =
             document.getElementById(
-                "username"
+                "loginFeedback"
             );
 
-        const passwordInput =
-            document.getElementById(
-                "password"
+
+        const loginButtons =
+            loginForm.querySelectorAll(
+                "button[type='submit']"
             );
 
-        const loginMessage =
-            document.getElementById(
-                "loginMessage"
-            );
 
+        const dashboards = {
+
+            employee:
+                "employee-dashboard.html",
+
+            technician:
+                "technician-dashboard.html",
+
+            admin:
+                "admin-dashboard.html"
+
+        };
+
+
+        // ==================================================
+        // LOGIN FORM
+        // ==================================================
 
         loginForm.addEventListener(
             "submit",
@@ -30,15 +49,57 @@ document.addEventListener(
                 event.preventDefault();
 
 
+                const selectedRole =
+                    event.submitter
+                        ? event.submitter.dataset.role
+                        : null;
+
+
+                if (!selectedRole) {
+
+                    loginFeedback.textContent =
+                        "Please select a login role.";
+
+                    loginFeedback.style.color =
+                        "#B42318";
+
+                    loginFeedback.hidden =
+                        false;
+
+                    return;
+
+                }
+
+
                 const username =
-                    usernameInput.value.trim();
+                    document
+                        .getElementById(
+                            "username"
+                        )
+                        .value
+                        .trim();
+
 
                 const password =
-                    passwordInput.value;
+                    document
+                        .getElementById(
+                            "password"
+                        )
+                        .value;
 
 
-                loginMessage.hidden =
+                loginFeedback.hidden =
                     true;
+
+
+                loginButtons.forEach(
+                    function (button) {
+
+                        button.disabled =
+                            true;
+
+                    }
+                );
 
 
                 try {
@@ -47,21 +108,30 @@ document.addEventListener(
                         await fetch(
                             "/login",
                             {
-                                method: "POST",
+
+                                method:
+                                    "POST",
 
                                 headers: {
+
                                     "Content-Type":
                                         "application/json"
+
                                 },
 
                                 body:
-                                    JSON.stringify({
-                                        username:
-                                            username,
+                                    JSON.stringify(
+                                        {
 
-                                        password:
-                                            password
-                                    })
+                                            username:
+                                                username,
+
+                                            password:
+                                                password
+
+                                        }
+                                    )
+
                             }
                         );
 
@@ -72,56 +142,59 @@ document.addEventListener(
 
                     if (!response.ok) {
 
-                        loginMessage.textContent =
+                        throw new Error(
                             data.message ||
-                            "Unable to log in.";
-
-                        loginMessage.style.color =
-                            "#B91C1C";
-
-                        loginMessage.hidden =
-                            false;
-
-                        return;
+                            "Unable to log in."
+                        );
 
                     }
 
 
-                    loginMessage.textContent =
-                        "Login successful.";
-
-                    loginMessage.style.color =
-                        "#166534";
-
-                    loginMessage.hidden =
-                        false;
-
-
+                    // Check whether the account matches
+                    // the selected portal.
                     if (
-                        data.user.role ===
-                        "employee"
+                        data.user.role !==
+                        selectedRole
                     ) {
 
-                        window.location.href =
-                            "/employee-dashboard.html";
+                        // End the session if the wrong
+                        // portal was selected.
+                        await fetch(
+                            "/logout",
+                            {
 
-                    } else if (
-                        data.user.role ===
-                        "technician"
-                    ) {
+                                method:
+                                    "POST"
 
-                        window.location.href =
-                            "/technician-dashboard.html";
+                            }
+                        );
 
-                    } else if (
-                        data.user.role ===
-                        "admin"
-                    ) {
 
-                        window.location.href =
-                            "/admin-dashboard.html";
+                        throw new Error(
+                            "This account does not match the selected role."
+                        );
 
                     }
+
+
+                    const dashboard =
+                        dashboards[
+                            data.user.role
+                        ];
+
+
+                    if (!dashboard) {
+
+                        throw new Error(
+                            "This account has an unsupported role."
+                        );
+
+                    }
+
+
+                    // Go to the correct dashboard.
+                    window.location.href =
+                        dashboard;
 
                 } catch (error) {
 
@@ -131,14 +204,27 @@ document.addEventListener(
                     );
 
 
-                    loginMessage.textContent =
-                        "Unable to connect to the server.";
+                    loginFeedback.textContent =
+                        error.message;
 
-                    loginMessage.style.color =
-                        "#B91C1C";
 
-                    loginMessage.hidden =
+                    loginFeedback.style.color =
+                        "#B42318";
+
+
+                    loginFeedback.hidden =
                         false;
+
+                } finally {
+
+                    loginButtons.forEach(
+                        function (button) {
+
+                            button.disabled =
+                                false;
+
+                        }
+                    );
 
                 }
 
