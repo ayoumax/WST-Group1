@@ -76,7 +76,7 @@
                     <h2>Assigned Tickets</h2>
 
                     <p>
-                        Search and review tickets assigned to the IT support team.
+                        Search and review tickets assigned to you.
                     </p>
 
                 </div>
@@ -84,15 +84,14 @@
             </header>
 
 
-            <!-- SEARCH -->
+            <!-- SEARCH AND FILTER -->
             <section class="dashboard-card filter-card">
 
                 <h3>Search and Filter</h3>
 
                 <form
-                    class="filter-form"
-                    action="#"
-                    method="GET">
+                    id="technicianFilterForm"
+                    class="filter-form">
 
                     <p>
 
@@ -146,14 +145,16 @@
 
                     <button
                         type="submit"
-                        id="filter-submit-btn">
+                        id="filter-submit-btn"
+                        class="btn btn-primary">
                         Filter
                     </button>
+
 
                     <button
                         type="button"
                         id="filter-reset-btn"
-                        class="btn-secondary">
+                        class="btn btn-secondary">
                         Reset
                     </button>
 
@@ -163,7 +164,7 @@
                 <p
                     id="filter-feedback"
                     style="margin-top: 12px; margin-bottom: 0; font-size: 13px; color: var(--text-muted);">
-                    Showing all tickets
+                    Loading tickets...
                 </p>
 
             </section>
@@ -179,7 +180,7 @@
                         <h3>Ticket List</h3>
 
                         <p>
-                            Review tickets currently assigned to IT support.
+                            Review tickets currently assigned to you.
                         </p>
 
                     </div>
@@ -194,12 +195,15 @@
                         <thead>
 
                             <tr>
+
                                 <th>Ticket ID</th>
                                 <th>Employee</th>
                                 <th>Category</th>
                                 <th>Priority</th>
                                 <th>Status</th>
                                 <th>Assigned To</th>
+                                <th>Action</th>
+
                             </tr>
 
                         </thead>
@@ -207,170 +211,20 @@
 
                         <tbody id="technicianTicketTableBody">
 
-                            <!-- DEFAULT SAMPLE TICKET 1001 -->
-                            <tr>
-
-                                <td>
-                                    <a
-                                        class="ticket-link"
-                                        href="technician-ticket-detail.html#tck-1001">
-                                        TCK-1001
-                                    </a>
-                                </td>
-
-                                <td>
-                                    J. Santos
-                                </td>
-
-                                <td>
-                                    Network
-                                </td>
-
-                                <td>
-
-                                    <span class="priority high">
-                                        High
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <span class="status open">
-                                        Open
-                                    </span>
-
-                                </td>
-
-                                <td>
-                                    IT Support Team
-                                </td>
-
-                            </tr>
-
-
-                            <!-- DEFAULT SAMPLE TICKET 1002 -->
-                            <tr>
-
-                                <td>
-                                    <a
-                                        class="ticket-link"
-                                        href="technician-ticket-detail.html#tck-1002">
-                                        TCK-1002
-                                    </a>
-                                </td>
-
-                                <td>
-                                    M. Cruz
-                                </td>
-
-                                <td>
-                                    Hardware
-                                </td>
-
-                                <td>
-
-                                    <span class="priority urgent">
-                                        Urgent
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <span class="status progress">
-                                        In Progress
-                                    </span>
-
-                                </td>
-
-                                <td>
-                                    Mark Santos
-                                </td>
-
-                            </tr>
-
-
-                            <!-- DEFAULT SAMPLE TICKET 1005 -->
-                            <tr>
-
-                                <td>
-                                    TCK-1005
-                                </td>
-
-                                <td>
-                                    K. Tan
-                                </td>
-
-                                <td>
-                                    Account Access
-                                </td>
-
-                                <td>
-
-                                    <span class="priority high">
-                                        High
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <span class="status progress">
-                                        In Progress
-                                    </span>
-
-                                </td>
-
-                                <td>
-                                    Ana Reyes
-                                </td>
-
-                            </tr>
-
-
-                            <!-- DEFAULT SAMPLE TICKET 1006 -->
-                            <tr>
-
-                                <td>
-                                    TCK-1006
-                                </td>
-
-                                <td>
-                                    L. Garcia
-                                </td>
-
-                                <td>
-                                    Account Access
-                                </td>
-
-                                <td>
-
-                                    <span class="priority low">
-                                        Low
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                    <span class="status resolved">
-                                        Resolved
-                                    </span>
-
-                                </td>
-
-                                <td>
-                                    IT Support Team
-                                </td>
-
-                            </tr>
+                            <!-- Tickets loaded from GET /tickets -->
 
                         </tbody>
 
                     </table>
 
                 </div>
+
+
+                <p
+                    id="noTechnicianTickets"
+                    hidden>
+                    No assigned tickets found.
+                </p>
 
             </section>
 

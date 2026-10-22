@@ -1,213 +1,644 @@
 // ==========================================================================
-// MotorPH IT Support - Technician Message Thread
+// MotorPH IT Support - Technician Ticket Details
 // ==========================================================================
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    var MESSAGE_STORAGE_KEY =
-        "motorphTicketMessages";
-
-    var CURRENT_TICKET_ID =
-        "TCK-1001";
-
-
-    var ticketPanel =
-        document.getElementById("tck-1001");
-
-    if (!ticketPanel) {
-        return;
-    }
+        const MESSAGE_STORAGE_KEY =
+            "motorphTicketMessages";
 
 
-    var messageList =
-        ticketPanel.querySelector(".message-list");
-
-    var messageInput =
-        document.getElementById("message-1001");
-
-    var messageForm =
-        messageInput.closest("form");
-
-
-    // Get saved messages
-    function getSavedMessages() {
-
-        var savedMessages =
-            localStorage.getItem(MESSAGE_STORAGE_KEY);
-
-        if (savedMessages === null) {
-            return [];
-        }
-
-        return JSON.parse(savedMessages);
-
-    }
-
-
-    // Save messages
-    function saveMessages(messages) {
-
-        localStorage.setItem(
-            MESSAGE_STORAGE_KEY,
-            JSON.stringify(messages)
-        );
-
-    }
-
-
-    // Show a message on the page
-    function displayMessage(message) {
-
-        var messageItem =
-            document.createElement("li");
-
-        var sender =
-            document.createElement("strong");
-
-        sender.textContent =
-            message.sender;
-
-
-        var messageText =
-            document.createElement("span");
-
-        messageText.textContent =
-            " " + message.text;
-
-
-        messageItem.appendChild(
-            sender
-        );
-
-        messageItem.appendChild(
-            messageText
-        );
-
-
-        if (message.time) {
-
-            var timeText =
-                document.createElement("small");
-
-            timeText.textContent =
-                " - " + message.time;
-
-            timeText.style.marginLeft =
-                "8px";
-
-            timeText.style.color =
-                "var(--text-muted)";
-
-            messageItem.appendChild(
-                timeText
+        const headingId =
+            document.getElementById(
+                "technicianTicketHeadingId"
             );
 
-        }
-
-
-        messageList.appendChild(
-            messageItem
-        );
-
-    }
-
-
-    // Load saved messages for TCK-1001
-    var savedMessages =
-        getSavedMessages();
-
-
-    for (
-        var i = 0;
-        i < savedMessages.length;
-        i++
-    ) {
-
-        if (
-            savedMessages[i].ticketId ===
-            CURRENT_TICKET_ID
-        ) {
-
-            displayMessage(
-                savedMessages[i]
+        const headingSubject =
+            document.getElementById(
+                "technicianTicketHeadingSubject"
             );
 
-        }
+        const employeeText =
+            document.getElementById(
+                "technicianTicketEmployee"
+            );
 
-    }
+        const departmentText =
+            document.getElementById(
+                "technicianTicketDepartment"
+            );
+
+        const categoryText =
+            document.getElementById(
+                "technicianTicketCategory"
+            );
+
+        const priorityText =
+            document.getElementById(
+                "technicianTicketPriority"
+            );
+
+        const statusText =
+            document.getElementById(
+                "technicianTicketStatus"
+            );
+
+        const ticketIdText =
+            document.getElementById(
+                "technicianTicketId"
+            );
+
+        const descriptionText =
+            document.getElementById(
+                "technicianTicketDescription"
+            );
+
+        const loadMessage =
+            document.getElementById(
+                "technicianTicketLoadMessage"
+            );
+
+        const statusForm =
+            document.getElementById(
+                "technicianStatusForm"
+            );
+
+        const statusSelect =
+            document.getElementById(
+                "technicianStatusSelect"
+            );
+
+        const statusFeedback =
+            document.getElementById(
+                "technicianStatusFeedback"
+            );
+
+        const messageList =
+            document.getElementById(
+                "technicianMessageList"
+            );
+
+        const noMessages =
+            document.getElementById(
+                "technicianNoMessages"
+            );
+
+        const messageForm =
+            document.getElementById(
+                "technicianMessageForm"
+            );
+
+        const messageInput =
+            document.getElementById(
+                "technicianMessageInput"
+            );
 
 
-    // Technician sends a reply
-    messageForm.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
+        const queryParameters =
+            new URLSearchParams(
+                window.location.search
+            );
 
 
-            var messageText =
-                messageInput.value.trim();
+        const currentTicketId =
+            queryParameters.get("id");
 
 
-            if (messageText === "") {
-                return;
-            }
+        let currentTicket = null;
 
 
-            var now =
-                new Date();
+        // ==================================================
+        // GET SAVED LOCAL MESSAGES
+        // ==================================================
 
+        function getSavedMessages() {
 
-            var timeText =
-                now.toLocaleTimeString(
-                    [],
-                    {
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    }
+            const savedMessages =
+                localStorage.getItem(
+                    MESSAGE_STORAGE_KEY
                 );
 
 
-            var newMessage = {
+            if (savedMessages === null) {
+                return [];
+            }
 
-                ticketId:
-                    CURRENT_TICKET_ID,
 
-                sender:
-                    "IT Technician",
+            try {
 
-                text:
-                    messageText,
+                return JSON.parse(
+                    savedMessages
+                );
 
-                time:
+            } catch (error) {
+
+                console.error(
+                    "Unable to read saved messages:",
+                    error
+                );
+
+                return [];
+
+            }
+
+        }
+
+
+        // ==================================================
+        // SAVE LOCAL MESSAGES
+        // ==================================================
+
+        function saveMessages(messages) {
+
+            localStorage.setItem(
+                MESSAGE_STORAGE_KEY,
+                JSON.stringify(messages)
+            );
+
+        }
+
+
+        // ==================================================
+        // DISPLAY ONE MESSAGE
+        // ==================================================
+
+        function displayMessage(message) {
+
+            const messageItem =
+                document.createElement("li");
+
+
+            const sender =
+                document.createElement("strong");
+
+
+            sender.textContent =
+                message.sender ||
+                (
+                    message.senderRole === "technician"
+                        ? "IT Technician"
+                        : "Employee"
+                );
+
+
+            const messageText =
+                document.createElement("span");
+
+
+            messageText.textContent =
+                " " +
+                (message.text || "");
+
+
+            messageItem.appendChild(
+                sender
+            );
+
+
+            messageItem.appendChild(
+                messageText
+            );
+
+
+            if (message.time) {
+
+                const timeText =
+                    document.createElement("small");
+
+
+                timeText.textContent =
+                    " - " +
+                    message.time;
+
+
+                timeText.style.marginLeft =
+                    "8px";
+
+
+                timeText.style.color =
+                    "var(--text-muted)";
+
+
+                messageItem.appendChild(
                     timeText
+                );
 
-            };
+            }
 
 
-            var messages =
+            messageList.appendChild(
+                messageItem
+            );
+
+        }
+
+
+        // ==================================================
+        // DISPLAY MESSAGES
+        // ==================================================
+
+        function displayMessages(serverMessages) {
+
+            messageList.innerHTML = "";
+
+
+            const allMessages = [];
+
+
+            if (
+                Array.isArray(serverMessages)
+            ) {
+
+                serverMessages.forEach(
+                    function (message) {
+
+                        allMessages.push(
+                            message
+                        );
+
+                    }
+                );
+
+            }
+
+
+            const savedMessages =
                 getSavedMessages();
 
 
-            messages.push(
-                newMessage
+            savedMessages.forEach(
+                function (message) {
+
+                    if (
+                        message.ticketId ===
+                        currentTicketId
+                    ) {
+
+                        allMessages.push(
+                            message
+                        );
+
+                    }
+
+                }
             );
 
 
-            saveMessages(
-                messages
+            if (allMessages.length === 0) {
+
+                noMessages.hidden =
+                    false;
+
+                return;
+
+            }
+
+
+            noMessages.hidden =
+                true;
+
+
+            allMessages.forEach(
+                function (message) {
+
+                    displayMessage(
+                        message
+                    );
+
+                }
             );
-
-
-            displayMessage(
-                newMessage
-            );
-
-
-            messageInput.value =
-                "";
 
         }
-    );
 
-});
+
+        // ==================================================
+        // DISPLAY TICKET
+        // ==================================================
+
+        function displayTicket(ticket) {
+
+            headingId.textContent =
+                "Ticket " +
+                ticket.id;
+
+
+            headingSubject.textContent =
+                ticket.subject ||
+                "No subject";
+
+
+            employeeText.textContent =
+                ticket.employeeName ||
+                ticket.submittedBy ||
+                "Employee";
+
+
+            departmentText.textContent =
+                ticket.department ||
+                "-";
+
+
+            categoryText.textContent =
+                ticket.categoryText ||
+                ticket.category ||
+                "-";
+
+
+            priorityText.textContent =
+                ticket.priorityText ||
+                ticket.priority ||
+                "-";
+
+
+            statusText.textContent =
+                ticket.statusText ||
+                ticket.status ||
+                "-";
+
+
+            ticketIdText.textContent =
+                ticket.id ||
+                "-";
+
+
+            descriptionText.textContent =
+                ticket.description ||
+                "No description provided.";
+
+
+            statusSelect.value =
+                ticket.status ||
+                "open";
+
+
+            displayMessages(
+                ticket.messages
+            );
+
+        }
+
+
+        // ==================================================
+        // LOAD TICKET FROM SERVER
+        // ==================================================
+
+        async function loadTicket() {
+
+            if (!currentTicketId) {
+
+                loadMessage.textContent =
+                    "No ticket ID was provided.";
+
+                loadMessage.style.color =
+                    "#B91C1C";
+
+                loadMessage.hidden =
+                    false;
+
+                return;
+
+            }
+
+
+            loadMessage.textContent =
+                "Loading ticket...";
+
+            loadMessage.hidden =
+                false;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/tickets/" +
+                        encodeURIComponent(
+                            currentTicketId
+                        )
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    loadMessage.textContent =
+                        data.message ||
+                        "Unable to load ticket.";
+
+                    loadMessage.style.color =
+                        "#B91C1C";
+
+                    return;
+
+                }
+
+
+                currentTicket =
+                    data.ticket;
+
+
+                loadMessage.hidden =
+                    true;
+
+
+                displayTicket(
+                    currentTicket
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Error loading technician ticket:",
+                    error
+                );
+
+
+                loadMessage.textContent =
+                    "Unable to connect to the server.";
+
+                loadMessage.style.color =
+                    "#B91C1C";
+
+                loadMessage.hidden =
+                    false;
+
+            }
+
+        }
+
+
+        // ==================================================
+        // STATUS FORM
+        // ==================================================
+        // Your current backend does not yet have a route
+        // for updating ticket status, so this remains a
+        // frontend-only interaction for now.
+        // ==================================================
+
+        statusForm.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+
+                if (!currentTicket) {
+                    return;
+                }
+
+
+                currentTicket.status =
+                    statusSelect.value;
+
+
+                if (
+                    statusSelect.value ===
+                    "in-progress"
+                ) {
+
+                    currentTicket.statusText =
+                        "In Progress";
+
+                } else if (
+                    statusSelect.value ===
+                    "resolved"
+                ) {
+
+                    currentTicket.statusText =
+                        "Resolved";
+
+                } else if (
+                    statusSelect.value ===
+                    "closed"
+                ) {
+
+                    currentTicket.statusText =
+                        "Closed";
+
+                } else {
+
+                    currentTicket.statusText =
+                        "Open";
+
+                }
+
+
+                statusText.textContent =
+                    currentTicket.statusText;
+
+
+                statusFeedback.textContent =
+                    "Status updated on this page.";
+
+                statusFeedback.style.color =
+                    "#166534";
+
+                statusFeedback.hidden =
+                    false;
+
+            }
+        );
+
+
+        // ==================================================
+        // TECHNICIAN MESSAGE
+        // ==================================================
+
+        messageForm.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+
+                const messageText =
+                    messageInput.value.trim();
+
+
+                if (messageText === "") {
+                    return;
+                }
+
+
+                if (!currentTicketId) {
+                    return;
+                }
+
+
+                const now =
+                    new Date();
+
+
+                const timeText =
+                    now.toLocaleTimeString(
+                        [],
+                        {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        }
+                    );
+
+
+                const newMessage = {
+
+                    ticketId:
+                        currentTicketId,
+
+                    sender:
+                        "IT Technician",
+
+                    senderRole:
+                        "technician",
+
+                    text:
+                        messageText,
+
+                    time:
+                        timeText
+
+                };
+
+
+                const savedMessages =
+                    getSavedMessages();
+
+
+                savedMessages.push(
+                    newMessage
+                );
+
+
+                saveMessages(
+                    savedMessages
+                );
+
+
+                noMessages.hidden =
+                    true;
+
+
+                displayMessage(
+                    newMessage
+                );
+
+
+                messageInput.value =
+                    "";
+
+            }
+        );
+
+
+        // ==================================================
+        // INITIAL LOAD
+        // ==================================================
+
+        loadTicket();
+
+    }
+);
