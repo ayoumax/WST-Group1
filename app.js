@@ -5,56 +5,187 @@ const bcrypt = require("bcryptjs");
 const session = require("express-session");
 const crypto = require("crypto");
 
+
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-const usersPath = path.join(__dirname, "users.json");
-const ticketsPath = path.join(__dirname, "tickets.json");
+const PORT =
+    process.env.PORT || 3000;
 
-app.use(express.json());
+
+const usersPath =
+    path.join(
+        __dirname,
+        "users.json"
+    );
+
+
+const ticketsPath =
+    path.join(
+        __dirname,
+        "tickets.json"
+    );
+
+
+// =========================================================
+// MIDDLEWARE
+// =========================================================
+
+app.use(
+    express.json()
+);
+
 
 // Remember the authenticated user
-app.use(session({
-    name: "motorph.sid",
-    secret: process.env.SESSION_SECRET ||
-        crypto.randomBytes(32).toString("hex"),
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: false,
-        maxAge: 60 * 60 * 1000
-    }
-}));
+app.use(
+    session({
+
+        name:
+            "motorph.sid",
+
+        secret:
+            process.env.SESSION_SECRET ||
+            crypto
+                .randomBytes(32)
+                .toString("hex"),
+
+        resave:
+            false,
+
+        saveUninitialized:
+            false,
+
+        cookie: {
+
+            httpOnly:
+                true,
+
+            sameSite:
+                "lax",
+
+            secure:
+                false,
+
+            maxAge:
+                60 * 60 * 1000
+
+        }
+
+    })
+);
 
 
 // =========================================================
 // ROLE PROTECTION
 // =========================================================
 
-function requireRole(...allowedRoles) {
+function requireRole(
+    ...allowedRoles
+) {
 
-    return function (req, res, next) {
+    return function (
+        req,
+        res,
+        next
+    ) {
 
-        if (!req.session.user) {
+        if (
+            !req.session.user
+        ) {
 
-            return res.status(401).json({
-                message: "Please log in first."
-            });
+            return res
+                .status(401)
+                .json({
+
+                    message:
+                        "Please log in first."
+
+                });
 
         }
 
-        if (!allowedRoles.includes(req.session.user.role)) {
 
-            return res.status(403).json({
-                message: "You do not have permission to do this."
-            });
+        if (
+            !allowedRoles.includes(
+                req.session.user.role
+            )
+        ) {
+
+            return res
+                .status(403)
+                .json({
+
+                    message:
+                        "You do not have permission to do this."
+
+                });
 
         }
+
 
         next();
+
     };
+
+}
+
+
+// =========================================================
+// CHECK IF USER CAN VIEW A TICKET
+// =========================================================
+
+function canViewTicket(
+    user,
+    ticket
+) {
+
+    // Administrator can view all tickets
+    if (
+        user.role === "admin"
+    ) {
+
+        return true;
+
+    }
+
+
+    // Employee can only view their own tickets
+    if (
+        user.role === "employee"
+    ) {
+
+        return (
+
+            ticket.employeeId ===
+                user.id ||
+
+            ticket.submittedBy ===
+                user.username
+
+        );
+
+    }
+
+
+    // Technician can only view tickets assigned to them
+    if (
+        user.role === "technician"
+    ) {
+
+        return (
+
+            ticket.assignedTech ===
+                user.name ||
+
+            ticket.technician ===
+                user.name
+
+        );
+
+    }
+
+
+    return false;
+
 }
 
 
@@ -62,172 +193,494 @@ function requireRole(...allowedRoles) {
 // LOGIN
 // =========================================================
 
-app.post("/login", async (req, res, next) => {
+app.post(
+    "/login",
+    async (
+        req,
+        res,
+        next
+    ) => {
 
-    try {
+        try {
 
-        const {
-            username,
-            password
-        } = req.body || {};
-
-
-        if (
-            typeof username !== "string" ||
-            typeof password !== "string" ||
-            username.trim() === "" ||
-            password === ""
-        ) {
-
-            return res.status(400).json({
-                message: "Please enter your username and password."
-            });
-
-        }
+            const {
+                username,
+                password
+            } =
+                req.body || {};
 
 
-        const users = JSON.parse(
-            fs.readFileSync(
-                usersPath,
-                "utf8"
-            )
-        );
+            if (
+                typeof username !==
+                    "string" ||
+
+                typeof password !==
+                    "string" ||
+
+                username.trim() ===
+                    "" ||
+
+                password ===
+                    ""
+            ) {
+
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Please enter your username and password."
+
+                    });
+
+            }
 
 
-        const user = users.find(
-            function (account) {
+            const users =
+                JSON.parse(
+                    fs.readFileSync(
+                        usersPath,
+                        "utf8"
+                    )
+                );
 
-                return (
-                    account.username ===
-                    username.trim()
+
+            if (
+                !Array.isArray(users)
+            ) {
+
+                throw new Error(
+                    "users.json must contain an array."
                 );
 
             }
-        );
 
 
-        const passwordMatches = user
-            ? await bcrypt.compare(
-                password,
-                user.passwordHash
-            )
-            : false;
+            const user =
+                users.find(
+                    function (
+                        account
+                    ) {
 
-
-        if (!passwordMatches) {
-
-            return res.status(401).json({
-                message: "Invalid username or password."
-            });
-
-        }
-
-
-        req.session.regenerate(
-            function (error) {
-
-                if (error) {
-                    return next(error);
-                }
-
-
-                req.session.user = {
-
-                    id: user.id,
-
-                    name: user.name,
-
-                    username: user.username,
-
-                    role: user.role
-
-                };
-
-
-                req.session.save(
-                    function (error) {
-
-                        if (error) {
-                            return next(error);
-                        }
-
-
-                        res.json({
-                            message:
-                                "Login successful.",
-
-                            user:
-                                req.session.user
-                        });
+                        return (
+                            account.username ===
+                            username.trim()
+                        );
 
                     }
                 );
 
+
+            // Supports both the newer passwordHash format
+            // and older plain password format.
+            let passwordMatches =
+                false;
+
+
+            if (user) {
+
+                if (
+                    typeof user.passwordHash ===
+                    "string"
+                ) {
+
+                    passwordMatches =
+                        await bcrypt.compare(
+                            password,
+                            user.passwordHash
+                        );
+
+                } else if (
+                    typeof user.password ===
+                    "string"
+                ) {
+
+                    passwordMatches =
+                        password ===
+                        user.password;
+
+                }
+
             }
-        );
 
-    } catch (error) {
 
-        next(error);
+            if (
+                !passwordMatches
+            ) {
+
+                return res
+                    .status(401)
+                    .json({
+
+                        message:
+                            "Invalid username or password."
+
+                    });
+
+            }
+
+
+            req.session.regenerate(
+                function (
+                    error
+                ) {
+
+                    if (error) {
+
+                        return next(
+                            error
+                        );
+
+                    }
+
+
+                    req.session.user = {
+
+                        id:
+                            user.id,
+
+                        name:
+                            user.name,
+
+                        username:
+                            user.username,
+
+                        role:
+                            user.role,
+
+                        department:
+                            user.department ||
+                            ""
+
+                    };
+
+
+                    req.session.save(
+                        function (
+                            error
+                        ) {
+
+                            if (error) {
+
+                                return next(
+                                    error
+                                );
+
+                            }
+
+
+                            res.json({
+
+                                message:
+                                    "Login successful.",
+
+                                user:
+                                    req.session.user
+
+                            });
+
+                        }
+                    );
+
+                }
+            );
+
+        } catch (
+            error
+        ) {
+
+            next(
+                error
+            );
+
+        }
 
     }
-
-});
+);
 
 
 // =========================================================
 // CHECK CURRENT LOGIN
 // =========================================================
 
-app.get("/me", (req, res) => {
+app.get(
+    "/me",
+    (
+        req,
+        res
+    ) => {
 
-    if (!req.session.user) {
+        if (
+            !req.session.user
+        ) {
 
-        return res.status(401).json({
-            message: "Please log in first."
+            return res
+                .status(401)
+                .json({
+
+                    message:
+                        "Please log in first."
+
+                });
+
+        }
+
+
+        res.json({
+
+            user:
+                req.session.user
+
         });
 
     }
-
-
-    res.json({
-        user: req.session.user
-    });
-
-});
+);
 
 
 // =========================================================
 // LOGOUT
 // =========================================================
 
-app.post("/logout", (req, res, next) => {
+app.post(
+    "/logout",
+    (
+        req,
+        res,
+        next
+    ) => {
 
-    req.session.destroy(
-        function (error) {
+        req.session.destroy(
+            function (
+                error
+            ) {
 
-            if (error) {
-                return next(error);
+                if (error) {
+
+                    return next(
+                        error
+                    );
+
+                }
+
+
+                res.clearCookie(
+                    "motorph.sid",
+                    {
+                        path:
+                            "/"
+                    }
+                );
+
+
+                res.json({
+
+                    message:
+                        "Logged out successfully."
+
+                });
+
+            }
+        );
+
+    }
+);
+
+
+// =========================================================
+// GET TICKETS
+// =========================================================
+// Employee   -> own tickets
+// Technician -> assigned tickets
+// Admin      -> all tickets
+// =========================================================
+
+app.get(
+    "/tickets",
+
+    requireRole(
+        "employee",
+        "technician",
+        "admin"
+    ),
+
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        try {
+
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+
+            if (
+                !Array.isArray(
+                    tickets
+                )
+            ) {
+
+                throw new Error(
+                    "tickets.json must contain an array."
+                );
+
             }
 
 
-            res.clearCookie(
-                "motorph.sid",
-                {
-                    path: "/"
-                }
-            );
+            const visibleTickets =
+                tickets.filter(
+                    function (
+                        ticket
+                    ) {
+
+                        return canViewTicket(
+                            req.session.user,
+                            ticket
+                        );
+
+                    }
+                );
 
 
             res.json({
-                message:
-                    "Logged out successfully."
+
+                tickets:
+                    visibleTickets
+
             });
 
-        }
-    );
+        } catch (
+            error
+        ) {
 
-});
+            next(
+                error
+            );
+
+        }
+
+    }
+);
+
+
+// =========================================================
+// GET ONE TICKET BY ID
+// =========================================================
+
+app.get(
+    "/tickets/:id",
+
+    requireRole(
+        "employee",
+        "technician",
+        "admin"
+    ),
+
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        try {
+
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+
+            if (
+                !Array.isArray(
+                    tickets
+                )
+            ) {
+
+                throw new Error(
+                    "tickets.json must contain an array."
+                );
+
+            }
+
+
+            const ticket =
+                tickets.find(
+                    function (
+                        item
+                    ) {
+
+                        return (
+                            item.id ===
+                            req.params.id
+                        );
+
+                    }
+                );
+
+
+            if (
+                !ticket
+            ) {
+
+                return res
+                    .status(404)
+                    .json({
+
+                        message:
+                            "Ticket not found."
+
+                    });
+
+            }
+
+
+            if (
+                !canViewTicket(
+                    req.session.user,
+                    ticket
+                )
+            ) {
+
+                return res
+                    .status(403)
+                    .json({
+
+                        message:
+                            "You do not have permission to view this ticket."
+
+                    });
+
+            }
+
+
+            res.json({
+
+                ticket:
+                    ticket
+
+            });
+
+        } catch (
+            error
+        ) {
+
+            next(
+                error
+            );
+
+        }
+
+    }
+);
 
 
 // =========================================================
@@ -236,8 +689,16 @@ app.post("/logout", (req, res, next) => {
 
 app.post(
     "/tickets",
-    requireRole("employee"),
-    (req, res, next) => {
+
+    requireRole(
+        "employee"
+    ),
+
+    (
+        req,
+        res,
+        next
+    ) => {
 
         try {
 
@@ -257,6 +718,9 @@ app.post(
                     "Software",
 
                 account:
+                    "Account Access",
+
+                "account-access":
                     "Account Access",
 
                 email:
@@ -290,69 +754,105 @@ app.post(
 
             // Validate required fields
             if (
-                typeof body.subject !== "string" ||
-                body.subject.trim() === "" ||
-                typeof body.description !== "string" ||
-                body.description.trim() === ""
+                typeof body.subject !==
+                    "string" ||
+
+                body.subject.trim() ===
+                    "" ||
+
+                typeof body.description !==
+                    "string" ||
+
+                body.description.trim() ===
+                    ""
             ) {
 
-                return res.status(400).json({
-                    message:
-                        "Please enter a subject and problem description."
-                });
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Please enter a subject and problem description."
+
+                    });
 
             }
 
 
             if (
-                typeof body.category !== "string" ||
+                typeof body.category !==
+                    "string" ||
+
                 !Object.hasOwn(
                     categoryLabels,
                     body.category
                 ) ||
-                typeof body.priority !== "string" ||
+
+                typeof body.priority !==
+                    "string" ||
+
                 !Object.hasOwn(
                     priorityLabels,
                     body.priority
                 )
             ) {
 
-                return res.status(400).json({
-                    message:
-                        "Please select a valid category and priority."
-                });
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Please select a valid category and priority."
+
+                    });
 
             }
 
 
             if (
                 (
-                    body.department !== undefined &&
-                    typeof body.department !== "string"
+                    body.department !==
+                        undefined &&
+
+                    typeof body.department !==
+                        "string"
                 ) ||
+
                 (
-                    body.device !== undefined &&
-                    typeof body.device !== "string"
+                    body.device !==
+                        undefined &&
+
+                    typeof body.device !==
+                        "string"
                 )
             ) {
 
-                return res.status(400).json({
-                    message:
-                        "Department and device must be text."
-                });
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Department and device must be text."
+
+                    });
 
             }
 
 
-            const tickets = JSON.parse(
-                fs.readFileSync(
-                    ticketsPath,
-                    "utf8"
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+
+            if (
+                !Array.isArray(
+                    tickets
                 )
-            );
-
-
-            if (!Array.isArray(tickets)) {
+            ) {
 
                 throw new Error(
                     "tickets.json must contain an array."
@@ -361,12 +861,15 @@ app.post(
             }
 
 
-            // Generate next ticket number
-            let highestNumber = 1003;
+            // Generate the next ticket number
+            let highestNumber =
+                1000;
 
 
             tickets.forEach(
-                function (ticket) {
+                function (
+                    ticket
+                ) {
 
                     const match =
                         /^TCK-(\d+)$/.exec(
@@ -374,10 +877,14 @@ app.post(
                         );
 
 
-                    if (match) {
+                    if (
+                        match
+                    ) {
 
                         const number =
-                            Number(match[1]);
+                            Number(
+                                match[1]
+                            );
 
 
                         if (
@@ -408,13 +915,19 @@ app.post(
 
                 id:
                     "TCK-" +
-                    (highestNumber + 1),
+                    (
+                        highestNumber +
+                        1
+                    ),
 
                 employeeId:
                     req.session.user.id,
 
                 employeeName:
                     req.session.user.name,
+
+                submittedBy:
+                    req.session.user.username,
 
                 subject:
                     body.subject.trim(),
@@ -436,12 +949,29 @@ app.post(
                     ],
 
                 department:
-                    body.department?.trim() ||
-                    "Not provided",
+                    (
+                        typeof body.department ===
+                            "string" &&
+
+                        body.department.trim() !==
+                            ""
+                    )
+                        ? body.department.trim()
+                        : (
+                            req.session.user.department ||
+                            "Not provided"
+                        ),
 
                 device:
-                    body.device?.trim() ||
-                    "Not provided",
+                    (
+                        typeof body.device ===
+                            "string" &&
+
+                        body.device.trim() !==
+                            ""
+                    )
+                        ? body.device.trim()
+                        : "Not provided",
 
                 description:
                     body.description.trim(),
@@ -452,16 +982,29 @@ app.post(
                 statusText:
                     "Open",
 
+                assignedTech:
+                    "Unassigned",
+
                 technician:
                     "Unassigned",
+
+                messages:
+                    [],
 
                 submitted:
                     now.toLocaleDateString(
                         "en-US",
                         {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric"
+
+                            month:
+                                "long",
+
+                            day:
+                                "numeric",
+
+                            year:
+                                "numeric"
+
                         }
                     ),
 
@@ -478,28 +1021,36 @@ app.post(
 
             fs.writeFileSync(
                 ticketsPath,
+
                 JSON.stringify(
                     tickets,
                     null,
                     2
                 ),
+
                 "utf8"
             );
 
 
-            res.status(201).json({
+            res
+                .status(201)
+                .json({
 
-                message:
-                    "Ticket submitted successfully.",
+                    message:
+                        "Ticket submitted successfully.",
 
-                ticket:
-                    newTicket
+                    ticket:
+                        newTicket
 
-            });
+                });
 
-        } catch (error) {
+        } catch (
+            error
+        ) {
 
-            next(error);
+            next(
+                error
+            );
 
         }
 
@@ -552,108 +1103,130 @@ const pageRoles = {
 
 
 // Check access before serving protected pages
-app.use((req, res, next) => {
+app.use(
+    (
+        req,
+        res,
+        next
+    ) => {
 
-    const requiredRole =
-        pageRoles[req.path];
-
-
-    if (!requiredRole) {
-
-        return next();
-
-    }
-
-
-    res.set(
-        "Cache-Control",
-        "no-store"
-    );
+        const requiredRole =
+            pageRoles[
+                req.path
+            ];
 
 
-    if (!req.session.user) {
+        if (
+            !requiredRole
+        ) {
 
-        return res.redirect(
-            "/index.html"
+            return next();
+
+        }
+
+
+        res.set(
+            "Cache-Control",
+            "no-store"
         );
 
-    }
 
+        if (
+            !req.session.user
+        ) {
 
-    if (
-        req.session.user.role !==
-        requiredRole
-    ) {
-
-        return res
-            .status(403)
-            .send(
-                "Access denied. This page is for another user role."
+            return res.redirect(
+                "/index.html"
             );
 
+        }
+
+
+        if (
+            req.session.user.role !==
+            requiredRole
+        ) {
+
+            return res
+                .status(403)
+                .send(
+                    "Access denied. This page is for another user role."
+                );
+
+        }
+
+
+        next();
+
     }
-
-
-    next();
-
-});
+);
 
 
 // =========================================================
 // FRONTEND FILES
 // =========================================================
+// Only explicitly listed frontend files are publicly served.
+// JSON data files are not exposed directly.
+// =========================================================
 
-const publicFiles = new Set([
+const publicFiles =
+    new Set([
 
-    "index.html",
+        "index.html",
 
-    "employee-dashboard.html",
+        "employee-dashboard.html",
 
-    "submit-ticket.html",
+        "submit-ticket.html",
 
-    "my-tickets.html",
+        "my-tickets.html",
 
-    "ticket-detail.html",
+        "ticket-detail.html",
 
-    "help.html",
+        "help.html",
 
-    "technician-dashboard.html",
+        "technician-dashboard.html",
 
-    "manage-tickets.html",
+        "manage-tickets.html",
 
-    "technician-ticket-detail.html",
+        "technician-ticket-detail.html",
 
-    "admin-dashboard.html",
+        "admin-dashboard.html",
 
-    "admin-tickets.html",
+        "admin-tickets.html",
 
-    "assign-technician.html",
+        "assign-technician.html",
 
-    "style.css",
+        "style.css",
 
-    "login.js",
+        "login.js",
 
-    "logout.js",
+        "logout.js",
 
-    "script.js",
+        "script.js",
 
-    "admin-dashboard.js",
+        "my-tickets.js",
 
-    "assign-technician.js",
+        "admin-tickets.js",
 
-    "manage-tickets.js",
+        "admin-dashboard.js",
 
-    "technician-dashboard.js",
+        "assign-technician.js",
 
-    "technician-ticket-messages.js",
+        "manage-tickets.js",
 
-    "ticket-messages.js"
+        "technician-dashboard.js",
 
-]);
+        "technician-ticket-messages.js",
+
+        "ticket-messages.js"
+
+    ]);
 
 
+// Allow images to load
 app.use(
     "/images",
+
     express.static(
         path.join(
             __dirname,
@@ -663,74 +1236,117 @@ app.use(
 );
 
 
-app.get("/", (req, res) => {
+// =========================================================
+// HOME PAGE
+// =========================================================
 
-    res.sendFile(
-        path.join(
-            __dirname,
-            "index.html"
-        )
-    );
+app.get(
+    "/",
+    (
+        req,
+        res
+    ) => {
 
-});
-
-
-app.use((req, res, next) => {
-
-    const filename =
-        req.path.slice(1);
-
-
-    if (
-        (
-            req.method === "GET" ||
-            req.method === "HEAD"
-        ) &&
-        publicFiles.has(filename)
-    ) {
-
-        return res.sendFile(
+        res.sendFile(
             path.join(
                 __dirname,
-                filename
+                "index.html"
             )
         );
 
     }
+);
 
 
-    next();
+// =========================================================
+// SERVE ALLOWED FRONTEND FILES
+// =========================================================
 
-});
+app.use(
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        const filename =
+            req.path.slice(
+                1
+            );
+
+
+        if (
+            (
+                req.method ===
+                    "GET" ||
+
+                req.method ===
+                    "HEAD"
+            ) &&
+
+            publicFiles.has(
+                filename
+            )
+        ) {
+
+            return res.sendFile(
+                path.join(
+                    __dirname,
+                    filename
+                )
+            );
+
+        }
+
+
+        next();
+
+    }
+);
 
 
 // =========================================================
 // ERROR HANDLER
 // =========================================================
 
-app.use((error, req, res, next) => {
+app.use(
+    (
+        error,
+        req,
+        res,
+        next
+    ) => {
 
-    console.error(
-        error.message
-    );
+        console.error(
+            "Server error:",
+            error
+        );
 
 
-    res.status(500).json({
-        message:
-            "A server error occurred. Please try again."
-    });
+        res
+            .status(500)
+            .json({
 
-});
+                message:
+                    "A server error occurred. Please try again."
+
+            });
+
+    }
+);
 
 
 // =========================================================
 // START SERVER
 // =========================================================
 
-app.listen(PORT, () => {
+app.listen(
+    PORT,
+    () => {
 
-    console.log(
-        `MotorPH backend running on port ${PORT}`
-    );
+        console.log(
+            `MotorPH backend running on port ${PORT}`
+        );
 
-});
+    }
+);

@@ -14,6 +14,7 @@
 
     <div class="app-layout">
 
+        <!-- SIDEBAR -->
         <aside class="sidebar">
 
             <div class="sidebar-brand">
@@ -69,6 +70,7 @@
         </aside>
 
 
+        <!-- MAIN CONTENT -->
         <main class="dashboard-content">
 
             <header class="dashboard-header">
@@ -160,7 +162,8 @@
 
                 <p
                     id="adminFilterResult"
-                    hidden>
+                    style="margin-top: 12px; margin-bottom: 0; font-size: 13px; color: var(--text-muted);">
+                    Loading tickets...
                 </p>
 
             </section>
@@ -178,6 +181,7 @@
                         <thead>
 
                             <tr>
+
                                 <th>Ticket ID</th>
                                 <th>Employee</th>
                                 <th>Department</th>
@@ -185,6 +189,7 @@
                                 <th>Priority</th>
                                 <th>Status</th>
                                 <th>Assigned Technician</th>
+
                             </tr>
 
                         </thead>
@@ -192,152 +197,7 @@
 
                         <tbody id="adminTicketTableBody">
 
-                            <!-- DEFAULT SAMPLE TICKET 1001 -->
-                            <tr
-                                class="admin-ticket-row"
-                                data-ticket-id="TCK-1001"
-                                data-employee="J. Santos"
-                                data-subject="Cannot connect to office Wi-Fi"
-                                data-status="open">
-
-                                <td>TCK-1001</td>
-
-                                <td>J. Santos</td>
-
-                                <td>Human Resources</td>
-
-                                <td>
-                                    Cannot connect to office Wi-Fi
-                                </td>
-
-                                <td>
-                                    <span class="priority high">
-                                        High
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class="status open">
-                                        Open
-                                    </span>
-                                </td>
-
-                                <td>
-                                    Unassigned
-                                </td>
-
-                            </tr>
-
-
-                            <!-- DEFAULT SAMPLE TICKET 1002 -->
-                            <tr
-                                class="admin-ticket-row"
-                                data-ticket-id="TCK-1002"
-                                data-employee="M. Cruz"
-                                data-subject="Laptop won't boot after update"
-                                data-status="in-progress">
-
-                                <td>TCK-1002</td>
-
-                                <td>M. Cruz</td>
-
-                                <td>Finance</td>
-
-                                <td>
-                                    Laptop won't boot after update
-                                </td>
-
-                                <td>
-                                    <span class="priority urgent">
-                                        Urgent
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class="status progress">
-                                        In Progress
-                                    </span>
-                                </td>
-
-                                <td>
-                                    Mark Santos
-                                </td>
-
-                            </tr>
-
-
-                            <!-- DEFAULT SAMPLE TICKET 1003 -->
-                            <tr
-                                class="admin-ticket-row"
-                                data-ticket-id="TCK-1003"
-                                data-employee="A. Reyes"
-                                data-subject="Need access to shared drive"
-                                data-status="resolved">
-
-                                <td>TCK-1003</td>
-
-                                <td>A. Reyes</td>
-
-                                <td>Payroll</td>
-
-                                <td>
-                                    Need access to shared drive
-                                </td>
-
-                                <td>
-                                    <span class="priority low">
-                                        Low
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class="status resolved">
-                                        Resolved
-                                    </span>
-                                </td>
-
-                                <td>
-                                    Ana Reyes
-                                </td>
-
-                            </tr>
-
-
-                            <!-- DEFAULT SAMPLE TICKET 1007 -->
-                            <tr
-                                class="admin-ticket-row"
-                                data-ticket-id="TCK-1007"
-                                data-employee="P. Dela Cruz"
-                                data-subject="Monitor not turning on"
-                                data-status="closed">
-
-                                <td>TCK-1007</td>
-
-                                <td>P. Dela Cruz</td>
-
-                                <td>Sales</td>
-
-                                <td>
-                                    Monitor not turning on
-                                </td>
-
-                                <td>
-                                    <span class="priority medium">
-                                        Medium
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class="status closed">
-                                        Closed
-                                    </span>
-                                </td>
-
-                                <td>
-                                    Mark Santos
-                                </td>
-
-                            </tr>
+                            <!-- Tickets loaded from GET /tickets -->
 
                         </tbody>
 
@@ -360,7 +220,8 @@
 
 
     <script src="script.js"></script>
-    <script src="logout.js"></script>
+<script src="admin-tickets.js"></script>
+<script src="logout.js"></script>
 
 </body>
 

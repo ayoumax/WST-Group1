@@ -34,8 +34,13 @@
                     alt="MotorPH Logo">
 
                 <div>
+
                     <h1>MotorPH</h1>
-                    <p>IT Support Portal</p>
+
+                    <p>
+                        IT Support Portal
+                    </p>
+
                 </div>
 
             </div>
@@ -44,17 +49,23 @@
             <h2>Sign In</h2>
 
             <p class="login-description">
-                Enter your credentials and select your role.
+                Enter your username and password, then select your portal.
             </p>
 
 
-            <form id="loginForm" method="POST" action="/login">
+            <form
+                id="loginForm"
+                method="POST"
+                action="/login">
+
 
                 <!-- USERNAME -->
                 <p>
 
                     <label for="username">
-                        <strong>Username:</strong>
+                        <strong>
+                            Username:
+                        </strong>
                     </label>
 
                     <br>
@@ -73,7 +84,9 @@
                 <p>
 
                     <label for="password">
-                        <strong>Password:</strong>
+                        <strong>
+                            Password:
+                        </strong>
                     </label>
 
                     <br>
@@ -88,31 +101,37 @@
                 </p>
 
 
-                <!-- ROLE -->
-                <fieldset>
+                <!-- ROLE BUTTONS -->
+                <p class="login-role-buttons">
 
-                    <legend>
-                        <strong>Login As</strong>
-                    </legend>
+                    <button
+                        type="submit"
+                        data-role="employee">
+                        Employee
+                    </button>
 
-                    <p class="login-role-buttons">
+                    <button
+                        type="submit"
+                        data-role="technician">
+                        IT Technician
+                    </button>
 
-                        <button type="submit" data-role="employee">
-                            Employee
-                        </button>
+                    <button
+                        type="submit"
+                        data-role="admin">
+                        Administrator
+                    </button>
 
-                        <button type="submit" data-role="technician">
-                            IT Technician
-                        </button>
+                </p>
 
-                        <button type="submit" data-role="admin">
-                            Administrator
-                        </button>
 
-                    </p>
+                <!-- LOGIN FEEDBACK -->
+                <p
+                    id="loginFeedback"
+                    role="alert"
+                    hidden>
+                </p>
 
-                </fieldset>
-                        <p id="loginFeedback" role="alert" hidden></p>
             </form>
 
         </section>
@@ -127,7 +146,10 @@
         </p>
 
     </footer>
-            <script src="login.js"></script>
+
+
+    <script src="login.js"></script>
+
 </body>
 
 </html>
