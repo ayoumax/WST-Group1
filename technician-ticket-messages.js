@@ -406,68 +406,73 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // ==================================================
-    // STATUS FORM
-    // ==================================================
-    // Status update remains frontend-only for now.
-    // Another team member is handling the backend
-    // ticket-status feature.
+     // ==================================================
+    // SAVE TICKET STATUS TO BACKEND
     // ==================================================
 
     statusForm.addEventListener(
         "submit",
-        function (event) {
-
+        async function (event) {
             event.preventDefault();
 
-            if (!currentTicket) {
+            if (!currentTicket || !currentTicketId) {
                 return;
             }
 
-            currentTicket.status =
-                statusSelect.value;
+            const submitButton =
+                statusForm.querySelector('button[type="submit"]');
 
-            if (
-                statusSelect.value ===
-                "in-progress"
-            ) {
-
-                currentTicket.statusText =
-                    "In Progress";
-
-            } else if (
-                statusSelect.value ===
-                "resolved"
-            ) {
-
-                currentTicket.statusText =
-                    "Resolved";
-
-            } else if (
-                statusSelect.value ===
-                "closed"
-            ) {
-
-                currentTicket.statusText =
-                    "Closed";
-
-            } else {
-
-                currentTicket.statusText =
-                    "Open";
+            if (submitButton.disabled) {
+                return;
             }
 
-            statusText.textContent =
-                currentTicket.statusText;
+            submitButton.disabled = true;
+            statusSelect.disabled = true;
+            statusFeedback.hidden = true;
 
-            statusFeedback.textContent =
-                "Status updated on this page.";
+            try {
+                const response = await fetch(
+                    "/tickets/" + encodeURIComponent(currentTicketId),
+                    {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            status: statusSelect.value
+                        })
+                    }
+                );
 
-            statusFeedback.style.color =
-                "#166534";
+                if (response.status === 401) {
+                    window.location.replace("index.html");
+                    return;
+                }
 
-            statusFeedback.hidden =
-                false;
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || "Unable to update ticket status."
+                    );
+                }
+
+                // Read the saved record back from the server.
+                await loadTicket();
+
+                statusFeedback.textContent =
+                    "Status saved successfully.";
+                statusFeedback.style.color = "#166534";
+            } catch (error) {
+                statusFeedback.textContent = error.message;
+                statusFeedback.style.color = "#B91C1C";
+
+                statusSelect.value = currentTicket.status;
+            } finally {
+                statusFeedback.hidden = false;
+                submitButton.disabled = false;
+                statusSelect.disabled = false;
+            }
         }
     );
 
