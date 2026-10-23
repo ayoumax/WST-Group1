@@ -1,480 +1,203 @@
 // ==========================================================================
-// MotorPH IT Support - Technician Dashboard
+// MotorPH IT Support - Technician Dashboard Interactivity
 // ==========================================================================
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    var STORAGE_KEY = "motorphTickets";
-
-
-    // ----------------------------------------------------------------------
-    // PAGE ELEMENTS
-    // ----------------------------------------------------------------------
-
-    var summaryCards =
-        document.querySelectorAll(".summary-grid .summary-card");
-
-    var countAssigned =
-        document.getElementById("count-assigned");
-
-    var countOpen =
-        document.getElementById("count-open");
-
-    var countProgress =
-        document.getElementById("count-progress");
-
-    var countResolved =
-        document.getElementById("count-resolved");
-
-    var filterBanner =
-        document.getElementById("technician-filter-banner");
-
-    var filterBannerText =
-        document.getElementById("technician-filter-text");
-
-    var resetFilterBtn =
-        document.getElementById("technician-reset-filter");
-
-    var updateToast =
-        document.getElementById("technician-update-toast");
-
-    var tableBody =
-        document.querySelector(".recent-tickets tbody");
-
-    var noteInput =
-        document.getElementById("shift-note-input");
-
-    var saveNoteBtn =
-        document.getElementById("save-note-btn");
-
-    var noteList =
-        document.getElementById("technician-notes-list");
-
-    var currentFilter =
-        "all";
-
-
-    // ----------------------------------------------------------------------
-    // LOCAL STORAGE
-    // ----------------------------------------------------------------------
-
-    function getSavedTickets() {
-
-        var savedTickets =
-            localStorage.getItem(STORAGE_KEY);
-
-
-        if (savedTickets === null) {
-            return [];
-        }
-
-
-        return JSON.parse(savedTickets);
-
-    }
-
-
-    function saveTickets(tickets) {
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(tickets)
+    // 1. LOCATE WEBPAGE ELEMENTS
+    const summaryCards =
+        document.querySelectorAll(
+            ".summary-card"
         );
 
+    const countAssigned =
+        document.getElementById(
+            "count-assigned"
+        );
+
+    const countOpen =
+        document.getElementById(
+            "count-open"
+        );
+
+    const countProgress =
+        document.getElementById(
+            "count-progress"
+        );
+
+    const countResolved =
+        document.getElementById(
+            "count-resolved"
+        );
+
+    const filterBanner =
+        document.getElementById(
+            "technician-filter-banner"
+        );
+
+    const filterBannerText =
+        document.getElementById(
+            "technician-filter-text"
+        );
+
+    const resetFilterBtn =
+        document.getElementById(
+            "technician-reset-filter"
+        );
+
+    const updateToast =
+        document.getElementById(
+            "technician-update-toast"
+        );
+
+    const tableBody =
+        document.querySelector(
+            ".recent-tickets tbody"
+        );
+
+    const noteInput =
+        document.getElementById(
+            "shift-note-input"
+        );
+
+    const saveNoteBtn =
+        document.getElementById(
+            "save-note-btn"
+        );
+
+    const noteList =
+        document.getElementById(
+            "technician-notes-list"
+        );
+
+    let currentFilter =
+        "all";
+
+    let toastTimer =
+        null;
+
+
+    // ======================================================================
+    // HELPER: STATUS CSS CLASS
+    // ======================================================================
+
+    function getStatusClass(status) {
+
+        if (status === "in-progress" || status === "progress") {
+
+            return "progress";
+
+        }
+
+        if (status === "resolved") {
+
+            return "resolved";
+
+        }
+
+        return "open";
+
     }
 
 
-    // ----------------------------------------------------------------------
-    // CREATE OR UPDATE A LOCAL TICKET ROW
-    // ----------------------------------------------------------------------
+    // ======================================================================
+    // HELPER: SHOW NOTIFICATION TOAST
+    // ======================================================================
 
-    function displayAssignedTickets() {
+    function showToast(message) {
 
-        if (!tableBody) {
+        if (!updateToast) {
+
             return;
+
         }
 
 
-        var savedTickets =
-            getSavedTickets();
+        if (toastTimer) {
+
+            clearTimeout(toastTimer);
+
+        }
 
 
-        for (
-            var i = 0;
-            i < savedTickets.length;
-            i++
-        ) {
+        updateToast.textContent =
+            message;
 
-            var ticket =
-                savedTickets[i];
+        updateToast.style.display =
+            "block";
 
 
-            // Only show tickets that already have a technician
-            if (
-                !ticket.technician ||
-                ticket.technician === ""
-            ) {
+        toastTimer =
+            setTimeout(function () {
+
+                updateToast.style.display =
+                    "none";
+
+            }, 3000);
+
+    }
+
+
+    // ======================================================================
+    // 2. UPDATE SUMMARY COUNTS
+    // ======================================================================
+
+    function updateCounts() {
+
+        if (!tableBody) {
+
+            return;
+
+        }
+
+
+        const rows =
+            tableBody.querySelectorAll("tr");
+
+        let openCount =
+            0;
+
+        let progressCount =
+            0;
+
+        let resolvedCount =
+            0;
+
+        let totalCount =
+            0;
+
+
+        for (let i = 0; i < rows.length; i++) {
+
+            const statusBadge =
+                rows[i].querySelector(".status");
+
+
+            // Ignore placeholder / empty row
+            if (!statusBadge) {
 
                 continue;
 
             }
 
 
-            var existingRows =
-                tableBody.querySelectorAll("tr");
+            totalCount++;
 
-            var row =
-                null;
+            const statusText =
+                statusBadge.textContent.trim().toLowerCase();
 
 
-            // Check if the ticket number is already in the sample table
-            for (
-                var r = 0;
-                r < existingRows.length;
-                r++
-            ) {
+            if (statusText === "open") {
 
-                var firstCell =
-                    existingRows[r].cells[0];
+                openCount++;
 
+            } else if (statusText === "in progress") {
 
-                if (
-                    firstCell &&
-                    firstCell.textContent
-                        .trim() === ticket.id
-                ) {
+                progressCount++;
 
-                    row =
-                        existingRows[r];
+            } else if (statusText === "resolved") {
 
-                    break;
-
-                }
-
-            }
-
-
-            // If ticket does not already exist, create a new row
-            if (!row) {
-
-                row =
-                    document.createElement("tr");
-
-                tableBody.appendChild(
-                    row
-                );
-
-            }
-
-
-            // Mark this as a localStorage ticket
-            row.dataset.localTicketId =
-                ticket.id;
-
-
-            // Clear old sample content if the same ID existed
-            row.innerHTML =
-                "";
-
-
-            // --------------------------------------------------------------
-            // TICKET ID
-            // --------------------------------------------------------------
-
-            var idCell =
-                document.createElement("td");
-
-            var ticketLink =
-                document.createElement("span");
-
-            ticketLink.className =
-                "ticket-link";
-
-            ticketLink.textContent =
-                ticket.id;
-
-            idCell.appendChild(
-                ticketLink
-            );
-
-
-            // --------------------------------------------------------------
-            // EMPLOYEE
-            // --------------------------------------------------------------
-
-            var employeeCell =
-                document.createElement("td");
-
-            employeeCell.textContent =
-                "Employee";
-
-
-            // --------------------------------------------------------------
-            // ISSUE
-            // --------------------------------------------------------------
-
-            var issueCell =
-                document.createElement("td");
-
-            issueCell.textContent =
-                ticket.subject;
-
-
-            // --------------------------------------------------------------
-            // PRIORITY
-            // --------------------------------------------------------------
-
-            var priorityCell =
-                document.createElement("td");
-
-            var priorityBadge =
-                document.createElement("span");
-
-            priorityBadge.className =
-                "priority " +
-                ticket.priority;
-
-            priorityBadge.textContent =
-                ticket.priorityText ||
-                ticket.priority;
-
-            priorityCell.appendChild(
-                priorityBadge
-            );
-
-
-            // --------------------------------------------------------------
-            // STATUS
-            // --------------------------------------------------------------
-
-            var statusCell =
-                document.createElement("td");
-
-            var statusBadge =
-                document.createElement("span");
-
-
-            if (
-                ticket.status === "in-progress"
-            ) {
-
-                statusBadge.className =
-                    "status progress";
-
-                statusBadge.textContent =
-                    "In Progress";
-
-            } else if (
-                ticket.status === "resolved"
-            ) {
-
-                statusBadge.className =
-                    "status resolved";
-
-                statusBadge.textContent =
-                    "Resolved";
-
-            } else {
-
-                statusBadge.className =
-                    "status open";
-
-                statusBadge.textContent =
-                    "Open";
-
-            }
-
-
-            statusCell.appendChild(
-                statusBadge
-            );
-
-
-            // --------------------------------------------------------------
-            // QUICK STATUS ACTION
-            // --------------------------------------------------------------
-
-            var actionCell =
-                document.createElement("td");
-
-            var statusSelect =
-                document.createElement("select");
-
-            statusSelect.className =
-                "quick-status-select";
-
-            statusSelect.setAttribute(
-                "aria-label",
-                "Update ticket status"
-            );
-
-
-            var openOption =
-                document.createElement("option");
-
-            openOption.value =
-                "open";
-
-            openOption.textContent =
-                "Open";
-
-
-            var progressOption =
-                document.createElement("option");
-
-            progressOption.value =
-                "progress";
-
-            progressOption.textContent =
-                "In Progress";
-
-
-            var resolvedOption =
-                document.createElement("option");
-
-            resolvedOption.value =
-                "resolved";
-
-            resolvedOption.textContent =
-                "Resolved";
-
-
-            statusSelect.appendChild(
-                openOption
-            );
-
-            statusSelect.appendChild(
-                progressOption
-            );
-
-            statusSelect.appendChild(
-                resolvedOption
-            );
-
-
-            // Select the correct current status
-            if (
-                ticket.status === "resolved"
-            ) {
-
-                statusSelect.value =
-                    "resolved";
-
-            } else if (
-                ticket.status === "in-progress"
-            ) {
-
-                statusSelect.value =
-                    "progress";
-
-            } else {
-
-                statusSelect.value =
-                    "open";
-
-            }
-
-
-            actionCell.appendChild(
-                statusSelect
-            );
-
-
-            // Add all cells
-            row.appendChild(
-                idCell
-            );
-
-            row.appendChild(
-                employeeCell
-            );
-
-            row.appendChild(
-                issueCell
-            );
-
-            row.appendChild(
-                priorityCell
-            );
-
-            row.appendChild(
-                statusCell
-            );
-
-            row.appendChild(
-                actionCell
-            );
-
-        }
-
-    }
-
-
-    // Load assigned localStorage tickets before counting rows
-    displayAssignedTickets();
-
-
-    var ticketRows =
-        tableBody
-            ? tableBody.querySelectorAll("tr")
-            : [];
-
-
-    // ----------------------------------------------------------------------
-    // UPDATE DASHBOARD COUNTS
-    // ----------------------------------------------------------------------
-
-    function updateCounts() {
-
-        var openCount =
-            0;
-
-        var progressCount =
-            0;
-
-        var resolvedCount =
-            0;
-
-        var totalCount =
-            ticketRows.length;
-
-
-        for (
-            var i = 0;
-            i < ticketRows.length;
-            i++
-        ) {
-
-            var statusBadge =
-                ticketRows[i]
-                    .querySelector(".status");
-
-
-            if (statusBadge) {
-
-                var text =
-                    statusBadge.textContent
-                        .trim()
-                        .toLowerCase();
-
-
-                if (text === "open") {
-
-                    openCount++;
-
-                } else if (
-                    text === "in progress"
-                ) {
-
-                    progressCount++;
-
-                } else if (
-                    text === "resolved"
-                ) {
-
-                    resolvedCount++;
-
-                }
+                resolvedCount++;
 
             }
 
@@ -488,7 +211,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-
         if (countOpen) {
 
             countOpen.textContent =
@@ -496,14 +218,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-
         if (countProgress) {
 
             countProgress.textContent =
                 progressCount;
 
         }
-
 
         if (countResolved) {
 
@@ -515,70 +235,66 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // ----------------------------------------------------------------------
-    // FILTER TABLE
-    // ----------------------------------------------------------------------
+    // ======================================================================
+    // 3. FILTER TABLE BY STATUS
+    // ======================================================================
 
-    function filterTableByStatus(targetStatus) {
+    function filterTableByStatus(filterType) {
 
         currentFilter =
-            targetStatus;
+            filterType;
 
-        var visibleCount =
+
+        if (!tableBody) {
+
+            return;
+
+        }
+
+
+        const rows =
+            tableBody.querySelectorAll("tr");
+
+        let visibleCount =
             0;
 
 
-        for (
-            var i = 0;
-            i < ticketRows.length;
-            i++
-        ) {
+        for (let i = 0; i < rows.length; i++) {
 
-            var row =
-                ticketRows[i];
-
-            var statusBadge =
-                row.querySelector(".status");
-
-            var statusText =
-                statusBadge
-                    ? statusBadge.textContent
-                        .trim()
-                        .toLowerCase()
-                    : "";
+            const statusBadge =
+                rows[i].querySelector(".status");
 
 
-            var matches =
+            if (!statusBadge) {
+
+                continue;
+
+            }
+
+
+            const statusText =
+                statusBadge.textContent.trim().toLowerCase();
+
+            let matches =
                 false;
 
 
-            if (
-                targetStatus === "all"
-            ) {
+            if (filterType === "all") {
 
                 matches =
                     true;
 
-            } else if (
-                targetStatus === "open" &&
-                statusText === "open"
-            ) {
+            } else if (filterType === "open" && statusText === "open") {
 
                 matches =
                     true;
 
-            } else if (
-                targetStatus === "progress" &&
-                statusText === "in progress"
-            ) {
+            } else if (filterType === "progress" && statusText === "in progress") {
 
                 matches =
                     true;
 
-            } else if (
-                targetStatus === "resolved" &&
-                statusText === "resolved"
-            ) {
+            } else if (filterType === "resolved" && statusText === "resolved") {
 
                 matches =
                     true;
@@ -588,14 +304,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (matches) {
 
-                row.style.display =
+                rows[i].style.display =
                     "";
 
                 visibleCount++;
 
             } else {
 
-                row.style.display =
+                rows[i].style.display =
                     "none";
 
             }
@@ -603,50 +319,48 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        if (filterBanner) {
+        // Update filter banner
+        if (filterBanner && filterBannerText) {
 
-            if (
-                targetStatus === "all"
-            ) {
+            if (filterType === "all") {
 
                 filterBanner.style.display =
                     "none";
 
             } else {
 
+                let label =
+                    filterType;
+
+
+                if (filterType === "progress") {
+
+                    label =
+                        "In Progress";
+
+                } else if (filterType === "open") {
+
+                    label =
+                        "Open";
+
+                } else if (filterType === "resolved") {
+
+                    label =
+                        "Resolved";
+
+                }
+
+
                 filterBanner.style.display =
                     "flex";
 
-
-                var labelMap = {
-
-                    open: "Open",
-
-                    progress:
-                        "In Progress",
-
-                    resolved:
-                        "Resolved Today"
-
-                };
-
-
-                var displayLabel =
-                    labelMap[targetStatus] ||
-                    targetStatus;
-
-
                 filterBannerText.textContent =
                     "Filtered by: " +
-                    displayLabel +
+                    label +
                     " (" +
                     visibleCount +
                     " ticket" +
-                    (
-                        visibleCount === 1
-                            ? ""
-                            : "s"
-                    ) +
+                    (visibleCount === 1 ? "" : "s") +
                     ")";
 
             }
@@ -656,12 +370,412 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // ----------------------------------------------------------------------
-    // SUMMARY CARD CLICKS
-    // ----------------------------------------------------------------------
+    // ======================================================================
+    // 4. QUICK STATUS UPDATE VIA PATCH /tickets/:id
+    // ======================================================================
+
+    async function handleStatusChange(event) {
+
+        const selectElement =
+            event.target;
+
+        const ticketId =
+            selectElement.dataset.ticketId;
+
+        const newStatus =
+            selectElement.value;
+
+        const oldStatus =
+            selectElement.dataset.currentStatus || "open";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/tickets/" +
+                        encodeURIComponent(ticketId),
+                    {
+                        method:
+                            "PATCH",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                status:
+                                    newStatus
+                            })
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                alert(
+                    result.message ||
+                    "Failed to update ticket status."
+                );
+
+                selectElement.value =
+                    oldStatus;
+
+                return;
+
+            }
+
+
+            // Update current tracking value
+            selectElement.dataset.currentStatus =
+                newStatus;
+
+
+            // Update the status badge in this row
+            const row =
+                selectElement.closest("tr");
+
+            const statusBadge =
+                row.querySelector(".status");
+
+
+            if (statusBadge) {
+
+                const badgeClass =
+                    getStatusClass(result.ticket.status);
+
+                statusBadge.className =
+                    "status " +
+                    badgeClass;
+
+                statusBadge.textContent =
+                    result.ticket.statusText ||
+                    result.ticket.status;
+
+            }
+
+
+            // Display toast notification
+            const displayTitle =
+                result.ticket.statusText ||
+                newStatus;
+
+            showToast(
+                "Status updated to " +
+                displayTitle +
+                " for ticket " +
+                ticketId +
+                "."
+            );
+
+
+            // Recalculate summary card counts
+            updateCounts();
+
+
+            // Re-apply active filter if one is active
+            if (currentFilter !== "all") {
+
+                filterTableByStatus(currentFilter);
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Error updating status:",
+                error
+            );
+
+            alert(
+                "Network error while updating status. Please try again."
+            );
+
+            selectElement.value =
+                oldStatus;
+
+        }
+
+    }
+
+
+    // ======================================================================
+    // 5. LOAD ASSIGNED TICKETS FROM BACKEND
+    // ======================================================================
+
+    async function loadAssignedTickets() {
+
+        if (!tableBody) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch("/tickets");
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load assigned tickets."
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+            const tickets =
+                data.tickets || [];
+
+
+            tableBody.innerHTML =
+                "";
+
+
+            if (tickets.length === 0) {
+
+                const emptyRow =
+                    document.createElement("tr");
+
+                emptyRow.innerHTML =
+                    '<td colspan="6" style="text-align: center; padding: 24px; color: var(--text-muted); font-size: 13px;">No assigned tickets currently found.</td>';
+
+                tableBody.appendChild(
+                    emptyRow
+                );
+
+                updateCounts();
+
+                return;
+
+            }
+
+
+            // Render ticket rows
+            tickets.forEach(function (ticket) {
+
+                const row =
+                    document.createElement("tr");
+
+                row.dataset.ticketId =
+                    ticket.id;
+
+
+                // 1. TICKET ID
+                const idCell =
+                    document.createElement("td");
+
+                const ticketLink =
+                    document.createElement("a");
+
+                ticketLink.className =
+                    "ticket-link";
+
+                ticketLink.href =
+                    "technician-ticket-detail.html?id=" +
+                    encodeURIComponent(ticket.id);
+
+                ticketLink.textContent =
+                    ticket.id;
+
+                idCell.appendChild(
+                    ticketLink
+                );
+
+
+                // 2. EMPLOYEE
+                const employeeCell =
+                    document.createElement("td");
+
+                employeeCell.textContent =
+                    ticket.submittedBy ||
+                    "Employee";
+
+
+                // 3. ISSUE
+                const issueCell =
+                    document.createElement("td");
+
+                issueCell.textContent =
+                    ticket.subject;
+
+
+                // 4. PRIORITY
+                const priorityCell =
+                    document.createElement("td");
+
+                const priorityBadge =
+                    document.createElement("span");
+
+                const priorityClass =
+                    (ticket.priority || "low").toLowerCase();
+
+                priorityBadge.className =
+                    "priority " +
+                    priorityClass;
+
+                priorityBadge.textContent =
+                    ticket.priorityText ||
+                    ticket.priority ||
+                    "Low";
+
+                priorityCell.appendChild(
+                    priorityBadge
+                );
+
+
+                // 5. STATUS
+                const statusCell =
+                    document.createElement("td");
+
+                const statusBadge =
+                    document.createElement("span");
+
+                const statusClass =
+                    getStatusClass(ticket.status);
+
+                statusBadge.className =
+                    "status " +
+                    statusClass;
+
+                statusBadge.textContent =
+                    ticket.statusText ||
+                    ticket.status ||
+                    "Open";
+
+                statusCell.appendChild(
+                    statusBadge
+                );
+
+
+                // 6. QUICK ACTION SELECT
+                const actionCell =
+                    document.createElement("td");
+
+                const select =
+                    document.createElement("select");
+
+                select.className =
+                    "quick-status-select";
+
+                select.setAttribute(
+                    "aria-label",
+                    "Update ticket status"
+                );
+
+                select.style.padding =
+                    "5px 8px";
+
+                select.style.fontSize =
+                    "12px";
+
+                select.style.borderRadius =
+                    "5px";
+
+                select.style.border =
+                    "1px solid var(--card-border)";
+
+                select.dataset.ticketId =
+                    ticket.id;
+
+
+                select.innerHTML = `
+                    <option value="open">Open</option>
+                    <option value="progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                `;
+
+
+                // Set selected value
+                let selectedVal =
+                    "open";
+
+
+                if (
+                    ticket.status === "in-progress" ||
+                    ticket.status === "progress"
+                ) {
+
+                    selectedVal =
+                        "progress";
+
+                } else if (
+                    ticket.status === "resolved"
+                ) {
+
+                    selectedVal =
+                        "resolved";
+
+                }
+
+
+                select.value =
+                    selectedVal;
+
+                select.dataset.currentStatus =
+                    selectedVal;
+
+
+                select.addEventListener(
+                    "change",
+                    handleStatusChange
+                );
+
+                actionCell.appendChild(
+                    select
+                );
+
+
+                // Append cells to row
+                row.appendChild(idCell);
+                row.appendChild(employeeCell);
+                row.appendChild(issueCell);
+                row.appendChild(priorityCell);
+                row.appendChild(statusCell);
+                row.appendChild(actionCell);
+
+                tableBody.appendChild(row);
+
+            });
+
+
+            // Update card counters
+            updateCounts();
+
+        } catch (error) {
+
+            console.error(
+                "Error loading assigned tickets:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // Initial fetch of assigned tickets
+    loadAssignedTickets();
+
+
+    // ======================================================================
+    // 6. SUMMARY CARD CLICK FILTERING
+    // ======================================================================
 
     for (
-        var c = 0;
+        let c = 0;
         c < summaryCards.length;
         c++
     ) {
@@ -676,7 +790,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "click",
                 function () {
 
-                    var filterType =
+                    const filterType =
                         card.getAttribute(
                             "data-filter"
                         );
@@ -698,7 +812,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // Show all button
     if (resetFilterBtn) {
 
         resetFilterBtn.addEventListener(
@@ -717,283 +830,125 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // ----------------------------------------------------------------------
-    // QUICK STATUS UPDATE
-    // ----------------------------------------------------------------------
+    // ======================================================================
+    // 7. SHIFT NOTES (LOCAL STORAGE PERSISTENCE)
+    // ======================================================================
 
-    var statusSelects =
-        document.querySelectorAll(
-            ".quick-status-select"
-        );
+    const SHIFT_NOTES_KEY =
+        "technicianShiftNotes";
 
 
-    for (
-        var s = 0;
-        s < statusSelects.length;
-        s++
-    ) {
+    function getSavedNotes() {
 
-        statusSelects[s].addEventListener(
-            "change",
-            function (event) {
+        const saved =
+            localStorage.getItem(
+                SHIFT_NOTES_KEY
+            );
 
-                var newStatus =
-                    event.target.value;
 
-                var row =
-                    event.target.closest(
-                        "tr"
-                    );
+        if (!saved) {
 
-                var ticketIdElement =
-                    row.querySelector(
-                        ".ticket-link"
-                    );
+            return [];
 
-                var ticketId =
-                    ticketIdElement
-                        ? ticketIdElement
-                            .textContent
-                            .trim()
-                        : "Ticket";
+        }
 
-                var statusBadge =
-                    row.querySelector(
-                        ".status"
-                    );
 
+        try {
 
-                if (
-                    newStatus === "open"
-                ) {
+            return JSON.parse(saved);
 
-                    statusBadge.textContent =
-                        "Open";
+        } catch {
 
-                    statusBadge.className =
-                        "status open";
+            return [];
 
-                } else if (
-                    newStatus === "progress"
-                ) {
-
-                    statusBadge.textContent =
-                        "In Progress";
-
-                    statusBadge.className =
-                        "status progress";
-
-                } else if (
-                    newStatus === "resolved"
-                ) {
-
-                    statusBadge.textContent =
-                        "Resolved";
-
-                    statusBadge.className =
-                        "status resolved";
-
-                }
-
-
-                // Save status change for localStorage tickets
-                var localTicketId =
-                    row.dataset.localTicketId;
-
-
-                if (localTicketId) {
-
-                    var savedTickets =
-                        getSavedTickets();
-
-
-                    for (
-                        var i = 0;
-                        i < savedTickets.length;
-                        i++
-                    ) {
-
-                        if (
-                            savedTickets[i].id ===
-                            localTicketId
-                        ) {
-
-                            if (
-                                newStatus ===
-                                "progress"
-                            ) {
-
-                                savedTickets[i].status =
-                                    "in-progress";
-
-                                savedTickets[i].statusText =
-                                    "In Progress";
-
-                            } else if (
-                                newStatus ===
-                                "resolved"
-                            ) {
-
-                                savedTickets[i].status =
-                                    "resolved";
-
-                                savedTickets[i].statusText =
-                                    "Resolved";
-
-                            } else {
-
-                                savedTickets[i].status =
-                                    "open";
-
-                                savedTickets[i].statusText =
-                                    "Open";
-
-                            }
-
-
-                            break;
-
-                        }
-
-                    }
-
-
-                    saveTickets(
-                        savedTickets
-                    );
-
-                }
-
-
-                updateCounts();
-
-
-                if (
-                    currentFilter !==
-                    "all"
-                ) {
-
-                    filterTableByStatus(
-                        currentFilter
-                    );
-
-                }
-
-
-                if (updateToast) {
-
-                    var statusNames = {
-
-                        open:
-                            "Open",
-
-                        progress:
-                            "In Progress",
-
-                        resolved:
-                            "Resolved"
-
-                    };
-
-
-                    updateToast.textContent =
-                        ticketId +
-                        " status updated to " +
-                        (
-                            statusNames[
-                                newStatus
-                            ] ||
-                            newStatus
-                        ) +
-                        ".";
-
-
-                    updateToast.style.display =
-                        "block";
-
-
-                    setTimeout(
-                        function () {
-
-                            updateToast.style.display =
-                                "none";
-
-                        },
-                        3000
-                    );
-
-                }
-
-            }
-        );
+        }
 
     }
 
 
-    // ----------------------------------------------------------------------
-    // SHIFT HANDOVER NOTES
-    // ----------------------------------------------------------------------
+    function renderNotes() {
 
-    if (
-        saveNoteBtn &&
-        noteInput &&
-        noteList
-    ) {
+        if (!noteList) {
+
+            return;
+
+        }
+
+
+        const notes =
+            getSavedNotes();
+
+        noteList.innerHTML =
+            "";
+
+
+        notes.forEach(function (noteText) {
+
+            const li =
+                document.createElement("li");
+
+            li.textContent =
+                noteText;
+
+            li.style.marginBottom =
+                "4px";
+
+            noteList.appendChild(
+                li
+            );
+
+        });
+
+    }
+
+
+    if (saveNoteBtn && noteInput) {
 
         saveNoteBtn.addEventListener(
             "click",
             function () {
 
-                var noteText =
+                const text =
                     noteInput.value.trim();
 
 
-                if (noteText === "") {
-
-                    alert(
-                        "Please enter a note before saving."
-                    );
+                if (text === "") {
 
                     return;
 
                 }
 
 
-                var newNoteItem =
-                    document.createElement(
-                        "li"
-                    );
+                const notes =
+                    getSavedNotes();
 
-                var now =
+                const now =
                     new Date();
 
-                var timeString =
+                const timeStamp =
                     now.toLocaleTimeString(
                         [],
                         {
-                            hour:
-                                "2-digit",
-
-                            minute:
-                                "2-digit"
+                            hour: "2-digit",
+                            minute: "2-digit"
                         }
                     );
 
 
-                newNoteItem.innerHTML =
-                    "<strong>" +
-                    timeString +
-                    ":</strong> " +
-                    noteText;
-
-
-                noteList.appendChild(
-                    newNoteItem
+                notes.unshift(
+                    "[" + timeStamp + "] " + text
                 );
 
 
+                localStorage.setItem(
+                    SHIFT_NOTES_KEY,
+                    JSON.stringify(notes)
+                );
+
                 noteInput.value =
                     "";
+
+                renderNotes();
 
             }
         );
@@ -1001,8 +956,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // Initial dashboard count
-    updateCounts();
+    // Initial notes render
+    renderNotes();
 
 });
-
