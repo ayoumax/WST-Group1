@@ -82,22 +82,20 @@ document.addEventListener("DOMContentLoaded", function () {
     // ======================================================================
 
     function getStatusClass(status) {
-
-        if (status === "in-progress" || status === "progress") {
-
-            return "progress";
-
-        }
-
-        if (status === "resolved") {
-
-            return "resolved";
-
-        }
-
-        return "open";
-
+    if (status === "in-progress" || status === "progress") {
+        return "progress";
     }
+
+    if (status === "resolved") {
+        return "resolved";
+    }
+
+    if (status === "closed") {
+        return "closed";
+    }
+
+    return "open";
+}
 
 
     // ======================================================================
@@ -695,37 +693,16 @@ document.addEventListener("DOMContentLoaded", function () {
                     <option value="open">Open</option>
                     <option value="progress">In Progress</option>
                     <option value="resolved">Resolved</option>
+                    <option value="closed">Closed</option>
                 `;
 
 
                 // Set selected value
-                let selectedVal =
-                    "open";
-
-
-                if (
-                    ticket.status === "in-progress" ||
-                    ticket.status === "progress"
-                ) {
-
-                    selectedVal =
-                        "progress";
-
-                } else if (
-                    ticket.status === "resolved"
-                ) {
-
-                    selectedVal =
-                        "resolved";
-
-                }
-
-
                 select.value =
-                    selectedVal;
-
-                select.dataset.currentStatus =
-                    selectedVal;
+                    ticket.status === "in-progress"
+                        ? "progress"
+                        : ticket.status;
+                select.dataset.currentStatus = select.value;
 
 
                 select.addEventListener(
@@ -830,133 +807,110 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // ======================================================================
-    // 7. SHIFT NOTES (LOCAL STORAGE PERSISTENCE)
-    // ======================================================================
+// ======================================================================
+// 7. SHIFT NOTES — BACKEND STORAGE
+// ======================================================================
 
-    const SHIFT_NOTES_KEY =
-        "technicianShiftNotes";
+function showNotesMessage(message) {
+            noteList.replaceChildren();
 
-
-    function getSavedNotes() {
-
-        const saved =
-            localStorage.getItem(
-                SHIFT_NOTES_KEY
-            );
-
-
-        if (!saved) {
-
-            return [];
-
+            const item = document.createElement("li");
+            item.textContent = message;
+            noteList.appendChild(item);
         }
 
+        async function notesRequest(options = {}) {
+            const response = await fetch("/shift-notes", {
+                cache: "no-store",
+                ...options
+            });
 
-        try {
+            if (response.status === 401) {
+                window.location.replace("/index.html");
+                throw new Error("Please log in again.");
+            }
 
-            return JSON.parse(saved);
+            const data = await response.json();
 
-        } catch {
+            if (!response.ok) {
+                throw new Error(data.message || "Unable to access shift notes.");
+            }
 
-            return [];
-
+            return data;
         }
 
-    }
+        async function loadNotes() {
+            if (!noteList) {
+                return;
+            }
 
+            showNotesMessage("Loading shift notes...");
 
-    function renderNotes() {
+            try {
+                const data = await notesRequest();
 
-        if (!noteList) {
-
-            return;
-
-        }
-
-
-        const notes =
-            getSavedNotes();
-
-        noteList.innerHTML =
-            "";
-
-
-        notes.forEach(function (noteText) {
-
-            const li =
-                document.createElement("li");
-
-            li.textContent =
-                noteText;
-
-            li.style.marginBottom =
-                "4px";
-
-            noteList.appendChild(
-                li
-            );
-
-        });
-
-    }
-
-
-    if (saveNoteBtn && noteInput) {
-
-        saveNoteBtn.addEventListener(
-            "click",
-            function () {
-
-                const text =
-                    noteInput.value.trim();
-
-
-                if (text === "") {
-
-                    return;
-
+                if (!Array.isArray(data.notes)) {
+                    throw new Error("Invalid shift notes received.");
                 }
 
+                noteList.replaceChildren();
 
-                const notes =
-                    getSavedNotes();
+                if (data.notes.length === 0) {
+                    showNotesMessage("No shift notes yet.");
+                    return;
+                }
 
-                const now =
-                    new Date();
+                data.notes.forEach(function (note) {
+                    const item = document.createElement("li");
+                    const timestamp = new Date(note.createdAt).toLocaleString();
 
-                const timeStamp =
-                    now.toLocaleTimeString(
-                        [],
-                        {
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        }
-                    );
+                    item.textContent =
+                        "[" + timestamp + "] " +
+                        note.sender + ": " + note.text;
 
-
-                notes.unshift(
-                    "[" + timeStamp + "] " + text
-                );
-
-
-                localStorage.setItem(
-                    SHIFT_NOTES_KEY,
-                    JSON.stringify(notes)
-                );
-
-                noteInput.value =
-                    "";
-
-                renderNotes();
-
+                    item.style.marginBottom = "4px";
+                    noteList.appendChild(item);
+                });
+            } catch (error) {
+                showNotesMessage(error.message);
             }
-        );
+        }
 
-    }
+        if (saveNoteBtn && noteInput && noteList) {
+            noteInput.maxLength = 1000;
 
+            saveNoteBtn.addEventListener("click", async function () {
+                const text = noteInput.value.trim();
 
-    // Initial notes render
-    renderNotes();
+                if (text === "") {
+                    showToast("Enter a shift note first.");
+                    return;
+                }
+
+                saveNoteBtn.disabled = true;
+                noteInput.disabled = true;
+
+                try {
+                    await notesRequest({
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ text })
+                    });
+
+                    noteInput.value = "";
+                    showToast("Shift note saved.");
+                    await loadNotes();
+                } catch (error) {
+                    alert(error.message);
+                } finally {
+                    saveNoteBtn.disabled = false;
+                    noteInput.disabled = false;
+                }
+            });
+        }
+
+        loadNotes();
 
 });

@@ -171,14 +171,13 @@ function canViewTicket(
         user.role === "technician"
     ) {
 
+        const assignedTechnician =
+    ticket.assignedTech ?? ticket.technician;
+
         return (
-
-            ticket.assignedTech ===
-                user.name ||
-
-            ticket.technician ===
-                user.name
-
+            typeof assignedTechnician === "string" &&
+            assignedTechnician.trim() !== "" &&
+            assignedTechnician.trim() === user.name
         );
 
     }
@@ -753,13 +752,9 @@ app.get(
                     const ticket =
                         tickets[i];
 
-                    const tech =
-                        (ticket.assignedTech || ticket.technician || "").trim();
 
 
-                    if (
-                        tech === user.name
-                    ) {
+                    if (canViewTicket(user, ticket)) {
 
                         assigned++;
 
@@ -1772,10 +1767,7 @@ app.patch(
                 }
 
 
-                const isAssigned = (
-                    ticket.assignedTech === req.session.user.name ||
-                    ticket.technician === req.session.user.name
-                );
+                const isAssigned = canViewTicket(req.session.user, ticket);
 
 
                 if (!isAssigned) {
@@ -1834,19 +1826,19 @@ app.patch(
                     ticket.statusText =
                         "Resolved";
 
+                } else if (normalizedStatus === "closed") {
+
+                    ticket.status = "closed";
+                    ticket.statusText = "Closed";
+
                 } else {
 
-                    return res
-                        .status(400)
-                        .json({
-
-                            message:
-                                "Invalid status. Allowed values: open, in-progress, resolved."
-
-                        });
+                    return res.status(400).json({
+                        message:
+                            "Invalid status. Allowed values: open, in-progress, resolved, closed."
+                    });
 
                 }
-
             }
 
 
@@ -1878,6 +1870,29 @@ app.patch(
 
                 const techName =
                     newTech.trim();
+
+                    if (techName !== "Unassigned") {
+                        const users = JSON.parse(
+                            fs.readFileSync(usersPath, "utf8")
+                        );
+
+                        if (!Array.isArray(users)) {
+                            throw new Error("users.json must contain an array.");
+                        }
+
+                        const matchingTechnicians = users.filter(function (user) {
+                            return (
+                                user.role === "technician" &&
+                                user.name === techName
+                            );
+                        });
+
+                        if (matchingTechnicians.length !== 1) {
+                            return res.status(400).json({
+                                message: "Select a valid technician account."
+                            });
+                        }
+                    }
 
                 ticket.assignedTech =
                     techName;
@@ -1933,6 +1948,123 @@ app.patch(
     }
 );
 
+// =========================================================
+// SHARED TECHNICIAN SHIFT NOTES
+// =========================================================
+
+const shiftNotesPath = path.join(__dirname, "shift-notes.json");
+
+        function readShiftNotes() {
+            try {
+                const notes = JSON.parse(
+                    fs.readFileSync(shiftNotesPath, "utf8")
+                );
+
+                if (!Array.isArray(notes)) {
+                    throw new Error("shift-notes.json must contain an array.");
+                }
+
+                return notes;
+            } catch (error) {
+                if (error.code === "ENOENT") {
+                    return [];
+                }
+
+                throw error;
+            }
+        }
+
+        // All authenticated technicians can read shared handover notes.
+        app.get(
+            "/shift-notes",
+            requireRole("technician"),
+            function (req, res, next) {
+                try {
+                    res.set("Cache-Control", "no-store");
+                    res.json({ notes: readShiftNotes() });
+                } catch (error) {
+                    next(error);
+                }
+            }
+        );
+
+        // Sender identity and timestamps come from the server.
+        app.post(
+            "/shift-notes",
+            requireRole("technician"),
+            function (req, res, next) {
+                try {
+                    const text = req.body?.text;
+
+                    if (
+                        typeof text !== "string" ||
+                        text.trim() === "" ||
+                        text.trim().length > 1000
+                    ) {
+                        return res.status(400).json({
+                            message: "Enter a shift note between 1 and 1,000 characters."
+                        });
+                    }
+
+                    const notes = readShiftNotes();
+
+                    const note = {
+                        id: crypto.randomUUID(),
+                        senderId: req.session.user.id,
+                        sender: req.session.user.name,
+                        text: text.trim(),
+                        createdAt: new Date().toISOString()
+                    };
+
+                    notes.unshift(note);
+
+                    fs.writeFileSync(
+                        shiftNotesPath,
+                        JSON.stringify(notes, null, 2),
+                        "utf8"
+                    );
+
+                    res.status(201).json({
+                        message: "Shift note saved.",
+                        note
+                    });
+                } catch (error) {
+                    next(error);
+                }
+            }
+        );
+
+        // =========================================================
+        // LIST TECHNICIAN ACCOUNTS — ADMIN ONLY
+        // =========================================================
+
+        app.get(
+            "/technicians",
+            requireRole("admin"),
+            function (req, res, next) {
+                try {
+                    const users = JSON.parse(
+                        fs.readFileSync(usersPath, "utf8")
+                    );
+
+                    if (!Array.isArray(users)) {
+                        throw new Error("users.json must contain an array.");
+                    }
+
+                    const technicians = users
+                        .filter(user => user.role === "technician")
+                        .map(user => ({
+                            id: user.id,
+                            name: user.name
+                        }));
+
+                    res.set("Cache-Control", "no-store");
+                    res.json({ technicians });
+                } catch (error) {
+                    next(error);
+                }
+            }
+        );
 
 // =========================================================
 // PROTECTED PAGES

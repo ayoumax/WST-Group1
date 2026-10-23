@@ -18,7 +18,6 @@
         <aside class="sidebar">
 
             <div class="sidebar-brand">
-
                 <div class="sidebar-logo">
 
                     <img
@@ -26,27 +25,18 @@
                         alt="MotorPH Logo">
 
                     <div class="sidebar-title">
-
                         <h1>MotorPH</h1>
-
                         <p>IT Support</p>
-
                         <span class="portal-label">
                             Administrator Portal
                         </span>
-
                     </div>
 
                 </div>
-
             </div>
 
-
             <nav class="sidebar-nav">
-
-                <a
-                    class="active"
-                    href="admin-dashboard.html">
+                <a class="active" href="admin-dashboard.html">
                     Dashboard
                 </a>
 
@@ -57,42 +47,33 @@
                 <a href="assign-technician.html">
                     Assign Technician
                 </a>
-
             </nav>
 
-
-            <a
-                class="logout-button"
-                href="index.html">
+            <a class="logout-button" href="index.html">
                 Logout
             </a>
 
         </aside>
 
-
         <!-- MAIN CONTENT -->
         <main class="dashboard-content">
 
-            <!-- LIVE ANNOUNCEMENT CONTAINER -->
-            <div id="admin-announcement-container"></div>
+            <div
+                id="admin-announcement-container"
+                aria-live="polite">
+            </div>
 
-            <!-- HEADER -->
             <header class="dashboard-header">
-
                 <div>
-
                     <h2>Administrator Dashboard</h2>
-
                     <p>
-                        Overview of IT support activity, ticket status, and technician workload.
+                        Overview of IT support activity, ticket status,
+                        and technician workload.
                     </p>
-
                 </div>
-
             </header>
 
-
-            <!-- MAIN SUMMARY -->
+            <!-- LIVE TICKET SUMMARY -->
             <section class="admin-summary-cards">
 
                 <article
@@ -100,7 +81,7 @@
                     data-metric="total"
                     title="Click for Total Tickets breakdown">
                     <p>Total Tickets</p>
-                    <strong>26</strong>
+                    <strong>—</strong>
                     <small>All support requests</small>
                 </article>
 
@@ -109,7 +90,7 @@
                     data-metric="open"
                     title="Click for Open Tickets breakdown">
                     <p>Open</p>
-                    <strong>5</strong>
+                    <strong>—</strong>
                     <small>Waiting for action</small>
                 </article>
 
@@ -118,7 +99,7 @@
                     data-metric="progress"
                     title="Click for In Progress breakdown">
                     <p>In Progress</p>
-                    <strong>3</strong>
+                    <strong>—</strong>
                     <small>Currently being handled</small>
                 </article>
 
@@ -127,8 +108,8 @@
                     data-metric="resolved"
                     title="Click for Resolved breakdown">
                     <p>Resolved</p>
-                    <strong>10</strong>
-                    <small>Successfully completed</small>
+                    <strong>—</strong>
+                    <small>Marked as resolved</small>
                 </article>
 
                 <article
@@ -136,7 +117,7 @@
                     data-metric="unassigned"
                     title="Click for Unassigned breakdown">
                     <p>Unassigned</p>
-                    <strong>4</strong>
+                    <strong>—</strong>
                     <small>Needs technician</small>
                 </article>
 
@@ -145,8 +126,8 @@
                     data-metric="closed"
                     title="Click for Closed breakdown">
                     <p>Closed</p>
-                    <strong>8</strong>
-                    <small>Completed and closed</small>
+                    <strong>—</strong>
+                    <small>Marked as closed</small>
                 </article>
 
             </section>
@@ -155,10 +136,12 @@
             <div
                 id="admin-metric-detail"
                 style="display: none; justify-content: space-between; align-items: center; background-color: #E8F1FF; border: 1px solid #B8D5FC; padding: 10px 14px; border-radius: 6px; margin-bottom: 20px; font-size: 13px;">
+
                 <span
                     id="admin-metric-text"
                     style="font-weight: bold; color: var(--sidebar-active);">
                 </span>
+
                 <button
                     type="button"
                     id="admin-clear-metric"
@@ -166,197 +149,97 @@
                     style="padding: 4px 10px; font-size: 12px; cursor: pointer;">
                     Dismiss
                 </button>
+
             </div>
 
-
-            <!-- MIDDLE OVERVIEW -->
+            <!-- PRIORITY AND WORKLOAD -->
             <section class="admin-overview-grid">
 
-                <!-- PRIORITY OVERVIEW -->
                 <article class="dashboard-card admin-overview-card">
 
                     <div class="admin-card-heading">
-
                         <div>
                             <h3>Priority Overview</h3>
-
                             <p>
                                 Current tickets grouped by priority level.
                             </p>
                         </div>
-
                     </div>
-
 
                     <div class="priority-overview-list">
 
                         <div class="overview-row">
-
                             <div class="overview-label">
-
-                                <span class="priority urgent">
-                                    Urgent
-                                </span>
-
+                                <span class="priority urgent">Urgent</span>
                             </div>
-
-                            <strong>2</strong>
-
+                            <strong>—</strong>
                         </div>
 
-
                         <div class="overview-row">
-
                             <div class="overview-label">
-
-                                <span class="priority high">
-                                    High
-                                </span>
-
+                                <span class="priority high">High</span>
                             </div>
-
-                            <strong>5</strong>
-
+                            <strong>—</strong>
                         </div>
 
-
                         <div class="overview-row">
-
                             <div class="overview-label">
-
-                                <span class="priority medium">
-                                    Medium
-                                </span>
-
+                                <span class="priority medium">Medium</span>
                             </div>
-
-                            <strong>8</strong>
-
+                            <strong>—</strong>
                         </div>
 
-
                         <div class="overview-row">
-
                             <div class="overview-label">
-
-                                <span class="priority low">
-                                    Low
-                                </span>
-
+                                <span class="priority low">Low</span>
                             </div>
-
-                            <strong>11</strong>
-
+                            <strong>—</strong>
                         </div>
 
                     </div>
 
                 </article>
 
-
-                <!-- TECHNICIAN WORKLOAD -->
                 <article class="dashboard-card admin-overview-card">
 
                     <div class="admin-card-heading">
-
                         <div>
                             <h3>Technician Workload</h3>
-
                             <p>
-                                Current number of tickets assigned to each technician.
+                                Current number of tickets assigned
+                                to each technician.
                             </p>
                         </div>
-
                     </div>
 
-
                     <div class="technician-list">
-
-                        <div class="technician-row">
-
-                            <div>
-
-                                <strong>Mark Santos</strong>
-
-                                <span>
-                                    IT Technician
-                                </span>
-
-                            </div>
-
-                            <div class="workload-count">
-                                4 Tickets
-                            </div>
-
-                        </div>
-
-
-                        <div class="technician-row">
-
-                            <div>
-
-                                <strong>Ana Reyes</strong>
-
-                                <span>
-                                    IT Technician
-                                </span>
-
-                            </div>
-
-                            <div class="workload-count">
-                                3 Tickets
-                            </div>
-
-                        </div>
-
-
-                        <div class="technician-row">
-
-                            <div>
-
-                                <strong>IT Support Team</strong>
-
-                                <span>
-                                    Shared Queue
-                                </span>
-
-                            </div>
-
-                            <div class="workload-count">
-                                5 Tickets
-                            </div>
-
-                        </div>
-
+                        <p>Loading technician workload...</p>
                     </div>
 
                 </article>
 
             </section>
 
-
-            <!-- RECENT ACTIVITY + QUICK ACTIONS -->
+            <!-- ACTIVITY AND QUICK ACTIONS -->
             <section class="admin-bottom-grid">
 
-                <!-- RECENT ACTIVITY -->
                 <article class="dashboard-card">
 
                     <div class="admin-card-heading">
-
                         <div>
-
                             <h3>Recent Activity</h3>
-
                             <p>
                                 Latest updates from the IT support system.
                             </p>
-
                         </div>
-
                     </div>
 
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-                        <div class="activity-filter-bar" style="display: flex; gap: 6px; flex-wrap: wrap;">
+
+                        <div
+                            class="activity-filter-bar"
+                            style="display: flex; gap: 6px; flex-wrap: wrap;">
+
                             <button
                                 type="button"
                                 class="activity-filter-btn"
@@ -364,6 +247,7 @@
                                 style="padding: 5px 11px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border); background-color: var(--sidebar-active); color: #FFFFFF; font-weight: bold; cursor: pointer;">
                                 All
                             </button>
+
                             <button
                                 type="button"
                                 class="activity-filter-btn"
@@ -371,6 +255,7 @@
                                 style="padding: 5px 11px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border); background-color: var(--card-bg); color: var(--text-dark); cursor: pointer;">
                                 New Tickets
                             </button>
+
                             <button
                                 type="button"
                                 class="activity-filter-btn"
@@ -378,6 +263,7 @@
                                 style="padding: 5px 11px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border); background-color: var(--card-bg); color: var(--text-dark); cursor: pointer;">
                                 Assignments
                             </button>
+
                             <button
                                 type="button"
                                 class="activity-filter-btn"
@@ -385,218 +271,75 @@
                                 style="padding: 5px 11px; font-size: 12px; border-radius: 5px; border: 1px solid var(--card-border); background-color: var(--card-bg); color: var(--text-dark); cursor: pointer;">
                                 Resolved / Closed
                             </button>
+
                         </div>
 
                         <small
                             id="activity-filter-count"
                             style="font-size: 12px; color: var(--text-muted);">
-                            Showing 4 of 4 activities
+                            Loading...
                         </small>
+
                     </div>
 
-
                     <div class="activity-list">
-
-                        <div
-                            class="activity-item"
-                            data-type="ticket">
-
-                            <div class="activity-icon">
-                                +
-                            </div>
-
-                            <div>
-
-                                <strong>
-                                    New ticket TCK-1004 created
-                                </strong>
-
-                                <p>
-                                    R. Lim submitted an office printer issue.
-                                </p>
-
-                                <small>
-                                    Today
-                                </small>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="activity-item"
-                            data-type="assigned">
-
-                            <div class="activity-icon">
-                                →
-                            </div>
-
-                            <div>
-
-                                <strong>
-                                    TCK-1002 assigned to Mark Santos
-                                </strong>
-
-                                <p>
-                                    Laptop boot issue was assigned for technician review.
-                                </p>
-
-                                <small>
-                                    Today
-                                </small>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="activity-item"
-                            data-type="resolved">
-
-                            <div class="activity-icon">
-                                ✓
-                            </div>
-
-                            <div>
-
-                                <strong>
-                                    TCK-1003 marked as Resolved
-                                </strong>
-
-                                <p>
-                                    Shared drive access issue has been completed.
-                                </p>
-
-                                <small>
-                                    Yesterday
-                                </small>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="activity-item"
-                            data-type="resolved">
-
-                            <div class="activity-icon">
-                                ✓
-                            </div>
-
-                            <div>
-
-                                <strong>
-                                    TCK-1007 closed
-                                </strong>
-
-                                <p>
-                                    Monitor support request was completed and closed.
-                                </p>
-
-                                <small>
-                                    Yesterday
-                                </small>
-
-                            </div>
-
-                        </div>
-
+                        <p>Loading ticket updates...</p>
                     </div>
 
                 </article>
 
-
-                <!-- QUICK ACTIONS -->
                 <aside class="dashboard-card admin-quick-actions">
 
                     <div class="admin-card-heading">
-
                         <div>
-
                             <h3>Quick Actions</h3>
-
-                            <p>
-                                Common administrator tasks.
-                            </p>
-
+                            <p>Common administrator tasks.</p>
                         </div>
-
                     </div>
-
 
                     <a
                         class="admin-action-link"
                         href="admin-tickets.html">
 
                         <div>
-
-                            <strong>
-                                View All Tickets
-                            </strong>
-
-                            <span>
-                                Review all support requests
-                            </span>
-
+                            <strong>View All Tickets</strong>
+                            <span>Review all support requests</span>
                         </div>
 
-                        <span class="action-arrow">
-                            →
-                        </span>
-
+                        <span class="action-arrow">→</span>
                     </a>
-
 
                     <a
                         class="admin-action-link"
                         href="assign-technician.html">
 
                         <div>
-
-                            <strong>
-                                Assign Technician
-                            </strong>
-
-                            <span>
-                                Assign pending tickets
-                            </span>
-
+                            <strong>Assign Technician</strong>
+                            <span>Assign pending tickets</span>
                         </div>
 
-                        <span class="action-arrow">
-                            →
-                        </span>
-
+                        <span class="action-arrow">→</span>
                     </a>
 
-
                     <div class="admin-queue-summary">
-
-                        <p>
-                            Tickets requiring attention
-                        </p>
-
-                        <strong>
-                            4 Unassigned
-                        </strong>
-
+                        <p>Tickets requiring attention</p>
+                        <strong>—</strong>
                     </div>
 
                     <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 18px 0 14px 0;">
 
                     <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--text-dark);">
-                        Broadcast Announcement
+                        Announcement Preview
                     </h4>
+
                     <p style="margin: 0 0 10px 0; font-size: 12px; color: var(--text-muted);">
-                        Post a live notice to all portal dashboards.
+                        Preview a notice on this page.
                     </p>
 
                     <input
                         type="text"
                         id="system-notice-input"
+                        aria-label="Announcement message"
                         placeholder="Type notice message..."
                         style="width: 100%; box-sizing: border-box; padding: 8px; font-size: 12px; border: 1px solid var(--card-border); border-radius: 5px; margin-bottom: 8px;">
 
@@ -613,7 +356,7 @@
                         id="post-notice-btn"
                         class="primary-button"
                         style="width: 100%; font-size: 12px; padding: 8px; cursor: pointer;">
-                        Post Announcement
+                        Preview Announcement
                     </button>
 
                 </aside>
@@ -626,6 +369,7 @@
 
     <script src="admin-dashboard.js"></script>
     <script src="logout.js"></script>
+
 </body>
 
 </html>

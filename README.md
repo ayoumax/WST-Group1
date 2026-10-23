@@ -1,521 +1,190 @@
 # MotorPH IT Support Ticketing System
 
-A browser-based IT support ticketing system for MotorPH employees, IT technicians, and administrators.
+A web application for MotorPH employees, IT technicians, and administrators. Employees submit support requests, administrators assign technicians, and technicians update ticket statuses and respond to employees.
 
 ## Group Information
 
-**Group:** WST - Group 1
+**Group:** WST – Group 1
 
 **Members:**
+
 - Irisha Bea Montaño
 - Cris Gerald Tan
 - Leonardo Arellano
 - Macky Arriesgado
 
----
+## Technologies
 
-# Quick Start Guide
+- HTML5, CSS3, and JavaScript
+- Node.js and Express
+- express-session for session authentication
+- bcryptjs for password hashing
+- Server-side JSON files for persistence
+- Git and GitHub
 
-## 1. Open the Project
+## Setup and Startup
 
-Open the project folder in Visual Studio Code.
+Install Node.js and open the project folder containing `package.json` in Visual Studio Code.
 
-Then open:
+Run these commands individually in the terminal:
 
-`index.html`
+```cmd
+npm.cmd install
+```
 
-Right-click the file and select:
+```cmd
+node seed-users.js
+```
 
-`Open with Live Server`
+```cmd
+npm.cmd start
+```
 
-The browser should open an address similar to:
+Open:
 
-`http://127.0.0.1:5500/index.html`
+http://localhost:3000
 
-or:
+Keep the server terminal running while using the application. Access the website through the Node.js server. Live Server does not provide the required API or authentication routes.
 
-`http://127.0.0.1:5501/index.html`
+The seed script creates missing demo accounts while preserving existing accounts and password hashes. When updating an existing users file, it creates a backup.
 
-> Important: Continue using the same Live Server address while testing because browser localStorage is connected to the browser origin.
+## Demo Accounts
 
----
+These credentials are for classroom testing only.
 
-# How to Log In
+| Account | Username | Password | Role |
+| --- | --- | --- | --- |
+| Demo Employee | employee | Employee123! | Employee |
+| Mark Santos | technician | Technician123! | Technician |
+| Ana Reyes | ana | Ana123! | Technician |
+| Demo Administrator | admin | Admin123! | Administrator |
 
-The current version is a frontend prototype and does not use a real authentication database.
+Existing accounts retain their existing passwords when the seed script runs.
 
-Enter any non-empty username and password.
+Mark and Ana are separate technicians. A ticket assigned to Ana is not accessible to Mark, and vice versa.
 
-Example:
+## Features
 
-Username:
+### Employee
 
-`testuser`
+- Submit IT support tickets with server-generated ticket IDs.
+- View their own tickets and ticket details.
+- Search and filter their ticket list.
+- View dashboard counts calculated from backend data.
+- Send comments and read replies from the assigned technician.
+- Access troubleshooting help.
 
-Password:
+### Technician
 
-`test123`
+- View only tickets assigned to their account.
+- Search and filter assigned tickets.
+- Update assigned tickets to Open, In Progress, Resolved, or Closed.
+- Read employee comments and send replies.
+- View dashboard counts based on assigned tickets.
+- Save and view shared technician shift handover notes.
 
-Then select the role you want to test:
+### Administrator
 
-- Employee
-- IT Technician
-- Administrator
+- View all tickets.
+- Search and filter the ticket list.
+- View ticket counts, priority totals, and technician workloads.
+- Assign and reassign tickets to technicians loaded from the backend.
+- Assigning an Open ticket to a technician changes it to In Progress.
+- Preview an announcement on the current dashboard page.
 
-The username and password fields are only used to simulate the login interface.
+The announcement preview is temporary. It is not saved or broadcast to other users.
 
----
+## Phase 3: Route Protection and Backend Data
 
-# Recommended Instructor Testing Flow
+Protected ticket endpoints use role guards and ticket access checks.
 
-For the easiest way to test the complete system, follow this order:
+- Unauthenticated protected API requests return `401 Unauthorized`.
+- Technicians can view, update, and message only their assigned tickets.
+- Attempts to access another technician's ticket return `403 Forbidden`.
+- Non-administrators cannot reassign tickets.
+- Invalid technician assignments are rejected.
+- Unauthenticated navigation to protected HTML pages redirects to `index.html` with a `302` response.
+- Authenticated users attempting to open a page outside their permitted role receive `403 Forbidden`.
 
-`Employee → Administrator → IT Technician → Employee`
+Ticket tables, status badges, messages, technician choices, and dashboard counters load through backend API requests. Prototype localStorage code and hardcoded ticket rows have been removed.
 
-This demonstrates the full ticket workflow.
+Search and filtering can operate in the browser on records already retrieved from the backend.
 
----
+Backend communication does not mean automatic real-time updates. Refresh or reload the relevant page to retrieve changes made by another user.
 
-## Step 1: Login as Employee
+## Data Storage
 
-From the login page:
-
-1. Enter any username.
-2. Enter any password.
-3. Click `Employee`.
-
-The Employee Dashboard will open.
-
-Default sample tickets are already included so that the system has visible data even on a new browser.
-
----
-
-## Step 2: Submit a New Ticket
-
-Go to:
-
-`Submit Ticket`
-
-Example test data:
-
-Subject:
-
-`Microsoft Teams not opening`
-
-Category:
-
-`Software`
-
-Priority:
-
-`High`
-
-Department:
-
-`Accounting`
-
-Device / Equipment:
-
-`Laptop`
-
-Problem Description:
-
-`Microsoft Teams closes immediately after opening.`
-
-Click:
-
-`Submit Ticket`
-
-A confirmation message will appear.
-
-On a fresh browser, the first locally submitted ticket will normally be:
-
-`TCK-1004`
-
-The ticket is saved using browser localStorage.
-
----
-
-## Step 3: Check My Tickets
-
-Go to:
-
-`Employee → My Tickets`
-
-The page will show:
-
-- Default sample tickets
-- Newly submitted tickets
-
-Try searching:
-
-`TCK-1004`
-
-You can also filter tickets by status.
-
-Refresh the browser or log out and log back in.
-
-The submitted ticket should still remain because it is stored using localStorage.
-
----
-
-## Step 4: Login as Administrator
-
-Logout and return to the login page.
-
-Enter any username and password, then click:
-
-`Administrator`
-
-Go to:
-
-`All Tickets`
-
-The newly submitted employee ticket should appear together with the default sample tickets.
-
----
-
-## Step 5: Assign a Technician
-
-Go to:
-
-`Administrator → Assign Technician`
-
-Open the Ticket dropdown.
-
-The newly submitted ticket should appear automatically.
-
-Example:
-
-`TCK-1004 - Microsoft Teams not opening`
-
-Select a technician:
-
-- Mark Santos
-- Ana Reyes
-- IT Support Team
-
-Then click:
-
-`Assign Technician`
-
-A confirmation message will appear.
-
-The selected technician is saved in localStorage.
-
-The ticket status will also change to:
-
-`In Progress`
-
----
-
-## Step 6: Login as IT Technician
-
-Logout and return to the login page.
-
-Enter any username and password, then click:
-
-`IT Technician`
-
-Go to:
-
-`Assigned Tickets`
-
-The ticket assigned by the administrator should appear in the list.
-
-Example:
-
-| Ticket ID | Employee | Category | Priority | Status | Assigned To |
-| --- | --- | --- | --- | --- | --- |
-| TCK-1004 | Employee | Software | High | In Progress | Mark Santos |
-
-You can search and filter the assigned ticket list.
-
----
-
-## Step 7: Check the Technician Dashboard
-
-Go to:
-
-`IT Technician → Dashboard`
-
-The assigned ticket should also appear on the Technician Dashboard.
-
-The dashboard counts automatically update.
-
----
-
-## Step 8: Update the Ticket Status
-
-Find the newly assigned ticket.
-
-Use the Quick Action dropdown and change:
-
-`In Progress`
-
-to:
-
-`Resolved`
-
-The status and dashboard counters should update.
-
-The new status is also saved in localStorage.
-
----
-
-## Step 9: Verify the Updated Status as Employee
-
-Logout and login again as:
-
-`Employee`
-
-Go to:
-
-`Dashboard`
-
-or:
-
-`My Tickets`
-
-The same ticket should now show:
-
-`Resolved`
-
-This demonstrates the complete workflow:
-
-`Employee submits ticket → Administrator assigns technician → Technician updates status → Employee sees updated status`
-
----
-
-# Project Overview
-
-The MotorPH IT Support Ticketing System is a frontend browser-based application designed to simulate the basic workflow of an IT support service.
-
-The system allows employees to submit and monitor IT support tickets, administrators to review and assign tickets, and IT technicians to manage assigned tickets and update their status.
-
-The project uses HTML, CSS, JavaScript, and browser localStorage.
-
-A backend server and database are not required for the current project version.
-
----
-
-# Current Features
-
-## Employee
-
-- Employee portal
-- Employee dashboard
-- Submit new IT support tickets
-- Automatically generate ticket IDs
-- Save submitted tickets using browser localStorage
-- View default sample tickets
-- View newly submitted tickets
-- Search tickets by ticket ID or subject
-- Filter tickets by status
-- View ticket status
-- View ticket details
-- Access basic troubleshooting help
-- Dashboard ticket counts automatically update
-
-## IT Technician
-
-- IT Technician portal
-- Technician dashboard
-- View assigned support tickets
-- View tickets assigned by the administrator
-- Search and filter assigned tickets
-- Filter tickets by status
-- Update ticket status
-- Change tickets between:
-  - Open
-  - In Progress
-  - Resolved
-- Updated ticket status is saved using localStorage
-- Dashboard counts automatically update
-- Add shift handover notes
-
-## Administrator
-
-- Administrator portal
-- Administrator dashboard
-- View all support tickets
-- View newly submitted employee tickets
-- Search and filter tickets
-- Monitor ticket status
-- View assigned technicians
-- Assign tickets to:
-  - Mark Santos
-  - Ana Reyes
-  - IT Support Team
-- Assigned technician is saved using localStorage
-- Assigned tickets automatically become In Progress
-- Post dashboard announcements
-- View administrator dashboard activity and ticket information
-
----
-
-# Technologies Used
-
-- HTML5
-- CSS3
-- JavaScript
-- Browser localStorage
-- Visual Studio Code
-- Live Server
-- Git
-- GitHub
-
----
-
-# Default Sample Tickets and Browser Storage
-
-The system uses two types of ticket data.
-
-## Default Sample Tickets
-
-Default sample tickets are included directly in the project so that an instructor opening the system on a new computer can immediately see example data.
-
-These sample tickets do not depend on localStorage.
-
-## Submitted Tickets
-
-Tickets submitted through the Employee portal are saved in:
-
-`localStorage`
-
-This allows submitted tickets to remain available after refreshing the page or logging out and logging back in using the same browser.
-
-### Important Limitation
-
-localStorage is browser-based storage.
-
-This means tickets created on one computer are not automatically transferred to another computer.
-
-For example:
-
-- Tickets created by a student remain in the student's browser.
-- An instructor opening the repository on another computer will see the default sample tickets.
-- Tickets created by the instructor during testing will be stored in the instructor's own browser.
-
-This is expected because the project does not use a server-side database.
-
----
-
-# Current Workflow
-
-## Employee
-
-`Login → Dashboard → Submit Ticket → My Tickets → View Status → Help`
-
-## Administrator
-
-`Login → Administrator Dashboard → All Tickets → Assign Technician`
-
-## IT Technician
-
-`Login → Technician Dashboard → Assigned Tickets → Update Ticket Status`
-
-## Complete Workflow
-
-`Employee submits ticket`
-
-↓
-
-`Ticket saved in localStorage`
-
-↓
-
-`Administrator sees ticket`
-
-↓
-
-`Administrator assigns technician`
-
-↓
-
-`Ticket becomes In Progress`
-
-↓
-
-`Technician sees assigned ticket`
-
-↓
-
-`Technician updates ticket status`
-
-↓
-
-`Employee sees updated status`
-
----
-
-# Project Structure
-
-## HTML Files
-
-- `index.html` - Main login page
-- `employee-dashboard.html` - Employee dashboard
-- `submit-ticket.html` - Employee ticket submission form
-- `my-tickets.html` - Employee ticket list
-- `ticket-detail.html` - Employee ticket details
-- `help.html` - Employee troubleshooting help page
-- `technician-dashboard.html` - IT Technician dashboard
-- `manage-tickets.html` - Technician assigned ticket list
-- `technician-ticket-detail.html` - Technician ticket details
-- `admin-dashboard.html` - Administrator dashboard
-- `admin-tickets.html` - Administrator ticket list
-- `assign-technician.html` - Administrator technician assignment page
-
-## JavaScript Files
-
-- `script.js` - Employee ticket submission, localStorage, employee dashboard, My Tickets, and administrator ticket integration
-- `technician-dashboard.js` - Technician dashboard interactions and ticket status updates
-- `manage-tickets.js` - Assigned ticket loading, searching, and filtering
-- `admin-dashboard.js` - Administrator dashboard interactions
-- `assign-technician.js` - Technician assignment and localStorage updates
-
-## Styling
-
-- `style.css` - Shared styling for the login page and all role portals
-
-## Images
-
-- `images/motorph-logo.png`
-- `images/login-illustration.png`
-
----
-
-# Data Storage
-
-The project currently uses browser localStorage instead of a database.
-
-The main localStorage key used by the system is:
-
-`motorphTickets`
-
-Each submitted ticket can store information such as:
-
-- Ticket ID
-- Subject
-- Category
-- Priority
-- Department
-- Device
-- Problem description
-- Status
-- Submitted date
-- Assigned technician
-
-Example:
-
-```javascript
-{
-    id: "TCK-1004",
-    subject: "Microsoft Teams not opening",
-    category: "software",
-    priority: "high",
-    department: "Accounting",
-    device: "Laptop",
-    status: "in-progress",
-    technician: "Mark Santos"
-}
+The application uses server-side files:
+
+| File | Purpose |
+| --- | --- |
+| `users.json` | Accounts, roles, and hashed passwords |
+| `tickets.json` | Tickets, assignments, statuses, and ticket messages |
+| `shift-notes.json` | Shared technician handover notes |
+
+Saved data remains available after browser refreshes and server restarts because it is stored in files on the server.
+
+Login sessions are held in server memory. Restarting the server requires users to log in again.
+
+Different browsers connected to the same server use the same saved backend data. Separate project copies running on different computers have separate data files.
+
+## Recommended Demonstration
+
+1. Log in as the employee and submit a ticket.
+2. Record the ticket ID shown by the application.
+3. Log out and log in as the administrator.
+4. Assign the ticket to Mark Santos or Ana Reyes.
+5. Log out and log in as the assigned technician, then open the ticket.
+6. Send a reply and update the ticket status to Resolved.
+7. Log out and log in as the employee, then confirm the reply and status.
+8. Send an employee comment.
+9. Log back in as the assigned technician and confirm the employee comment appears. Change the ticket status to Closed and refresh to confirm it persists.
+10. Log out and log in as the other technician. Confirm the ticket does not appear in their assigned list and that directly requesting its details returns `403 Forbidden`.
+
+When demonstrating accounts simultaneously, use separate browser profiles or a normal and private window. Tabs in the same browser profile share the login session.
+
+Refresh or reload the relevant page when checking changes made through another account.
+
+## Manual Verification
+
+| Check | Expected result |
+| --- | --- |
+| Request protected ticket APIs without logging in | 401 |
+| Open a protected dashboard without logging in | 302 redirect to index.html |
+| Technician requests another technician's ticket | 403 |
+| Technician reads or posts messages on another technician's ticket | 403 |
+| Non-administrator attempts reassignment | 403 |
+| Administrator submits an invalid technician assignment | 400 |
+| Employee and assigned technician exchange comments | Messages persist after refresh |
+| Assigned technician changes a ticket to Closed | Closed status persists after refresh |
+
+Ticket IDs and dashboard totals depend on the current server data. Do not assume a particular ticket ID exists on every installation.
+
+## Main Project Files
+
+| File | Purpose |
+| --- | --- |
+| `app.js` | Server, authentication, route protection, and REST endpoints |
+| `seed-users.js` | Creates missing demo accounts |
+| `script.js` | Employee ticket submission and dashboard |
+| `my-tickets.js` | Employee ticket list |
+| `ticket-messages.js` | Employee ticket details and messaging |
+| `technician-dashboard.js` | Technician dashboard, quick status updates, and shift notes |
+| `manage-tickets.js` | Technician assigned ticket list |
+| `technician-ticket-messages.js` | Technician ticket details, statuses, and messaging |
+| `admin-dashboard.js` | Administrator dashboard |
+| `admin-tickets.js` | Administrator ticket list |
+| `assign-technician.js` | Loads assignment choices and submits assignments |
+| `logout.js` | Logout behavior |
+| `style.css` | Shared styling |
+
+## Development Notes
+
+- Run the application through the Express server.
+- Preserve local testing data when preparing code commits.
+- Account backups and local shift notes are excluded through `.gitignore`.
+- Teammates should run `node seed-users.js` after pulling the updated seed script to add any missing demo accounts.
+- Local Phase 3 test tickets and message exchanges are excluded from the Phase 3 code commit. They remain available on the computer where they were created.
+- To demonstrate on another computer, create a ticket and repeat the assignment, messaging, and status update workflow.
+
+This is a classroom demonstration application. JSON file storage and in-memory sessions would need further development for production use.

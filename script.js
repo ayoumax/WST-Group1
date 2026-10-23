@@ -2,32 +2,6 @@ console.log("MotorPH JavaScript connected successfully.");
 
 
 // =========================================================
-// LOCAL STORAGE SETTINGS
-// Existing display pages still use these until GET routes
-// are connected.
-// =========================================================
-
-const STORAGE_KEY = "motorphTickets";
-
-function getSavedTickets() {
-    const savedTickets = localStorage.getItem(STORAGE_KEY);
-
-    if (savedTickets === null) {
-        return [];
-    }
-
-    return JSON.parse(savedTickets);
-}
-
-function saveTickets(tickets) {
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(tickets)
-    );
-}
-
-
-// =========================================================
 // SUBMIT TICKET PAGE
 // =========================================================
 
@@ -214,154 +188,8 @@ if (ticketForm) {
     });
 }
 
-
 // =========================================================
-// MY TICKETS - DISPLAY LOCALLY SAVED TICKETS
-// =========================================================
-
-const ticketTableBody = document.getElementById("ticketTableBody");
-
-if (ticketTableBody) {
-    const savedTickets = getSavedTickets();
-
-    savedTickets.forEach(function (ticket) {
-        const row = document.createElement("tr");
-
-        row.className = "ticket-row";
-        row.dataset.ticketId = ticket.id;
-        row.dataset.subject = ticket.subject;
-        row.dataset.status = ticket.status;
-
-        const idCell = document.createElement("td");
-        idCell.textContent = ticket.id;
-
-        const subjectCell = document.createElement("td");
-        subjectCell.textContent = ticket.subject;
-
-        const categoryCell = document.createElement("td");
-        categoryCell.textContent = ticket.categoryText;
-
-        const priorityCell = document.createElement("td");
-        priorityCell.textContent = ticket.priorityText;
-
-        const statusCell = document.createElement("td");
-        const statusBadge = document.createElement("span");
-
-        if (ticket.status === "in-progress") {
-            statusBadge.className = "status progress";
-            statusBadge.textContent = "In Progress";
-        } else if (ticket.status === "resolved") {
-            statusBadge.className = "status resolved";
-            statusBadge.textContent = "Resolved";
-        } else if (ticket.status === "closed") {
-            statusBadge.className = "status closed";
-            statusBadge.textContent = "Closed";
-        } else {
-            statusBadge.className = "status open";
-            statusBadge.textContent = "Open";
-        }
-
-        statusCell.appendChild(statusBadge);
-
-        const submittedCell = document.createElement("td");
-        submittedCell.textContent = ticket.submitted;
-
-        const actionCell = document.createElement("td");
-        const localLabel = document.createElement("span");
-
-        localLabel.className = "ticket-link";
-        localLabel.textContent = "Saved Ticket";
-
-        actionCell.appendChild(localLabel);
-
-        row.appendChild(idCell);
-        row.appendChild(subjectCell);
-        row.appendChild(categoryCell);
-        row.appendChild(priorityCell);
-        row.appendChild(statusCell);
-        row.appendChild(submittedCell);
-        row.appendChild(actionCell);
-
-        ticketTableBody.appendChild(row);
-    });
-}
-
-
-// =========================================================
-// MY TICKETS SEARCH AND FILTER
-// =========================================================
-
-const ticketFilterForm = document.getElementById("ticketFilterForm");
-
-if (ticketFilterForm) {
-    const ticketSearch = document.getElementById("ticket-search");
-    const statusFilter = document.getElementById("status-filter");
-    const clearFilters = document.getElementById("clearFilters");
-    const filterResult = document.getElementById("filterResult");
-    const noTicketsMessage = document.getElementById("noTicketsMessage");
-
-    function filterEmployeeTickets() {
-        const searchText = ticketSearch.value.trim().toLowerCase();
-        const selectedStatus = statusFilter.value;
-        const ticketRows = document.querySelectorAll(".ticket-row");
-
-        let visibleTickets = 0;
-
-        ticketRows.forEach(function (row) {
-            const ticketId = row.dataset.ticketId.toLowerCase();
-            const subject = row.dataset.subject.toLowerCase();
-            const status = row.dataset.status;
-
-            const matchesSearch =
-                ticketId.includes(searchText) ||
-                subject.includes(searchText);
-
-            const matchesStatus =
-                selectedStatus === "all" ||
-                status === selectedStatus;
-
-            if (matchesSearch && matchesStatus) {
-                row.style.display = "";
-                visibleTickets++;
-            } else {
-                row.style.display = "none";
-            }
-        });
-
-        filterResult.hidden = false;
-        noTicketsMessage.hidden = visibleTickets !== 0;
-
-        if (visibleTickets === 0) {
-            filterResult.textContent = "No matching tickets found.";
-        } else if (visibleTickets === 1) {
-            filterResult.textContent = "1 matching ticket found.";
-        } else {
-            filterResult.textContent =
-                visibleTickets + " matching tickets found.";
-        }
-    }
-
-    ticketFilterForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        filterEmployeeTickets();
-    });
-
-    clearFilters.addEventListener("click", function () {
-        ticketSearch.value = "";
-        statusFilter.value = "all";
-
-        document.querySelectorAll(".ticket-row").forEach(function (row) {
-            row.style.display = "";
-        });
-
-        filterResult.hidden = true;
-        noTicketsMessage.hidden = true;
-    });
-}
-
-
-// =========================================================
-// EMPLOYEE DASHBOARD
+// EMPLOYEE DASHBOARD — LIVE BACKEND DATA
 // =========================================================
 
 const employeeRecentTickets = document.getElementById(
@@ -369,258 +197,124 @@ const employeeRecentTickets = document.getElementById(
 );
 
 if (employeeRecentTickets) {
-    const employeeTotalTickets = document.getElementById(
-        "employeeTotalTickets"
-    );
+    const counters = {
+        total: document.getElementById("employeeTotalTickets"),
+        open: document.getElementById("employeeOpenTickets"),
+        progress: document.getElementById("employeeProgressTickets"),
+        resolved: document.getElementById("employeeResolvedTickets")
+    };
 
-    const employeeOpenTickets = document.getElementById(
-        "employeeOpenTickets"
-    );
+    function showDashboardMessage(message) {
+        employeeRecentTickets.replaceChildren();
 
-    const employeeProgressTickets = document.getElementById(
-        "employeeProgressTickets"
-    );
-
-    const employeeResolvedTickets = document.getElementById(
-        "employeeResolvedTickets"
-    );
-
-    const savedTickets = getSavedTickets();
-
-    // Default sample ticket counts
-    let totalTickets = 3;
-    let openTickets = 1;
-    let progressTickets = 1;
-    let resolvedTickets = 1;
-
-    savedTickets.forEach(function (ticket) {
-        totalTickets++;
-
-        if (ticket.status === "open") {
-            openTickets++;
-        } else if (ticket.status === "in-progress") {
-            progressTickets++;
-        } else if (ticket.status === "resolved") {
-            resolvedTickets++;
-        }
-    });
-
-    employeeTotalTickets.textContent = totalTickets;
-    employeeOpenTickets.textContent = openTickets;
-    employeeProgressTickets.textContent = progressTickets;
-    employeeResolvedTickets.textContent = resolvedTickets;
-
-    savedTickets
-        .slice()
-        .reverse()
-        .forEach(function (ticket) {
-            const row = document.createElement("tr");
-
-            const idCell = document.createElement("td");
-            idCell.textContent = ticket.id;
-
-            const issueCell = document.createElement("td");
-            issueCell.textContent = ticket.subject;
-
-            const categoryCell = document.createElement("td");
-            categoryCell.textContent =
-                ticket.categoryText || ticket.category;
-
-            const priorityCell = document.createElement("td");
-            priorityCell.textContent =
-                ticket.priorityText || ticket.priority;
-
-            const statusCell = document.createElement("td");
-            const statusBadge = document.createElement("span");
-
-            if (ticket.status === "in-progress") {
-                statusBadge.className = "status progress";
-                statusBadge.textContent = "In Progress";
-            } else if (ticket.status === "resolved") {
-                statusBadge.className = "status resolved";
-                statusBadge.textContent = "Resolved";
-            } else if (ticket.status === "closed") {
-                statusBadge.className = "status closed";
-                statusBadge.textContent = "Closed";
-            } else {
-                statusBadge.className = "status open";
-                statusBadge.textContent = "Open";
-            }
-
-            statusCell.appendChild(statusBadge);
-
-            row.appendChild(idCell);
-            row.appendChild(issueCell);
-            row.appendChild(categoryCell);
-            row.appendChild(priorityCell);
-            row.appendChild(statusCell);
-
-            employeeRecentTickets.insertBefore(
-                row,
-                employeeRecentTickets.firstChild
-            );
-        });
-}
-
-
-// =========================================================
-// ADMIN - ALL TICKETS
-// =========================================================
-
-const adminTicketTableBody = document.getElementById(
-    "adminTicketTableBody"
-);
-
-if (adminTicketTableBody) {
-    const savedTickets = getSavedTickets();
-
-    savedTickets.forEach(function (ticket) {
         const row = document.createElement("tr");
+        const cell = document.createElement("td");
 
-        row.className = "admin-ticket-row";
-        row.dataset.ticketId = ticket.id;
-        row.dataset.employee = "Employee";
-        row.dataset.subject = ticket.subject;
-        row.dataset.status = ticket.status;
+        cell.colSpan = 5;
+        cell.textContent = message;
+        row.appendChild(cell);
+        employeeRecentTickets.appendChild(row);
+    }
 
-        const idCell = document.createElement("td");
-        idCell.textContent = ticket.id;
-
-        const employeeCell = document.createElement("td");
-        employeeCell.textContent = "Employee";
-
-        const departmentCell = document.createElement("td");
-        departmentCell.textContent =
-            ticket.department || "Not provided";
-
-        const issueCell = document.createElement("td");
-        issueCell.textContent = ticket.subject;
-
-        const priorityCell = document.createElement("td");
-        const priorityBadge = document.createElement("span");
-
-        priorityBadge.className = "priority " + ticket.priority;
-        priorityBadge.textContent =
-            ticket.priorityText || ticket.priority;
-
-        priorityCell.appendChild(priorityBadge);
-
-        const statusCell = document.createElement("td");
-        const statusBadge = document.createElement("span");
-
-        if (ticket.status === "in-progress") {
-            statusBadge.className = "status progress";
-            statusBadge.textContent = "In Progress";
-        } else if (ticket.status === "resolved") {
-            statusBadge.className = "status resolved";
-            statusBadge.textContent = "Resolved";
-        } else if (ticket.status === "closed") {
-            statusBadge.className = "status closed";
-            statusBadge.textContent = "Closed";
-        } else {
-            statusBadge.className = "status open";
-            statusBadge.textContent = "Open";
-        }
-
-        statusCell.appendChild(statusBadge);
-
-        const technicianCell = document.createElement("td");
-        technicianCell.textContent =
-            ticket.technician || "Unassigned";
-
-        row.appendChild(idCell);
-        row.appendChild(employeeCell);
-        row.appendChild(departmentCell);
-        row.appendChild(issueCell);
-        row.appendChild(priorityCell);
-        row.appendChild(statusCell);
-        row.appendChild(technicianCell);
-
-        adminTicketTableBody.appendChild(row);
-    });
-}
-
-
-// =========================================================
-// ADMIN - SEARCH AND FILTER
-// =========================================================
-
-const adminTicketFilterForm = document.getElementById(
-    "adminTicketFilterForm"
-);
-
-if (adminTicketFilterForm) {
-    const adminSearch = document.getElementById("admin-search");
-    const adminStatus = document.getElementById("admin-status");
-    const adminClearFilters = document.getElementById("adminClearFilters");
-    const adminFilterResult = document.getElementById("adminFilterResult");
-
-    const adminNoTicketsMessage = document.getElementById(
-        "adminNoTicketsMessage"
-    );
-
-    function filterAdminTickets() {
-        const searchText = adminSearch.value.trim().toLowerCase();
-        const selectedStatus = adminStatus.value;
-
-        const ticketRows = document.querySelectorAll(
-            ".admin-ticket-row"
-        );
-
-        let visibleTickets = 0;
-
-        ticketRows.forEach(function (row) {
-            const ticketId = row.dataset.ticketId.toLowerCase();
-            const employee = row.dataset.employee.toLowerCase();
-            const subject = row.dataset.subject.toLowerCase();
-            const status = row.dataset.status;
-
-            const matchesSearch =
-                ticketId.includes(searchText) ||
-                employee.includes(searchText) ||
-                subject.includes(searchText);
-
-            const matchesStatus =
-                selectedStatus === "all" ||
-                status === selectedStatus;
-
-            if (matchesSearch && matchesStatus) {
-                row.style.display = "";
-                visibleTickets++;
-            } else {
-                row.style.display = "none";
-            }
+    async function loadEmployeeDashboard() {
+        Object.values(counters).forEach(function (counter) {
+            counter.textContent = "—";
         });
 
-        adminFilterResult.hidden = false;
-        adminNoTicketsMessage.hidden = visibleTickets !== 0;
+        showDashboardMessage("Loading tickets...");
 
-        if (visibleTickets === 0) {
-            adminFilterResult.textContent = "No matching tickets found.";
-        } else if (visibleTickets === 1) {
-            adminFilterResult.textContent = "1 matching ticket found.";
-        } else {
-            adminFilterResult.textContent =
-                visibleTickets + " matching tickets found.";
+        try {
+            const response = await fetch("/tickets", {
+                cache: "no-store"
+            });
+
+            if (response.status === 401) {
+                window.location.replace("/index.html");
+                return;
+            }
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to load tickets."
+                );
+            }
+
+            if (!Array.isArray(data.tickets)) {
+                throw new Error("Invalid ticket data from server.");
+            }
+
+            const tickets = data.tickets;
+
+            function normalizeStatus(ticket) {
+                return ticket.status === "progress"
+                    ? "in-progress"
+                    : ticket.status;
+            }
+
+            counters.total.textContent = tickets.length;
+            counters.open.textContent = tickets.filter(
+                ticket => normalizeStatus(ticket) === "open"
+            ).length;
+            counters.progress.textContent = tickets.filter(
+                ticket => normalizeStatus(ticket) === "in-progress"
+            ).length;
+            counters.resolved.textContent = tickets.filter(
+                ticket => normalizeStatus(ticket) === "resolved"
+            ).length;
+
+            employeeRecentTickets.replaceChildren();
+
+            if (tickets.length === 0) {
+                showDashboardMessage("You have no tickets yet.");
+                return;
+            }
+
+            const recentTickets = tickets.slice().sort(function (a, b) {
+                return (Date.parse(b.createdAt) || 0) -
+                    (Date.parse(a.createdAt) || 0);
+            }).slice(0, 5);
+
+            recentTickets.forEach(function (ticket) {
+                const row = document.createElement("tr");
+
+                [
+                    ticket.id,
+                    ticket.subject,
+                    ticket.categoryText || ticket.category,
+                    ticket.priorityText || ticket.priority
+                ].forEach(function (value) {
+                    const cell = document.createElement("td");
+                    cell.textContent = value || "—";
+                    row.appendChild(cell);
+                });
+
+                const statusCell = document.createElement("td");
+                const badge = document.createElement("span");
+                const status = normalizeStatus(ticket);
+
+                const statuses = {
+                    open: ["open", "Open"],
+                    "in-progress": ["progress", "In Progress"],
+                    resolved: ["resolved", "Resolved"],
+                    closed: ["closed", "Closed"]
+                };
+
+                const display = statuses[status] ||
+                    ["", "Unknown"];
+
+                badge.className = "status " + display[0];
+                badge.textContent = display[1];
+
+                statusCell.appendChild(badge);
+                row.appendChild(statusCell);
+                employeeRecentTickets.appendChild(row);
+            });
+        } catch (error) {
+            showDashboardMessage(error.message);
         }
     }
 
-    adminTicketFilterForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        filterAdminTickets();
-    });
-
-    adminClearFilters.addEventListener("click", function () {
-        adminSearch.value = "";
-        adminStatus.value = "all";
-
-        document.querySelectorAll(".admin-ticket-row").forEach(
-            function (row) {
-                row.style.display = "";
-            }
-        );
-
-        adminFilterResult.hidden = true;
-        adminNoTicketsMessage.hidden = true;
-    });
+    loadEmployeeDashboard();
 }

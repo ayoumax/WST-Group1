@@ -1,545 +1,411 @@
 // ==========================================================================
-// MotorPH IT Support - Admin Dashboard Interactivity
+// MotorPH IT Support - Live Administrator Dashboard
 // ==========================================================================
 
 document.addEventListener("DOMContentLoaded", function () {
+    const summaryCards = document.querySelectorAll(
+        ".admin-summary-cards .summary-card"
+    );
 
-    // 1. LOCATE WEBPAGE ELEMENTS
-    // Metric detail elements
-    const summaryCards =
-        document.querySelectorAll(
-            ".admin-summary-cards .summary-card"
-        );
+    const metricBanner = document.getElementById("admin-metric-detail");
+    const metricText = document.getElementById("admin-metric-text");
+    const clearMetricButton = document.getElementById("admin-clear-metric");
 
-    const metricDetailBanner =
-        document.getElementById(
-            "admin-metric-detail"
-        );
+    const technicianList = document.querySelector(".technician-list");
+    const activityList = document.querySelector(".activity-list");
+    const activityCount = document.getElementById("activity-filter-count");
+    const filterButtons = document.querySelectorAll(".activity-filter-btn");
+    const queueCount = document.querySelector(".admin-queue-summary strong");
 
-    const metricDetailText =
-        document.getElementById(
-            "admin-metric-text"
-        );
+    let tickets = [];
+    let loaded = false;
+    let selectedFilter = "all";
+    let selectedMetric = null;
 
-    const clearMetricBtn =
-        document.getElementById(
-            "admin-clear-metric"
-        );
-
-
-    // Recent activity filter elements
-    const activityFilterBtns =
-        document.querySelectorAll(
-            ".activity-filter-btn"
-        );
-
-    const activityItems =
-        document.querySelectorAll(
-            ".activity-list .activity-item"
-        );
-
-    const activityCountText =
-        document.getElementById(
-            "activity-filter-count"
-        );
-
-
-    // Broadcast announcement elements
-    const noticeInput =
-        document.getElementById(
-            "system-notice-input"
-        );
-
-    const noticeTypeSelect =
-        document.getElementById(
-            "system-notice-type"
-        );
-
-    const postNoticeBtn =
-        document.getElementById(
-            "post-notice-btn"
-        );
-
-    const announcementContainer =
-        document.getElementById(
-            "admin-announcement-container"
-        );
-
-
-    // Dynamic descriptions updated by live stats
-    const metricDescriptions = {
-        total: "Total Tickets: All support tickets registered across all departments.",
-        open: "Open Tickets: Tickets awaiting technician assignment and response.",
-        progress: "In Progress: Tickets currently undergoing active diagnosis or repair.",
-        resolved: "Resolved Tickets: Tickets marked resolved and awaiting employee confirmation.",
-        unassigned: "Unassigned Tickets: High-priority action required! Tickets need technician assignment.",
-        closed: "Closed Tickets: Finished tickets verified and archived."
+    const descriptions = {
+        total: "All support tickets.",
+        open: "Tickets with Open status.",
+        progress: "Tickets currently in progress.",
+        resolved: "Tickets marked as resolved.",
+        unassigned: "Tickets without an assigned technician.",
+        closed: "Tickets marked as closed."
     };
 
+    let counts = {};
 
-    // ======================================================================
-    // 2. LOAD LIVE METRICS FROM BACKEND
-    // ======================================================================
+    function statusOf(ticket) {
+        const status = String(ticket.status || "").trim().toLowerCase();
 
-    function updateCardCount(metricKey, count) {
-
-        const card =
-            document.querySelector(
-                `.admin-summary-cards .summary-card[data-metric="${metricKey}"] strong`
-            );
-
-
-        if (card) {
-
-            card.textContent =
-                count;
-
-        }
-
+        return status === "progress" ? "in-progress" : status;
     }
 
+    function technicianOf(ticket) {
+        return String(
+            ticket.assignedTech || ticket.technician || ""
+        ).trim();
+    }
 
-    async function loadAdminStats() {
+    function isUnassigned(ticket) {
+        const name = technicianOf(ticket).toLowerCase();
+
+        return name === "" || name === "unassigned";
+    }
+
+    function showMessage(container, message) {
+        if (!container) return;
+
+        const paragraph = document.createElement("p");
+        paragraph.textContent = message;
+        container.replaceChildren(paragraph);
+    }
+
+    async function request(url) {
+        const response = await fetch(url, {
+            cache: "no-store"
+        });
+
+        if (response.status === 401) {
+            window.location.replace("index.html");
+            throw new Error("Please log in again.");
+        }
+
+        if (response.status === 403) {
+            throw new Error("You do not have permission to load this data.");
+        }
+
+        if (!response.ok) {
+            throw new Error("Unable to load dashboard data. Please refresh.");
+        }
+
+        return response.json();
+    }
+
+    function renderCounts() {
+        counts = {
+            total: tickets.length,
+            open: tickets.filter(t => statusOf(t) === "open").length,
+            progress: tickets.filter(
+                t => statusOf(t) === "in-progress"
+            ).length,
+            resolved: tickets.filter(
+                t => statusOf(t) === "resolved"
+            ).length,
+            unassigned: tickets.filter(isUnassigned).length,
+            closed: tickets.filter(
+                t => statusOf(t) === "closed"
+            ).length
+        };
+
+        summaryCards.forEach(function (card) {
+            const value = card.querySelector("strong");
+
+            if (value) {
+                value.textContent = counts[card.dataset.metric];
+            }
+        });
+
+        if (queueCount) {
+            queueCount.textContent = `${counts.unassigned} Unassigned`;
+        }
+
+        ["urgent", "high", "medium", "low"].forEach(function (priority) {
+            const badge = document.querySelector(
+                `.priority-overview-list .priority.${priority}`
+            );
+
+            const value = badge
+                ?.closest(".overview-row")
+                ?.querySelector("strong");
+
+            if (value) {
+                value.textContent = tickets.filter(function (ticket) {
+                    return String(ticket.priority || "")
+                        .trim()
+                        .toLowerCase() === priority;
+                }).length;
+            }
+        });
+
+        if (selectedMetric) {
+            showMetric(selectedMetric);
+        }
+    }
+
+    function showMetric(key) {
+        if (!metricBanner || !metricText) return;
+
+        metricText.textContent = loaded
+            ? `${counts[key]} — ${descriptions[key]}`
+            : "Ticket data is not available yet.";
+
+        metricBanner.style.display = "flex";
+    }
+
+    summaryCards.forEach(function (card) {
+        card.style.cursor = "pointer";
+
+        card.addEventListener("click", function () {
+            selectedMetric = card.dataset.metric;
+
+            summaryCards.forEach(function (item) {
+                item.style.borderColor = "var(--card-border)";
+            });
+
+            card.style.borderColor = "var(--sidebar-active)";
+            showMetric(selectedMetric);
+        });
+    });
+
+    clearMetricButton?.addEventListener("click", function () {
+        selectedMetric = null;
+        metricBanner.style.display = "none";
+
+        summaryCards.forEach(function (card) {
+            card.style.borderColor = "var(--card-border)";
+        });
+    });
+
+    function renderWorkload(technicians) {
+        if (!technicianList) return;
+
+        technicianList.replaceChildren();
+
+        if (technicians.length === 0) {
+            showMessage(technicianList, "No technician accounts found.");
+            return;
+        }
+
+        technicians.forEach(function (technician) {
+            const row = document.createElement("div");
+            row.className = "technician-row";
+
+            const details = document.createElement("div");
+
+            const name = document.createElement("strong");
+            name.textContent = technician.name;
+
+            const role = document.createElement("span");
+            role.textContent = "IT Technician";
+
+            const workload = document.createElement("div");
+            workload.className = "workload-count";
+
+            const assignedCount = tickets.filter(function (ticket) {
+                return technicianOf(ticket) === technician.name;
+            }).length;
+
+            workload.textContent =
+                `${assignedCount} ${assignedCount === 1 ? "Ticket" : "Tickets"}`;
+
+            details.append(name, role);
+            row.append(details, workload);
+            technicianList.appendChild(row);
+        });
+    }
+
+    // Show current records without inventing historical events or dates.
+    const activitySection = activityList?.closest("article");
+    const activityHeading = activitySection?.querySelector("h3");
+    const activityDescription = activitySection?.querySelector(
+        ".admin-card-heading p"
+    );
+
+    if (activityHeading) {
+        activityHeading.textContent = "Ticket Overview";
+    }
+
+    if (activityDescription) {
+        activityDescription.textContent =
+            "Current ticket records, assignments, and statuses.";
+    }
+
+    filterButtons.forEach(function (button) {
+        if (button.dataset.type === "ticket") {
+            button.textContent = "Unassigned";
+        }
+
+        if (button.dataset.type === "assigned") {
+            button.textContent = "Assigned";
+        }
+
+        button.addEventListener("click", function () {
+            selectedFilter = button.dataset.type;
+
+            filterButtons.forEach(function (item) {
+                const active = item === button;
+
+                item.style.backgroundColor = active
+                    ? "var(--sidebar-active)"
+                    : "var(--card-bg)";
+
+                item.style.color = active
+                    ? "#FFFFFF"
+                    : "var(--text-dark)";
+            });
+
+            if (loaded) {
+                renderTickets();
+            }
+        });
+    });
+
+    function renderTickets() {
+        if (!activityList) return;
+
+        const filtered = tickets.filter(function (ticket) {
+            if (selectedFilter === "ticket") {
+                return isUnassigned(ticket);
+            }
+
+            if (selectedFilter === "assigned") {
+                return !isUnassigned(ticket);
+            }
+
+            if (selectedFilter === "resolved") {
+                return ["resolved", "closed"].includes(statusOf(ticket));
+            }
+
+            return true;
+        });
+
+        activityList.replaceChildren();
+
+        if (activityCount) {
+            activityCount.textContent =
+                `Showing ${filtered.length} of ${tickets.length} tickets`;
+        }
+
+        if (filtered.length === 0) {
+            showMessage(activityList, "No tickets match this filter.");
+            return;
+        }
+
+        filtered.forEach(function (ticket) {
+            const item = document.createElement("div");
+            item.className = "activity-item";
+
+            const icon = document.createElement("div");
+            icon.className = "activity-icon";
+            icon.textContent = "•";
+
+            const details = document.createElement("div");
+
+            const link = document.createElement("a");
+            link.className = "ticket-link";
+            link.href = "admin-tickets.html";
+
+            const title = document.createElement("strong");
+            title.textContent = `${ticket.id} — ${ticket.subject}`;
+            link.appendChild(title);
+
+            const assignment = document.createElement("p");
+            assignment.textContent = isUnassigned(ticket)
+                ? "Assigned to: Unassigned"
+                : `Assigned to: ${technicianOf(ticket)}`;
+
+            const status = document.createElement("small");
+            const labels = {
+                open: "Open",
+                "in-progress": "In Progress",
+                resolved: "Resolved",
+                closed: "Closed"
+            };
+
+            status.textContent =
+                `Status: ${labels[statusOf(ticket)] || "Unknown"}`;
+
+            details.append(link, assignment, status);
+            item.append(icon, details);
+            activityList.appendChild(item);
+        });
+    }
+
+    async function loadDashboard() {
+        try {
+            const data = await request("/tickets");
+
+            if (!Array.isArray(data.tickets)) {
+                throw new Error("The server returned invalid ticket data.");
+            }
+
+            tickets = data.tickets;
+            loaded = true;
+
+            renderCounts();
+            renderTickets();
+        } catch (error) {
+            console.error("Dashboard loading failed:", error);
+            showMessage(activityList, error.message);
+            showMessage(technicianList, "Unable to load technician workload.");
+
+            if (activityCount) {
+                activityCount.textContent = "Unable to load tickets";
+            }
+
+            return;
+        }
 
         try {
+            const data = await request("/technicians");
 
-            const response =
-                await fetch("/tickets/stats");
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Unable to load ticket statistics."
-                );
-
+            if (!Array.isArray(data.technicians)) {
+                throw new Error("The server returned invalid technician data.");
             }
 
-
-            const stats =
-                await response.json();
-
-
-            // Update number in each summary card
-            updateCardCount(
-                "total",
-                stats.total ?? 0
-            );
-
-            updateCardCount(
-                "open",
-                stats.open ?? 0
-            );
-
-            updateCardCount(
-                "progress",
-                stats.inProgress ?? stats.progress ?? 0
-            );
-
-            updateCardCount(
-                "resolved",
-                stats.resolved ?? 0
-            );
-
-            updateCardCount(
-                "unassigned",
-                stats.unassigned ?? 0
-            );
-
-            updateCardCount(
-                "closed",
-                stats.closed ?? 0
-            );
-
-
-            // Update dynamic click descriptions
-            metricDescriptions.total =
-                `Total Tickets (${stats.total}): All support tickets registered across all departments.`;
-
-            metricDescriptions.open =
-                `Open Tickets (${stats.open}): Tickets awaiting technician assignment and response.`;
-
-            metricDescriptions.progress =
-                `In Progress (${stats.inProgress ?? stats.progress}): Tickets currently undergoing active diagnosis or repair.`;
-
-            metricDescriptions.resolved =
-                `Resolved Tickets (${stats.resolved}): Tickets marked resolved and awaiting employee confirmation.`;
-
-            metricDescriptions.unassigned =
-                `Unassigned Tickets (${stats.unassigned}): Action required! ${stats.unassigned} ticket(s) need technician assignment.`;
-
-            metricDescriptions.closed =
-                `Closed Tickets (${stats.closed}): Finished tickets verified and archived.`;
-
+            renderWorkload(data.technicians);
         } catch (error) {
+            console.error("Workload loading failed:", error);
+            showMessage(technicianList, error.message);
+        }
+    }
 
-            console.error(
-                "Error loading admin stats:",
-                error
-            );
+    // Announcement preview: display entered text safely on this page.
+    const noticeInput = document.getElementById("system-notice-input");
+    const noticeType = document.getElementById("system-notice-type");
+    const previewButton = document.getElementById("post-notice-btn");
+    const announcementContainer = document.getElementById(
+        "admin-announcement-container"
+    );
 
+    previewButton?.addEventListener("click", function () {
+        if (!noticeInput || !announcementContainer) return;
+
+        const message = noticeInput.value.trim();
+
+        if (!message) {
+            noticeInput.focus();
+            return;
         }
 
-    }
-
-
-    // Load stats immediately on page load
-    loadAdminStats();
-
-
-    // ======================================================================
-    // 3. METRIC DETAILS ON CARD CLICK
-    // ======================================================================
-
-    for (
-        let i = 0;
-        i < summaryCards.length;
-        i++
-    ) {
-
-        (function (card) {
-
-            card.style.cursor =
-                "pointer";
-
-
-            card.addEventListener(
-                "click",
-                function () {
-
-                    const metricKey =
-                        card.getAttribute(
-                            "data-metric"
-                        );
-
-
-                    if (
-                        metricKey &&
-                        metricDescriptions[metricKey]
-                    ) {
-
-                        metricDetailText.textContent =
-                            metricDescriptions[metricKey];
-
-                        metricDetailBanner.style.display =
-                            "flex";
-
-
-                        // Highlight active card
-                        for (
-                            let j = 0;
-                            j < summaryCards.length;
-                            j++
-                        ) {
-
-                            summaryCards[j].style.borderColor =
-                                "var(--card-border)";
-
-                        }
-
-                        card.style.borderColor =
-                            "var(--sidebar-active)";
-
-                    }
-
-                }
-            );
-
-        })(summaryCards[i]);
-
-    }
-
-
-    if (clearMetricBtn) {
-
-        clearMetricBtn.addEventListener(
-            "click",
-            function () {
-
-                metricDetailBanner.style.display =
-                    "none";
-
-                for (
-                    let j = 0;
-                    j < summaryCards.length;
-                    j++
-                ) {
-
-                    summaryCards[j].style.borderColor =
-                        "var(--card-border)";
-
-                }
-
-            }
-        );
-
-    }
-
-
-    // ======================================================================
-    // 4. RECENT ACTIVITY FILTERING
-    // ======================================================================
-
-    for (
-        let b = 0;
-        b < activityFilterBtns.length;
-        b++
-    ) {
-
-        activityFilterBtns[b].addEventListener(
-            "click",
-            function (event) {
-
-                const selectedType =
-                    event.target.getAttribute(
-                        "data-type"
-                    );
-
-                let visibleCount =
-                    0;
-
-
-                // Update active button styling
-                for (
-                    let k = 0;
-                    k < activityFilterBtns.length;
-                    k++
-                ) {
-
-                    activityFilterBtns[k].style.backgroundColor =
-                        "var(--card-bg)";
-
-                    activityFilterBtns[k].style.color =
-                        "var(--text-dark)";
-
-                }
-
-                event.target.style.backgroundColor =
-                    "var(--sidebar-active)";
-
-                event.target.style.color =
-                    "#FFFFFF";
-
-
-                // Show/hide activity items based on filter
-                for (
-                    let m = 0;
-                    m < activityItems.length;
-                    m++
-                ) {
-
-                    const item =
-                        activityItems[m];
-
-                    const itemType =
-                        item.getAttribute(
-                            "data-type"
-                        );
-
-
-                    if (
-                        selectedType === "all" ||
-                        itemType === selectedType
-                    ) {
-
-                        item.style.display =
-                            "flex";
-
-                        visibleCount++;
-
-                    } else {
-
-                        item.style.display =
-                            "none";
-
-                    }
-
-                }
-
-
-                if (activityCountText) {
-
-                    activityCountText.textContent =
-                        "Showing " +
-                        visibleCount +
-                        " of " +
-                        activityItems.length +
-                        " activities";
-
-                }
-
-            }
-        );
-
-    }
-
-
-    // ======================================================================
-    // 5. BROADCAST ANNOUNCEMENT POSTING
-    // ======================================================================
-
-    if (
-        postNoticeBtn &&
-        noticeInput &&
-        noticeTypeSelect &&
-        announcementContainer
-    ) {
-
-        postNoticeBtn.addEventListener(
-            "click",
-            function () {
-
-                const message =
-                    noticeInput.value.trim();
-
-                const noticeType =
-                    noticeTypeSelect.value;
-
-
-                if (message === "") {
-
-                    alert(
-                        "Please type an announcement message before posting."
-                    );
-
-                    return;
-
-                }
-
-
-                const banner =
-                    document.createElement(
-                        "div"
-                    );
-
-                banner.className =
-                    "admin-live-banner";
-
-                banner.style.padding =
-                    "12px 16px";
-
-                banner.style.borderRadius =
-                    "8px";
-
-                banner.style.marginBottom =
-                    "16px";
-
-                banner.style.display =
-                    "flex";
-
-                banner.style.justifyContent =
-                    "space-between";
-
-                banner.style.alignItems =
-                    "center";
-
-
-                const now =
-                    new Date();
-
-                const timeStamp =
-                    now.toLocaleTimeString(
-                        [],
-                        {
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        }
-                    );
-
-
-                if (noticeType === "urgent") {
-
-                    banner.style.backgroundColor =
-                        "#FDECEC";
-
-                    banner.style.border =
-                        "1px solid #FCA5A5";
-
-                    banner.style.color =
-                        "#991B1B";
-
-                    banner.innerHTML =
-                        "<div><strong>[URGENT ALERT - " +
-                        timeStamp +
-                        "]:</strong> " +
-                        message +
-                        "</div>";
-
-                } else {
-
-                    banner.style.backgroundColor =
-                        "#E8F1FF";
-
-                    banner.style.border =
-                        "1px solid #B8D5FC";
-
-                    banner.style.color =
-                        "#0F52AA";
-
-                    banner.innerHTML =
-                        "<div><strong>[ANNOUNCEMENT - " +
-                        timeStamp +
-                        "]:</strong> " +
-                        message +
-                        "</div>";
-
-                }
-
-
-                const dismissBtn =
-                    document.createElement(
-                        "button"
-                    );
-
-                dismissBtn.type =
-                    "button";
-
-                dismissBtn.textContent =
-                    "✕ Dismiss";
-
-                dismissBtn.style.background =
-                    "transparent";
-
-                dismissBtn.style.border =
-                    "none";
-
-                dismissBtn.style.cursor =
-                    "pointer";
-
-                dismissBtn.style.fontWeight =
-                    "bold";
-
-                dismissBtn.style.marginLeft =
-                    "12px";
-
-                dismissBtn.style.color =
-                    "inherit";
-
-
-                dismissBtn.addEventListener(
-                    "click",
-                    function () {
-
-                        banner.remove();
-
-                    }
-                );
-
-
-                banner.appendChild(
-                    dismissBtn
-                );
-
-                announcementContainer.prepend(
-                    banner
-                );
-
-                noticeInput.value =
-                    "";
-
-            }
-        );
-
-    }
-
+        const urgent = noticeType?.value === "urgent";
+        const banner = document.createElement("div");
+        banner.className = "admin-live-banner";
+
+        Object.assign(banner.style, {
+            padding: "12px 16px",
+            borderRadius: "8px",
+            marginBottom: "16px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            backgroundColor: urgent ? "#FDECEC" : "#E8F1FF",
+            border: urgent ? "1px solid #FCA5A5" : "1px solid #B8D5FC",
+            color: urgent ? "#991B1B" : "#0F52AA"
+        });
+
+        const text = document.createElement("div");
+        text.textContent =
+            `${urgent ? "Urgent preview" : "Announcement preview"}: ${message}`;
+
+        const dismiss = document.createElement("button");
+        dismiss.type = "button";
+        dismiss.textContent = "Dismiss";
+        dismiss.addEventListener("click", () => banner.remove());
+
+        banner.append(text, dismiss);
+        announcementContainer.prepend(banner);
+        noticeInput.value = "";
+    });
+
+    loadDashboard();
 });
