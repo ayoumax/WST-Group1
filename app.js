@@ -1302,6 +1302,286 @@ app.post(
 
 
 // =========================================================
+// UPDATE TICKET (STATUS AND/OR TECHNICIAN ASSIGNMENT)
+// =========================================================
+
+app.patch(
+    "/tickets/:id",
+
+    requireRole(
+        "technician",
+        "admin"
+    ),
+
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        try {
+
+            const {
+                status,
+                assignedTech,
+                technician
+            } =
+                req.body || {};
+
+
+            // Check if at least one field to update was provided
+            if (
+                status === undefined &&
+                assignedTech === undefined &&
+                technician === undefined
+            ) {
+
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Please provide a status or technician to update."
+
+                    });
+
+            }
+
+
+            // Read tickets from tickets.json
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+
+            if (
+                !Array.isArray(tickets)
+            ) {
+
+                throw new Error(
+                    "tickets.json must contain an array."
+                );
+
+            }
+
+
+            // Find the ticket to update
+            const ticket =
+                tickets.find(
+                    function (item) {
+
+                        return (
+                            item.id ===
+                            req.params.id
+                        );
+
+                    }
+                );
+
+
+            if (!ticket) {
+
+                return res
+                    .status(404)
+                    .json({
+
+                        message:
+                            "Ticket not found."
+
+                    });
+
+            }
+
+
+            // Technicians can only update status for tickets assigned to them
+            if (
+                req.session.user.role === "technician"
+            ) {
+
+                if (
+                    assignedTech !== undefined ||
+                    technician !== undefined
+                ) {
+
+                    return res
+                        .status(403)
+                        .json({
+
+                            message:
+                                "Technicians cannot reassign tickets."
+
+                        });
+
+                }
+
+
+                const isAssigned = (
+                    ticket.assignedTech === req.session.user.name ||
+                    ticket.technician === req.session.user.name
+                );
+
+
+                if (!isAssigned) {
+
+                    return res
+                        .status(403)
+                        .json({
+
+                            message:
+                                "You can only update tickets assigned to you."
+
+                        });
+
+                }
+
+            }
+
+
+            // Update status if provided
+            if (status !== undefined) {
+
+                const normalizedStatus =
+                    typeof status === "string"
+                        ? status.trim().toLowerCase()
+                        : "";
+
+
+                if (
+                    normalizedStatus === "open"
+                ) {
+
+                    ticket.status =
+                        "open";
+
+                    ticket.statusText =
+                        "Open";
+
+                } else if (
+                    normalizedStatus === "in-progress" ||
+                    normalizedStatus === "progress"
+                ) {
+
+                    ticket.status =
+                        "in-progress";
+
+                    ticket.statusText =
+                        "In Progress";
+
+                } else if (
+                    normalizedStatus === "resolved"
+                ) {
+
+                    ticket.status =
+                        "resolved";
+
+                    ticket.statusText =
+                        "Resolved";
+
+                } else {
+
+                    return res
+                        .status(400)
+                        .json({
+
+                            message:
+                                "Invalid status. Allowed values: open, in-progress, resolved."
+
+                        });
+
+                }
+
+            }
+
+
+            // Update technician assignment if provided (Admin only)
+            const newTech =
+                assignedTech !== undefined
+                    ? assignedTech
+                    : technician;
+
+
+            if (newTech !== undefined) {
+
+                if (
+                    typeof newTech !== "string" ||
+                    newTech.trim() === ""
+                ) {
+
+                    return res
+                        .status(400)
+                        .json({
+
+                            message:
+                                "Technician name must be a non-empty string."
+
+                        });
+
+                }
+
+
+                const techName =
+                    newTech.trim();
+
+                ticket.assignedTech =
+                    techName;
+
+                ticket.technician =
+                    techName;
+
+
+                // If the ticket was open and is now assigned to a technician, advance status to in-progress
+                if (
+                    ticket.status === "open" &&
+                    techName !== "Unassigned"
+                ) {
+
+                    ticket.status =
+                        "in-progress";
+
+                    ticket.statusText =
+                        "In Progress";
+
+                }
+
+            }
+
+
+            // Save updated tickets back to tickets.json
+            fs.writeFileSync(
+                ticketsPath,
+                JSON.stringify(
+                    tickets,
+                    null,
+                    2
+                )
+            );
+
+
+            res.status(200).json({
+
+                message:
+                    "Ticket updated successfully.",
+
+                ticket:
+                    ticket
+
+            });
+
+        } catch (error) {
+
+            next(error);
+
+        }
+
+    }
+);
+
+
+// =========================================================
 // PROTECTED PAGES
 // =========================================================
 
