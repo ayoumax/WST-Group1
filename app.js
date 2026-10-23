@@ -682,7 +682,250 @@ app.get(
     }
 );
 
+// =========================================================
+// GET TICKET MESSAGES
+// =========================================================
 
+app.get(
+    "/tickets/:id/messages",
+
+    requireRole(
+        "employee",
+        "technician",
+        "admin"
+    ),
+
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        try {
+
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+            if (!Array.isArray(tickets)) {
+                throw new Error(
+                    "tickets.json must contain an array."
+                );
+            }
+
+            const ticket =
+                tickets.find(
+                    function (item) {
+                        return (
+                            item.id ===
+                            req.params.id
+                        );
+                    }
+                );
+
+            if (!ticket) {
+                return res
+                    .status(404)
+                    .json({
+                        message:
+                            "Ticket not found."
+                    });
+            }
+
+            if (
+                !canViewTicket(
+                    req.session.user,
+                    ticket
+                )
+            ) {
+                return res
+                    .status(403)
+                    .json({
+                        message:
+                            "You do not have permission to view this ticket."
+                    });
+            }
+
+            res.json({
+                messages:
+                    Array.isArray(ticket.messages)
+                        ? ticket.messages
+                        : []
+            });
+
+        } catch (error) {
+
+            next(error);
+
+        }
+
+    }
+);
+// =========================================================
+// POST TICKET MESSAGE
+// =========================================================
+
+app.post(
+    "/tickets/:id/messages",
+
+    requireRole(
+        "employee",
+        "technician",
+        "admin"
+    ),
+
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        try {
+
+            const body =
+                req.body || {};
+
+            if (
+                typeof body.text !== "string" ||
+                body.text.trim() === ""
+            ) {
+
+                return res
+                    .status(400)
+                    .json({
+                        message:
+                            "Message cannot be empty."
+                    });
+
+            }
+
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+            if (!Array.isArray(tickets)) {
+
+                throw new Error(
+                    "tickets.json must contain an array."
+                );
+
+            }
+
+            const ticket =
+                tickets.find(
+                    function (item) {
+
+                        return (
+                            item.id ===
+                            req.params.id
+                        );
+
+                    }
+                );
+
+            if (!ticket) {
+
+                return res
+                    .status(404)
+                    .json({
+                        message:
+                            "Ticket not found."
+                    });
+
+            }
+
+            if (
+                !canViewTicket(
+                    req.session.user,
+                    ticket
+                )
+            ) {
+
+                return res
+                    .status(403)
+                    .json({
+                        message:
+                            "You do not have permission to access this ticket."
+                    });
+
+            }
+
+            if (
+                !Array.isArray(
+                    ticket.messages
+                )
+            ) {
+
+                ticket.messages = [];
+
+            }
+
+            const now =
+                new Date();
+
+            const newMessage = {
+
+                sender:
+                    req.session.user.name,
+
+                senderRole:
+                    req.session.user.role,
+
+                text:
+                    body.text.trim(),
+
+                time:
+                    now.toLocaleString(),
+
+                createdAt:
+                    now.toISOString()
+
+            };
+
+            ticket.messages.push(
+                newMessage
+            );
+
+            fs.writeFileSync(
+                ticketsPath,
+
+                JSON.stringify(
+                    tickets,
+                    null,
+                    2
+                ),
+
+                "utf8"
+            );
+
+            res
+                .status(201)
+                .json({
+
+                    message:
+                        "Message sent successfully.",
+
+                    ticketMessage:
+                        newMessage
+
+                });
+
+        } catch (error) {
+
+            next(error);
+
+        }
+
+    }
+);
 // =========================================================
 // CREATE TICKET
 // =========================================================
