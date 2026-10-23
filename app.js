@@ -570,6 +570,359 @@ app.get(
 
 
 // =========================================================
+// GET TICKET STATS & METRICS (FOR DASHBOARDS)
+// =========================================================
+
+app.get(
+    "/tickets/stats",
+
+    requireRole(
+        "employee",
+        "technician",
+        "admin"
+    ),
+
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        try {
+
+            // Read tickets from tickets.json
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+
+            if (
+                !Array.isArray(tickets)
+            ) {
+
+                throw new Error(
+                    "tickets.json must contain an array."
+                );
+
+            }
+
+
+            const user =
+                req.session.user;
+
+
+            // Administrator: Stats across the entire system
+            if (
+                user.role === "admin"
+            ) {
+
+                let total =
+                    tickets.length;
+
+                let open =
+                    0;
+
+                let inProgress =
+                    0;
+
+                let resolved =
+                    0;
+
+                let unassigned =
+                    0;
+
+                let closed =
+                    0;
+
+
+                for (
+                    let i = 0;
+                    i < tickets.length;
+                    i++
+                ) {
+
+                    const ticket =
+                        tickets[i];
+
+                    const status =
+                        (ticket.status || "").toLowerCase();
+
+                    const tech =
+                        (ticket.assignedTech || ticket.technician || "").trim();
+
+
+                    if (
+                        status === "open"
+                    ) {
+
+                        open++;
+
+                    } else if (
+                        status === "in-progress" ||
+                        status === "progress"
+                    ) {
+
+                        inProgress++;
+
+                    } else if (
+                        status === "resolved"
+                    ) {
+
+                        resolved++;
+
+                    } else if (
+                        status === "closed"
+                    ) {
+
+                        closed++;
+
+                    }
+
+
+                    if (
+                        !tech ||
+                        tech === "Unassigned"
+                    ) {
+
+                        unassigned++;
+
+                    }
+
+                }
+
+
+                return res.json({
+
+                    role:
+                        "admin",
+
+                    total:
+                        total,
+
+                    open:
+                        open,
+
+                    inProgress:
+                        inProgress,
+
+                    progress:
+                        inProgress,
+
+                    resolved:
+                        resolved,
+
+                    unassigned:
+                        unassigned,
+
+                    closed:
+                        closed
+
+                });
+
+            }
+
+
+            // Technician: Stats for tickets assigned to this technician
+            if (
+                user.role === "technician"
+            ) {
+
+                let assigned =
+                    0;
+
+                let open =
+                    0;
+
+                let inProgress =
+                    0;
+
+                let resolved =
+                    0;
+
+
+                for (
+                    let i = 0;
+                    i < tickets.length;
+                    i++
+                ) {
+
+                    const ticket =
+                        tickets[i];
+
+                    const tech =
+                        (ticket.assignedTech || ticket.technician || "").trim();
+
+
+                    if (
+                        tech === user.name
+                    ) {
+
+                        assigned++;
+
+                        const status =
+                            (ticket.status || "").toLowerCase();
+
+
+                        if (
+                            status === "open"
+                        ) {
+
+                            open++;
+
+                        } else if (
+                            status === "in-progress" ||
+                            status === "progress"
+                        ) {
+
+                            inProgress++;
+
+                        } else if (
+                            status === "resolved"
+                        ) {
+
+                            resolved++;
+
+                        }
+
+                    }
+
+                }
+
+
+                return res.json({
+
+                    role:
+                        "technician",
+
+                    total:
+                        assigned,
+
+                    assigned:
+                        assigned,
+
+                    open:
+                        open,
+
+                    inProgress:
+                        inProgress,
+
+                    progress:
+                        inProgress,
+
+                    resolved:
+                        resolved
+
+                });
+
+            }
+
+
+            // Employee: Stats for tickets submitted by this employee
+            let empTotal =
+                0;
+
+            let empOpen =
+                0;
+
+            let empInProgress =
+                0;
+
+            let empResolved =
+                0;
+
+
+            for (
+                let i = 0;
+                i < tickets.length;
+                i++
+            ) {
+
+                const ticket =
+                    tickets[i];
+
+                const isOwner = (
+                    ticket.employeeId === user.id ||
+                    ticket.submittedBy === user.username
+                );
+
+
+                if (
+                    isOwner
+                ) {
+
+                    empTotal++;
+
+                    const status =
+                        (ticket.status || "").toLowerCase();
+
+
+                    if (
+                        status === "open"
+                    ) {
+
+                        empOpen++;
+
+                    } else if (
+                        status === "in-progress" ||
+                        status === "progress"
+                    ) {
+
+                        empInProgress++;
+
+                    } else if (
+                        status === "resolved"
+                    ) {
+
+                        empResolved++;
+
+                    }
+
+                }
+
+            }
+
+
+            return res.json({
+
+                role:
+                    "employee",
+
+                total:
+                    empTotal,
+
+                open:
+                    empOpen,
+
+                inProgress:
+                    empInProgress,
+
+                progress:
+                    empInProgress,
+
+                resolved:
+                    empResolved
+
+            });
+
+        } catch (
+            error
+        ) {
+
+            next(
+                error
+            );
+
+        }
+
+    }
+);
+
+
+// =========================================================
 // GET ONE TICKET BY ID
 // =========================================================
 
@@ -1294,6 +1647,286 @@ app.post(
             next(
                 error
             );
+
+        }
+
+    }
+);
+
+
+// =========================================================
+// UPDATE TICKET (STATUS AND/OR TECHNICIAN ASSIGNMENT)
+// =========================================================
+
+app.patch(
+    "/tickets/:id",
+
+    requireRole(
+        "technician",
+        "admin"
+    ),
+
+    (
+        req,
+        res,
+        next
+    ) => {
+
+        try {
+
+            const {
+                status,
+                assignedTech,
+                technician
+            } =
+                req.body || {};
+
+
+            // Check if at least one field to update was provided
+            if (
+                status === undefined &&
+                assignedTech === undefined &&
+                technician === undefined
+            ) {
+
+                return res
+                    .status(400)
+                    .json({
+
+                        message:
+                            "Please provide a status or technician to update."
+
+                    });
+
+            }
+
+
+            // Read tickets from tickets.json
+            const tickets =
+                JSON.parse(
+                    fs.readFileSync(
+                        ticketsPath,
+                        "utf8"
+                    )
+                );
+
+
+            if (
+                !Array.isArray(tickets)
+            ) {
+
+                throw new Error(
+                    "tickets.json must contain an array."
+                );
+
+            }
+
+
+            // Find the ticket to update
+            const ticket =
+                tickets.find(
+                    function (item) {
+
+                        return (
+                            item.id ===
+                            req.params.id
+                        );
+
+                    }
+                );
+
+
+            if (!ticket) {
+
+                return res
+                    .status(404)
+                    .json({
+
+                        message:
+                            "Ticket not found."
+
+                    });
+
+            }
+
+
+            // Technicians can only update status for tickets assigned to them
+            if (
+                req.session.user.role === "technician"
+            ) {
+
+                if (
+                    assignedTech !== undefined ||
+                    technician !== undefined
+                ) {
+
+                    return res
+                        .status(403)
+                        .json({
+
+                            message:
+                                "Technicians cannot reassign tickets."
+
+                        });
+
+                }
+
+
+                const isAssigned = (
+                    ticket.assignedTech === req.session.user.name ||
+                    ticket.technician === req.session.user.name
+                );
+
+
+                if (!isAssigned) {
+
+                    return res
+                        .status(403)
+                        .json({
+
+                            message:
+                                "You can only update tickets assigned to you."
+
+                        });
+
+                }
+
+            }
+
+
+            // Update status if provided
+            if (status !== undefined) {
+
+                const normalizedStatus =
+                    typeof status === "string"
+                        ? status.trim().toLowerCase()
+                        : "";
+
+
+                if (
+                    normalizedStatus === "open"
+                ) {
+
+                    ticket.status =
+                        "open";
+
+                    ticket.statusText =
+                        "Open";
+
+                } else if (
+                    normalizedStatus === "in-progress" ||
+                    normalizedStatus === "progress"
+                ) {
+
+                    ticket.status =
+                        "in-progress";
+
+                    ticket.statusText =
+                        "In Progress";
+
+                } else if (
+                    normalizedStatus === "resolved"
+                ) {
+
+                    ticket.status =
+                        "resolved";
+
+                    ticket.statusText =
+                        "Resolved";
+
+                } else {
+
+                    return res
+                        .status(400)
+                        .json({
+
+                            message:
+                                "Invalid status. Allowed values: open, in-progress, resolved."
+
+                        });
+
+                }
+
+            }
+
+
+            // Update technician assignment if provided (Admin only)
+            const newTech =
+                assignedTech !== undefined
+                    ? assignedTech
+                    : technician;
+
+
+            if (newTech !== undefined) {
+
+                if (
+                    typeof newTech !== "string" ||
+                    newTech.trim() === ""
+                ) {
+
+                    return res
+                        .status(400)
+                        .json({
+
+                            message:
+                                "Technician name must be a non-empty string."
+
+                        });
+
+                }
+
+
+                const techName =
+                    newTech.trim();
+
+                ticket.assignedTech =
+                    techName;
+
+                ticket.technician =
+                    techName;
+
+
+                // If the ticket was open and is now assigned to a technician, advance status to in-progress
+                if (
+                    ticket.status === "open" &&
+                    techName !== "Unassigned"
+                ) {
+
+                    ticket.status =
+                        "in-progress";
+
+                    ticket.statusText =
+                        "In Progress";
+
+                }
+
+            }
+
+
+            // Save updated tickets back to tickets.json
+            fs.writeFileSync(
+                ticketsPath,
+                JSON.stringify(
+                    tickets,
+                    null,
+                    2
+                )
+            );
+
+
+            res.status(200).json({
+
+                message:
+                    "Ticket updated successfully.",
+
+                ticket:
+                    ticket
+
+            });
+
+        } catch (error) {
+
+            next(error);
 
         }
 

@@ -23,70 +23,107 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("assignmentFeedbackMessage");
 
 
-    const STORAGE_KEY =
-        "motorphTickets";
+    // ======================================================================
+    // LOAD TICKETS FROM SERVER
+    // ======================================================================
+
+    async function loadTickets() {
+
+        try {
+
+            const response =
+                await fetch("/tickets");
 
 
-    // Get saved tickets from localStorage
-    function getSavedTickets() {
+            if (!response.ok) {
 
-        const savedTickets =
-            localStorage.getItem(STORAGE_KEY);
+                throw new Error(
+                    "Unable to load tickets from server."
+                );
 
-        if (savedTickets === null) {
-            return [];
-        }
-
-        return JSON.parse(savedTickets);
-
-    }
+            }
 
 
-    // Save updated tickets
-    function saveTickets(tickets) {
+            const data =
+                await response.json();
 
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(tickets)
-        );
-
-    }
+            const tickets =
+                data.tickets || [];
 
 
-    // Add locally saved tickets to dropdown
-    const savedTickets =
-        getSavedTickets();
+            // Keep only the default placeholder option
+            ticketSelect.innerHTML =
+                '<option value="">Select Ticket</option>';
 
 
-    savedTickets.forEach(
-        function (ticket) {
+            // Populate dropdown with tickets from backend
+            tickets.forEach(
+                function (ticket) {
 
-            const option =
-                document.createElement("option");
+                    const option =
+                        document.createElement("option");
 
-
-            option.value =
-                ticket.id;
-
-
-            option.textContent =
-                ticket.id +
-                " - " +
-                ticket.subject;
+                    option.value =
+                        ticket.id;
 
 
-            ticketSelect.appendChild(
-                option
+                    const techName =
+                        ticket.assignedTech ||
+                        ticket.technician ||
+                        "Unassigned";
+
+
+                    option.textContent =
+                        ticket.id +
+                        " - " +
+                        ticket.subject +
+                        " [" +
+                        techName +
+                        "]";
+
+
+                    ticketSelect.appendChild(
+                        option
+                    );
+
+                }
             );
 
+        } catch (error) {
+
+            console.error(
+                "Error loading tickets:",
+                error
+            );
+
+            feedbackTitle.textContent =
+                "Error Loading Tickets";
+
+            feedbackMessage.textContent =
+                "Could not load tickets from server. Please refresh the page.";
+
+            feedback.className =
+                "ticket-feedback error";
+
+            feedback.hidden =
+                false;
+
         }
-    );
+
+    }
 
 
-    // Respond when form is submitted
+    // Initial fetch of tickets
+    loadTickets();
+
+
+    // ======================================================================
+    // HANDLE ASSIGNMENT FORM SUBMISSION
+    // ======================================================================
+
     assignmentForm.addEventListener(
         "submit",
-        function (event) {
+        async function (event) {
 
             event.preventDefault();
 
@@ -98,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 technicianSelect.value;
 
 
-            // Validation
+            // Form validation
             if (
                 selectedTicket === "" &&
                 selectedTechnician === ""
@@ -159,87 +196,119 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            const ticketText =
-                ticketSelect.options[
-                    ticketSelect.selectedIndex
-                ].text;
-
-
             const technicianText =
                 technicianSelect.options[
                     technicianSelect.selectedIndex
-                ].text;
+                ].text.trim();
 
 
-            // Check if selected ticket is from localStorage
-            const tickets =
-                getSavedTickets();
+            // Send PATCH request to backend
+            try {
+
+                const response =
+                    await fetch(
+                        "/tickets/" +
+                            encodeURIComponent(selectedTicket),
+                        {
+                            method:
+                                "PATCH",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    assignedTech:
+                                        technicianText
+                                })
+                        }
+                    );
 
 
-            const selectedSavedTicket =
-                tickets.find(
-                    function (ticket) {
+                const result =
+                    await response.json();
 
-                        return (
-                            ticket.id ===
-                            selectedTicket
-                        );
 
-                    }
+                if (!response.ok) {
+
+                    feedbackTitle.textContent =
+                        "Assignment Failed";
+
+                    feedbackMessage.textContent =
+                        result.message ||
+                        "Failed to assign technician.";
+
+                    feedback.className =
+                        "ticket-feedback error";
+
+                    feedback.hidden =
+                        false;
+
+                    return;
+
+                }
+
+
+                // Show success feedback
+                if (selectedTechnician === "team") {
+
+                    feedbackTitle.textContent =
+                        "Ticket Assigned to Support Team";
+
+                    feedbackMessage.textContent =
+                        selectedTicket +
+                        " has been assigned to the IT Support Team.";
+
+                } else {
+
+                    feedbackTitle.textContent =
+                        "Technician Assigned Successfully";
+
+                    feedbackMessage.textContent =
+                        selectedTicket +
+                        " has been assigned to " +
+                        technicianText +
+                        ".";
+
+                }
+
+
+                feedback.className =
+                    "ticket-feedback success";
+
+                feedback.hidden =
+                    false;
+
+
+                // Reload dropdown so the updated assignment shows immediately
+                await loadTickets();
+
+                // Keep the assigned ticket selected in the dropdown
+                ticketSelect.value =
+                    selectedTicket;
+
+            } catch (error) {
+
+                console.error(
+                    "Network error during assignment:",
+                    error
                 );
 
-
-            // Save technician assignment
-            if (selectedSavedTicket) {
-
-                selectedSavedTicket.technician =
-                    technicianText;
-
-
-                selectedSavedTicket.status =
-                    "in-progress";
-
-
-                selectedSavedTicket.statusText =
-                    "In Progress";
-
-
-                saveTickets(
-                    tickets
-                );
-
-            }
-
-
-            // Show response
-            if (selectedTechnician === "team") {
-
                 feedbackTitle.textContent =
-                    "Ticket Assigned to Support Team";
+                    "Network Error";
 
                 feedbackMessage.textContent =
-                    ticketText +
-                    " has been assigned to the IT Support Team.";
+                    "Unable to connect to the server. Please try again.";
 
-            } else {
+                feedback.className =
+                    "ticket-feedback error";
 
-                feedbackTitle.textContent =
-                    "Technician Assigned Successfully";
-
-                feedbackMessage.textContent =
-                    ticketText +
-                    " has been assigned to " +
-                    technicianText +
-                    ".";
+                feedback.hidden =
+                    false;
 
             }
-
-
-            feedback.className =
-                "ticket-feedback success";
-
-            feedback.hidden =
-                false;
 
         }
     );
