@@ -23,6 +23,13 @@ async function createDemoUsers() {
             role: "employee"
         },
         {
+            id: "EMP-002",
+            name: "Second Employee",
+            username: "employee2",
+            password: "Employee123!",
+            role: "employee"
+        },
+        {
             id: "TECH-001",
             name: "Mark Santos",
             username: "technician",

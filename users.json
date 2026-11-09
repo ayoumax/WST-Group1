@@ -19,5 +19,19 @@
     "username": "admin",
     "passwordHash": "$2b$12$/CKNQANq3ALCrV3F2tpEKOYm/R98keNO1AkSSeU1buGZR2acdhilu",
     "role": "admin"
+  },
+  {
+    "id": "EMP-002",
+    "name": "Second Employee",
+    "username": "employee2",
+    "passwordHash": "$2b$12$UslId6T8MxGzpvpSb4Fap.0nO5msI1iPFgkU.IOtJRc9YNA7fmGi2",
+    "role": "employee"
+  },
+  {
+    "id": "TECH-002",
+    "name": "Ana Reyes",
+    "username": "ana",
+    "passwordHash": "$2b$12$2jXq1TKpmIi5V/GoLm0Cr.BDu6T165xMPfJVri9aBUiQ.ag/zVPXK",
+    "role": "technician"
   }
 ]
